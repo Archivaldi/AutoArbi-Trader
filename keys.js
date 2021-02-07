@@ -5,3 +5,7 @@ exports.mysql_data = {
     database: process.env.DATABASE,
     insecureAuth : true
   };
+
+exports.secret = {
+    secret: process.env.SECRET
+}
