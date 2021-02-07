@@ -1,0 +1,12 @@
+{
+  "name": "4wheelz",
+  "version": "1.0.0",
+  "description": "Make safe transactions to sell and buy cars",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Artur Markov, Nate Ryan",
+  "license": "ISC"
+}
