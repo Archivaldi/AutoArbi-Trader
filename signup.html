@@ -9,7 +9,7 @@
 <body>
     <div>
         <div id="test_1_div">
-            <label for="test_1">Please type the following text: "<span id="text_to_type_1">Hello world! I'm here to create a new account</span>"</label>
+            <label for="test_1">Please type the following text: "<span id="text_to_type_1">Cars are useful but they pollute our environment. It's a wonderful day to explore the city on a bicycle. Which one would you choose from these two tentative options?</span>"</label>
             <br>
             <input type="text" id="test_1">
         </div>
@@ -41,7 +41,7 @@
 
             if ($(`#test_${num}`).val() !== ""){
                 if ($(`#text_to_type_${num}`).text() === $(`#test_${num}`).val()) {
-                    var typingPattern = tdna.getTypingPattern({type:1, length: $(`#text_to_type_${num}`).text().length});
+                    var typingPattern = tdna.getTypingPattern({type:0, length: $(`#text_to_type_${num}`).text().length});
                     var patternQuality = tdna.getQuality(typingPattern);
                     console.log(`Quality for the test ${num}: ${patternQuality}`);
                     if (patternQuality > 0.5){
