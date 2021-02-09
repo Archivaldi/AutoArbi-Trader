@@ -34,9 +34,9 @@
                     $.ajax({
                         method: "POST",
                         url: "/sighup/typingdna",
-                        data: typingPattern
+                        data: {typingPattern}
                     }).then(r => {
-                        console.log("the data sent");
+                        console.log(r.message);
                     })
                 }
             } else {
