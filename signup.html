@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <label for="test_1">Please type the following text: "Hello world! I'm here to create a new account"</label>
+    <input type="text" id="test_1">
+    <br>
+    <label for="test_1">Please type the following text: "I want to create a text to secure my information"</label>
+    <input type="text" id="test_2">
+    <br>
+    <label for="test_1">Please type the following text: "We are using new technology to add more security"</label>
+    <input type="text" id="test_3">
+
+    <button onclick="check_accuracy()">Submit</button>
+
+
+
+    <script src="https://www.typingdna.com/scripts/typingdna.js"></script>
+    <script>
+        var tdna = new TypingDNA();
+
+        const check_accuracy = () => {
+            if (document.getElementById('test_1').innerText === "Hello world! I'm here to create a new account" && document.getElementById('test_2').innerText === "I want to create a text to secure my information" && document.getElementById("test_3").innerText == "We are using new technology to add more security"){
+                var typingPattern = tdna.getTypingPattern({type:0, length:160});
+                var patternQuality = tdna.getQuality(typingPattern);
+                console.log(patternQuality);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -32,28 +32,7 @@ const {typingDna_apiKey, typingDna_secret} = keys.typingDna;
 const TypingDnaClient = require('typingdnaclient');
 const typingDnaClient = new TypingDnaClient(typingDna_apiKey, typingDna_secret);
 let base_url = 'https://api.typingdna.com';
-let client_id = "test123";
 
-let options = {
-    url: base_url+'/auto/'+client_id,
-    port: 443,
-    method: "POST",
-    headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Cache-Control': 'no-cache',
-        'Authorization': 'Basic ' + new Buffer (typingDna_apiKey + ':' + typingDna_secret).toString('base64'),
-    }
-}
-
-var responseData = '';
-
-request(options, function(error, response, body) {
-    if (error) {
-        console.log(error);
-    } else {
-        console.log(body);
-    }
-});
 
 //main page 
 app.get("/", (req,res) => {
@@ -65,7 +44,29 @@ app.get("/login", (req,res) => {
 });
 
 app.get("/sighup", (req,res) => {
-    res.send({message: "We are on signup page"});
+    res.sendFile(__dirname + "/signup.html");
+    // let client_id = "test123";
+
+    // let options = {
+    //     url: base_url+'/auto/'+client_id,
+    //     port: 443,
+    //     method: "POST",
+    //     headers: {
+    //         'Content-Type': 'application/x-www-form-urlencoded',
+    //         'Cache-Control': 'no-cache',
+    //         'Authorization': 'Basic ' + new Buffer (typingDna_apiKey + ':' + typingDna_secret).toString('base64'),
+    //     }
+    // }
+
+    // var responseData = '';
+
+    // request(options, function(error, response, body) {
+    //     if (error) {
+    //         console.log(error);
+    //     } else {
+    //         console.log(body);
+    //     }
+    // });
 });
 
 
