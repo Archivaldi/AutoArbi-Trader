@@ -6,18 +6,16 @@ import {
     Button
 } from '@material-ui/core';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
-
 import { useStyles } from '../styles/FileUploadCardStyles';
 
 export default function FileUploadCard({ type, completed }) {
-    const classes = useStyles();
-    console.log(type, completed)
+    const { root, flex, icon, font } = useStyles();
     return (
-        <Card className={classes.root}>
-            <CardContent className={classes.grid}>
-                <Typography className={classes.documentName} color="textSecondary">
+        <Card className={root}>
+            <CardContent className={flex}>
+                <Typography className={font} color="textSecondary">
                     <AttachFileIcon
-                        className={classes.icon}
+                        className={icon}
                         color={!completed ? "primary" : "secondary"}
                     />
                     {`${type}`.toUpperCase()}
@@ -25,10 +23,17 @@ export default function FileUploadCard({ type, completed }) {
                 <div>
                     <Button
                         disabled={completed}
-                        className={classes.documentName}
+                        className={font}
                         color="secondary"
                     >
                         Upload{completed ? 'ed' : ''}
+                    </Button>
+                    <Button
+                        disabled={!completed}
+                        className={font}
+                        color="secondary"
+                    >
+                        View Document
                     </Button>
                 </div>
             </CardContent>

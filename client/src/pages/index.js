@@ -2,13 +2,18 @@ import React from 'react';
 import MiniDrawer from '../components/MiniDrawer';
 import UserProgressCard from '../components/UserProgressCard';
 import { dummyData } from '../utils/dummyData';
-import { useStyles } from '../styles/Dashboard'
+import { dashboardStyles } from '../styles/GlobalDrawer'
+import { checkForAllDocumentComplete } from '../utils/checkForAllDocComplete';
+
 
 export default function Dashboard() {
-  const classes = useStyles();
+  const classes = dashboardStyles();
   const { buyer, seller } = dummyData;
   return (
-    <MiniDrawer classes={classes}>
+    <MiniDrawer
+      allDocsComplete={checkForAllDocumentComplete(buyer, seller)}
+      classes={classes}
+    >
       <UserProgressCard
         key={2}
         data={seller}

@@ -15,7 +15,7 @@ export const dummyData = {
             },
             {
                 id: '5aea17theh386',
-                type: 'Title',
+                type: 'Vehicle Title',
                 completed: true
             },
             {

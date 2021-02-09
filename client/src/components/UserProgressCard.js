@@ -5,7 +5,7 @@ import ProgressBar from './ProgressBar';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 
 export default function UserProgressCard({ data: { docs, name, title } }) {
-    const classes = useStyles();
+    const { root, header, documents, items, progress, accent, font, userNameFont } = useStyles();
 
     function percentage(arr) {
         var i = 0
@@ -17,31 +17,31 @@ export default function UserProgressCard({ data: { docs, name, title } }) {
     const completed = percentage(docs)
 
     return (
-        <Card className={classes.root}>
-            <CardContent className={classes.header}>
+        <Card className={root}>
+            <CardContent className={header}>
                 <div>
-                    <Typography variant="h3">
+                    <Typography className={userNameFont}>
                         {name}
                     </Typography>
-                    <Typography variant="h6" color="textSecondary">
+                    <Typography className={`${accent} ${font}`}>
                         {title}
                     </Typography>
                 </div>
-                <div className={classes.documents}>
+                <div className={documents}>
                     {
                         docs.map(({ id, completed, type }) => (
-                            <div className={classes.items} key={id}>
+                            <div className={items} key={id}>
                                 <AttachFileIcon
+                                    className={font}
                                     color={completed ? "secondary" : "primary"}
                                 />
-                                <Typography variant="h6" color="textSecondary">{type}</Typography>
+                                <Typography className={font} color="textSecondary">{type}</Typography>
                             </div>
                         ))
                     }
                 </div>
             </CardContent>
-            <div className={classes.progress}>
-                <Typography variant="h6" color="textSecondary">{completed}%</Typography>
+            <div className={progress}>
                 <ProgressBar value={completed} />
             </div>
         </Card>

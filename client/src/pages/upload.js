@@ -2,14 +2,18 @@ import React from 'react';
 import MiniDrawer from '../components/MiniDrawer';
 import FileUploadCard from '../components/FileUploadCard';
 import { dummyData } from '../utils/dummyData';
-import { useStyles } from '../styles/UploadStyles'
+import { uploadStyles } from '../styles/GlobalDrawer'
+import { checkForAllDocumentComplete } from '../utils/checkForAllDocComplete';
 
 export default function Dashboard() {
     const { buyer, seller } = dummyData;
-    const classes = useStyles();
+    const classes = uploadStyles();
 
     return (
-        <MiniDrawer classes={classes}>
+        <MiniDrawer
+            classes={classes}
+            allDocsComplete={checkForAllDocumentComplete(buyer, seller)}
+        >
             {seller.docs.map(({ id, type, completed }) => (
                 <FileUploadCard
                     key={id}

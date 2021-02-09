@@ -23,7 +23,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
-export default function MiniDrawer({ children, classes }) {
+export default function MiniDrawer({ children, classes, allDocsComplete }) {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
 
@@ -98,16 +98,21 @@ export default function MiniDrawer({ children, classes }) {
                             <ListItemText>Upload Documents</ListItemText>
                         </ListItem>
                     </Link>
-                    <ListItem button={true} disabled={true}>
+                    <ListItem
+                        button={true}
+                        disabled={!allDocsComplete}
+                    >
                         <ListItemIcon>
-                            <MailIcon />
+                            <MailIcon
+                                color={allDocsComplete ? "secondary" : "primary"}
+                            />
                         </ListItemIcon>
                         <ListItemText>Send In Forms</ListItemText>
                     </ListItem>
                     <Divider />
                     <ListItem button={true}>
                         <ListItemIcon>
-                            <ExitToAppIcon />
+                            <ExitToAppIcon style={{ color: '#ffcccb' }} />
                         </ListItemIcon>
                         <ListItemText>Sign Out</ListItemText>
                     </ListItem>

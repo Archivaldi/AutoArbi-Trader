@@ -9,10 +9,10 @@ const useStyles = makeStyles({
 });
 
 export default function ProgressBar({ value }) {
-    const classes = useStyles();
+    const { root } = useStyles();
 
     return (
-        <div className={classes.root}>
+        <div className={root}>
             <LinearProgress
                 variant="determinate"
                 value={value}
