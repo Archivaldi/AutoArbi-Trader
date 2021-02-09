@@ -40,7 +40,7 @@ console.log(typingDna_apiKey, typingDna_secret)
 let options = {
     hostname: base_url,
     port: 443,
-    path: '/auto/'+id,
+    path: '/auto/'+client_id,
     method: "POST",
     headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
