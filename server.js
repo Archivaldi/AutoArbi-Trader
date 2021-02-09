@@ -31,7 +31,7 @@ connection.connect((err)=> {
 const {typingDna_apiKey, typingDna_secret} = keys.typingDna;
 const TypingDnaClient = require('typingdnaclient');
 const typingDnaClient = new TypingDnaClient(typingDna_apiKey, typingDna_secret);
-let base_url = 'api.typingdna.com';
+let base_url = 'https://api.typingdna.com';
 let client_id = "test123";
 
 let options = {
