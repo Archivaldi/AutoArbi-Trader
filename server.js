@@ -1,5 +1,5 @@
 //dependencies
-var request = require('request');
+const request = require('request');
 require('dotenv').config();
 var express = require('express');
 var app = express();
@@ -8,7 +8,6 @@ const path = require('path');
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 const session = require('express-session');
-const request = require("request");
 
 //keys
 const keys = require('./keys');
