@@ -25,7 +25,7 @@
         var tdna = new TypingDNA();
 
         const check_accuracy = () => {
-            if (document.getElementById('test_1').innerText === "Hello world! I'm here to create a new account" && document.getElementById('test_2').innerText === "I want to create a text to secure my information" && document.getElementById("test_3").innerText == "We are using new technology to add more security"){
+            if (document.getElementById('test_1').value === "Hello world! I'm here to create a new account" && document.getElementById('test_2').value === "I want to create a text to secure my information" && document.getElementById("test_3").value == "We are using new technology to add more security"){
                 var typingPattern = tdna.getTypingPattern({type:0, length:160});
                 var patternQuality = tdna.getQuality(typingPattern);
                 console.log(patternQuality);
