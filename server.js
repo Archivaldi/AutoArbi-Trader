@@ -83,9 +83,9 @@ app.post("/sighup/typingdna", (req,res) => {
                 res.send({message: "Success!"});
             } else {
                 res.send({message: "Got some issue"});
-            }
-    })
-})
+            };
+    });
+});
 
 
 
