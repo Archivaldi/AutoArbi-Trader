@@ -7,16 +7,25 @@
     <title>Document</title>
 </head>
 <body>
-    <label for="test_1">Please type the following text: "Hello world! I'm here to create a new account"</label>
-    <input type="text" id="test_1">
-    <br>
-    <label for="test_1">Please type the following text: "I want to create a text to secure my information"</label>
-    <input type="text" id="test_2">
-    <br>
-    <label for="test_1">Please type the following text: "We are using new technology to add more security"</label>
-    <input type="text" id="test_3">
+    <div>
+        <div id="test_1_div">
+            <label for="test_1">Please type the following text: "I'm here to create a new account"</label>
+            <br>
+            <input type="text" id="test_1">
+        </div>
+        <div id="test_2_div" style="display:none;">
+            <label for="test_1">Please type the following text: "I want to create a text to secure my information"</label>
+            <br>
+            <input type="text" id="test_2">
+        </div>
+        <div id="test_3_div" style="display:none;">
+            <label for="test_1">Please type the following text: "We are using new technology to add more security"</label>
+            <br>
+            <input type="text" id="test_3">
+        </div>
 
-    <button onclick="check_accuracy()">Submit</button>
+        <button onclick="check_accuracy_1()">Submit 1 test</button>
+    </div>
 
 
 
@@ -24,6 +33,34 @@
     <script src="https://www.typingdna.com/scripts/typingdna.js"></script>
     <script>
         var tdna = new TypingDNA();
+
+        const check_accuracy_1 = () => {
+            let text_to_type = "I'm here to create a new account";
+            let typed_text = $("#test_1").value;
+            if (text_to_type === typed_text) {
+                var typingPattern = tdna.getTypingPattern({type:0, length:160});
+                var patternQuality = tdna.getQuality(typingPattern);
+                console.log(`Quality for the test 1: ${patternQuality}`);
+                if (patternQuality > 0.5){
+                    $.ajax({
+                        method: "POST",
+                        url: "/sighup/typingdna",
+                        data: {typingPattern}
+                    }).then(r => {
+                        console.log(r.message);
+                        if (r.message === "Success"){
+
+                        } else {
+                            console.log("Something went wrong");
+                        }
+                    })
+                } else {
+                    console.log("Something went wrong");
+                }
+
+                
+            }
+        }
 
         const check_accuracy = () => {
             tdna.stop();

@@ -6,14 +6,18 @@ var app = express();
 var fs = require('fs');
 const path = require('path');
 const bodyParser = require("body-parser");
-app.use(bodyParser.urlencoded({ extended: true }));
 const session = require('express-session');
+const cookieParser = require('cookie-parser');
 
 //keys
 const keys = require('./keys');
 
+//uuid 
+const { v4: uuidv4 } = require('uuid');
+
 
 //allow sessions
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({ secret: keys.secret.secret, cookie: { maxAge: 1 * 1000 * 60 * 60 * 24 * 365 } }));
 
 //port
@@ -45,27 +49,6 @@ app.get("/login", (req,res) => {
 
 app.get("/sighup", (req,res) => {
     res.sendFile(__dirname + "/signup.html");
-
-    // let options = {
-    //     url: base_url+'/auto/'+client_id,
-    //     port: 443,
-    //     method: "POST",
-    //     headers: {
-    //         'Content-Type': 'application/x-www-form-urlencoded',
-    //         'Cache-Control': 'no-cache',
-    //         'Authorization': 'Basic ' + new Buffer (typingDna_apiKey + ':' + typingDna_secret).toString('base64'),
-    //     }
-    // }
-
-    // var responseData = '';
-
-    // request(options, function(error, response, body) {
-    //     if (error) {
-    //         console.log(error);
-    //     } else {
-    //         console.log(body);
-    //     }
-    // });
 });
 
 app.post("/sighup/typingdna", (req,res) => {
