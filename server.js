@@ -74,7 +74,7 @@ app.post("/sighup/typingdna", (req,res) => {
     
     let client_id = "test123";
 
-    typingDnaClient.auto(client_id, typingPattern, function(res) {
+    typingDnaClient.auto(client_id, typingPattern, res => {
         console.log(res)
         if (res.status === 200){
             res.send({message: "Success!"});
