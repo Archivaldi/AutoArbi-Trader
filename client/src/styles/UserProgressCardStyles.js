@@ -1,27 +1,25 @@
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme) => ({
     root: {
+        display: 'grid',
+        gap: '1em'
+    },
+    header: {
+        display: 'grid',
+        gridTemplateColumns: '50% 50%'
+    },
+    progress: {
+        display: 'grid',
+        margin: '0 50px 0 50px',
+    },
+    documents: {
         display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-around'
     },
-    details: {
+    items: {
         display: 'flex',
-        flexDirection: 'column',
-    },
-    content: {
-        flex: '1 0 auto',
-    },
-    cover: {
-        width: 151,
-    },
-    controls: {
-        display: 'flex',
-        alignItems: 'center',
-        paddingLeft: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
-    },
-    playIcon: {
-        height: 38,
-        width: 38,
-    },
+        flexDirection: 'row',
+    }
 }));

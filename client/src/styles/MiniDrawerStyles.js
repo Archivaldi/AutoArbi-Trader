@@ -7,6 +7,7 @@ export const useStyles = makeStyles((theme) => ({
         display: 'flex',
     },
     appBar: {
+        backgroundColor: '#787878',
         zIndex: theme.zIndex.drawer + 1,
         transition: theme.transitions.create(['width', 'margin'], {
             easing: theme.transitions.easing.sharp,
@@ -51,6 +52,7 @@ export const useStyles = makeStyles((theme) => ({
         },
     },
     toolbar: {
+        color: 'dark',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'flex-end',
@@ -61,6 +63,9 @@ export const useStyles = makeStyles((theme) => ({
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),
+        display: 'grid',
+        gap: '1rem',
+        gridTemplateRows: '12% 95% 95%'
     },
     logo: {
         maxWidth: 50,

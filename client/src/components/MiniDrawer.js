@@ -57,7 +57,7 @@ export default function MiniDrawer({ children }) {
                     <img src="https://raw.githubusercontent.com/Archivaldi/4wheelz/nextjswire/client/src/images/AutoArbiTraderLogo.png" alt="logo" className={classes.logo} />
                     <Typography variant="h6" noWrap>
                         auto arbi-trader
-          </Typography>
+                    </Typography>
                 </Toolbar>
             </AppBar>
             <Drawer
