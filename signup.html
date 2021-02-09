@@ -14,16 +14,16 @@
             <input type="text" id="test_1">
         </div>
         <div id="test_2_div" style="display:none;">
-            <label for="test_1">Please type the following text: "<span id="text_to_type_2">I want to create a text to secure my information</span>"</label>
+            <label for="test_2">Please type the following text: "<span id="text_to_type_2">I want to create a text to secure my information</span>"</label>
             <br>
             <input type="text" id="test_2">
         </div>
         <div id="test_3_div" style="display:none;">
-            <label for="test_1">Please type the following text:  "<span id="text_to_type_2">We are using new technology to add more security</span>"</label>
+            <label for="test_3">Please type the following text:  "<span id="text_to_type_3">We are using new technology to add more security</span>"</label>
             <br>
             <input type="text" id="test_3">
         </div>
-        <button onclick="check_accuracy()">Submit 1 test</button>
+        <button onclick="check_accuracy()">Submit test</button>
     </div>
 
 
@@ -62,10 +62,10 @@
                                  $(`#test_${num}`).val("");
                             }
                         })
-                }   
-            } else {
+                }  else {
                 alert("The text doens't match. Please try again");
                 $(`#test_${num}`).val("");
+            } 
             }
         }
     </script>
