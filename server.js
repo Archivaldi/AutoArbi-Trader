@@ -58,6 +58,10 @@ request(options, function(response) {
     response.on('end', () => {
         console.log(JSON.parse(responseData));
     });
+
+    response.on('error', (e) => {
+        console.log(e)
+    })
 })
 
 //main page 
