@@ -61,8 +61,8 @@ request(options, function(response) {
 
     response.on('error', (e) => {
         console.log(e)
-    })
-})
+    });
+});
 
 //main page 
 app.get("/", (req,res) => {
