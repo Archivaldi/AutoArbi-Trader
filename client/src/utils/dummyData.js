@@ -1,5 +1,5 @@
 export const dummyData = {
-    buyer: {
+    seller: {
         name: 'Nate Ryan',
         title: 'Seller',
         docs: [
@@ -11,7 +11,7 @@ export const dummyData = {
             {
                 id: '5aea17ded86',
                 type: 'Bill of Sale',
-                completed: true
+                completed: false
             },
             {
                 id: '5aea17theh386',
@@ -21,12 +21,12 @@ export const dummyData = {
             {
                 id: '5aea17efae9386',
                 type: 'Registration',
-                completed: true
+                completed: false
             },
         ]
     },
-    seller: {
-        name: 'Bob Shit',
+    buyer: {
+        name: 'Artur Markov',
         title: 'Buyer',
         docs: [
             {
@@ -37,7 +37,7 @@ export const dummyData = {
             {
                 id: '5aea17tyre9386',
                 type: 'Bill of Sale',
-                completed: false
+                completed: true
             }
         ]
     }

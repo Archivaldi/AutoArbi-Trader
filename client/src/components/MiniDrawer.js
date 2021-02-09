@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -8,6 +8,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -23,7 +24,7 @@ import { useStyles } from '../styles/MiniDrawerStyles'
 export default function MiniDrawer({ children }) {
     const classes = useStyles();
     const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -56,7 +57,7 @@ export default function MiniDrawer({ children }) {
                     </IconButton>
                     <img src="https://raw.githubusercontent.com/Archivaldi/4wheelz/nextjswire/client/src/images/AutoArbiTraderLogo.png" alt="logo" className={classes.logo} />
                     <Typography variant="h6" noWrap>
-                        auto arbi-trader
+                        <span className={classes.auto}>auto</span> <span className={classes.arbiTrader}>arbi-trader</span>
                     </Typography>
                 </Toolbar>
             </AppBar>
@@ -80,12 +81,21 @@ export default function MiniDrawer({ children }) {
                 </div>
                 <Divider />
                 <List>
-                    {['Inbox', 'Starred', 'Send email'].map((text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItem>
-                    ))}
+                    <ListItem button={true}>
+                        <ListItemIcon>
+                            <InboxIcon />
+                        </ListItemIcon>
+                        <ListItemText>View Progress</ListItemText>
+                    </ListItem>
+                    <ListItem button={true} disabled={true}>
+                        <ListItemIcon><MailIcon /></ListItemIcon>
+                        <ListItemText>Send In Forms</ListItemText>
+                    </ListItem>
+                    <Divider />
+                    <ListItem button={true}>
+                        <ListItemIcon><ExitToAppIcon /></ListItemIcon>
+                        <ListItemText>Sign Out</ListItemText>
+                    </ListItem>
                 </List>
             </Drawer>
             <main className={classes.content}>

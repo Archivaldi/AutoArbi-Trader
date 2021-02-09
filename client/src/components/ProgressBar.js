@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
@@ -13,7 +13,11 @@ export default function ProgressBar({ value }) {
 
     return (
         <div className={classes.root}>
-            <LinearProgress variant="determinate" value={value} />
+            <LinearProgress
+                variant="determinate"
+                value={value}
+                color={value === 100 ? "secondary" : "primary"}
+            />
         </div>
     );
 }

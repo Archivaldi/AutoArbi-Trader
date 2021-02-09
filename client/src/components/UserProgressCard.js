@@ -23,32 +23,28 @@ export default function UserProgressCard({ data: { docs, name, title } }) {
         <Card className={classes.root}>
             <CardContent className={classes.header}>
                 <div>
-                    <Typography component="h5" variant="h5">
-                        Current Progress
+                    <Typography component="h3" variant="h3">
+                        {name}
                     </Typography>
-                    <Typography variant="subtitle1" color="textSecondary">
-                        {name} - {title}
+                    <Typography variant="h6" color="textSecondary">
+                        {title}
                     </Typography>
                 </div>
                 <div className={classes.documents}>
                     {
-                        docs.map(({ id, completed, type }) => {
-                            var indicatorColor = completed ? "primary" : "secondary"
-                            return (
-                                <div className={classes.items}>
-                                    <AttachFileIcon
-                                        key={id}
-                                        color={indicatorColor}
-                                    />
-                                    <Typography>{type}</Typography>
-                                </div>
-                            )
-                        })
+                        docs.map(({ id, completed, type }) => (
+                            <div className={classes.items} key={id}>
+                                <AttachFileIcon
+                                    color={completed ? "secondary" : "primary"}
+                                />
+                                <Typography variant="h6" color="textSecondary">{type}</Typography>
+                            </div>
+                        ))
                     }
                 </div>
             </CardContent>
             <div className={classes.progress}>
-                {completed}%
+                <Typography variant="h6" color="textSecondary">{completed}%</Typography>
                 <ProgressBar value={completed} />
             </div>
         </Card>
