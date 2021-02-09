@@ -2,7 +2,7 @@ import React from 'react';
 import MiniDrawer from '../components/MiniDrawer';
 import UserProgressCard from '../components/UserProgressCard';
 import { dummyData } from '../utils/dummyData';
-import { dashboardStyles } from '../styles/GlobalDrawer'
+import { dashboardStyles } from '../styles/GlobalDrawerStyles'
 import { checkForAllDocumentComplete } from '../utils/checkForAllDocComplete';
 
 

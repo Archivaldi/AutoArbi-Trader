@@ -2,7 +2,7 @@ import React from 'react';
 import MiniDrawer from '../components/MiniDrawer';
 import FileUploadCard from '../components/FileUploadCard';
 import { dummyData } from '../utils/dummyData';
-import { uploadStyles } from '../styles/GlobalDrawer'
+import { uploadStyles } from '../styles/GlobalDrawerStyles'
 import { checkForAllDocumentComplete } from '../utils/checkForAllDocComplete';
 
 export default function Dashboard() {

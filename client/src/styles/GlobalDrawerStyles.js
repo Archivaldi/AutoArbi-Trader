@@ -63,8 +63,7 @@ const materialUIStyles = (theme, page) => {
             flexGrow: 1,
             padding: theme.spacing(3),
             display: 'grid',
-            gap: '1.5rem',
-            gridTemplateRows: '5vh 38vh 38vh'
+            gap: '1.5rem'
         },
         logo: {
             maxWidth: 50,
@@ -76,6 +75,9 @@ const materialUIStyles = (theme, page) => {
         },
         arbiTrader: {
             color: "#0081cb"
+        },
+        exitIcon: {
+            color: '#ffcccb'
         }
     }
     switch (page) {
@@ -99,5 +101,5 @@ const materialUIStyles = (theme, page) => {
     }
 }
 
-export const uploadStyles = makeStyles((theme) => (materialUIStyles(theme, 'uploadStyles')));
-export const dashboardStyles = makeStyles((theme) => (materialUIStyles(theme, 'dashboardStyles')));
+export const uploadStyles = makeStyles(theme => materialUIStyles(theme, 'uploadStyles'));
+export const dashboardStyles = makeStyles(theme => materialUIStyles(theme, 'dashboardStyles'));

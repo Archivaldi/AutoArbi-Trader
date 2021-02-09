@@ -35,13 +35,20 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
         setOpen(false);
     };
 
+    const {
+        root, appBar, appBarShift, menuButton,
+        hide, logo, auto, arbiTrader, drawer,
+        drawerOpen, drawerClose, content,
+        toolbar
+    } = classes
+
     return (
-        <div className={classes.root}>
+        <div className={root}>
             <CssBaseline />
             <AppBar
                 position="fixed"
-                className={clsx(classes.appBar, {
-                    [classes.appBarShift]: open,
+                className={clsx(appBar, {
+                    [appBarShift]: open,
                 })}
             >
                 <Toolbar>
@@ -50,32 +57,32 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
                         aria-label="open drawer"
                         onClick={handleDrawerOpen}
                         edge="start"
-                        className={clsx(classes.menuButton, {
-                            [classes.hide]: open,
+                        className={clsx(menuButton, {
+                            [hide]: open,
                         })}
                     >
                         <MenuIcon />
                     </IconButton>
-                    <img src="https://raw.githubusercontent.com/Archivaldi/4wheelz/nextjswire/client/src/images/AutoArbiTraderLogo.png" alt="logo" className={classes.logo} />
+                    <img src="https://raw.githubusercontent.com/Archivaldi/4wheelz/nextjswire/client/src/images/AutoArbiTraderLogo.png" alt="logo" className={logo} />
                     <Typography variant="h6" noWrap>
-                        <span className={classes.auto}>auto</span> <span className={classes.arbiTrader}>arbi-trader</span>
+                        <span className={auto}>auto</span> <span className={arbiTrader}>arbi-trader</span>
                     </Typography>
                 </Toolbar>
             </AppBar>
             <Drawer
                 variant="permanent"
-                className={clsx(classes.drawer, {
-                    [classes.drawerOpen]: open,
-                    [classes.drawerClose]: !open,
+                className={clsx(drawer, {
+                    [drawerOpen]: open,
+                    [drawerClose]: !open,
                 })}
                 classes={{
                     paper: clsx({
-                        [classes.drawerOpen]: open,
-                        [classes.drawerClose]: !open,
+                        [drawerOpen]: open,
+                        [drawerClose]: !open,
                     }),
                 }}
             >
-                <div className={classes.toolbar}>
+                <div className={toolbar}>
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
                     </IconButton>
@@ -118,8 +125,8 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
                     </ListItem>
                 </List>
             </Drawer>
-            <main className={classes.content}>
-                <div className={classes.toolbar} />
+            <main className={content}>
+                <div className={toolbar} />
                 {children}
             </main>
         </div>
