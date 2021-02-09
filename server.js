@@ -69,21 +69,22 @@ app.get("/sighup", (req,res) => {
 });
 
 app.post("/sighup/typingdna", (req,res) => {
-    let typingPattern = req.body.typingPattern;
-    console.log(typingPattern);
-    
-    let client_id = "test123";
+        let typingPattern = req.body.typingPattern;
+        console.log(typingPattern);
+        
+        let client_id = "test123";
 
-    typingDnaClient.auto(client_id, typingPattern, (error, res) => {
-        if (error){
-            console.log(error);
-        }
-        console.log(res)
-        if (res.status === 200){
-            res.send({message: "Success!"});
-        } else {
-            res.send({message: "Got some issue"});
-        }
+        typingDnaClient.auto(client_id, typingPattern, (error, res) => {
+            if (error){
+                console.log(error);
+            }
+            console.log(res)
+            if (res.status === 200){
+                res.send({message: "Success!"});
+            } else {
+                res.send({message: "Got some issue"});
+            }
+    })
 })
 
 
