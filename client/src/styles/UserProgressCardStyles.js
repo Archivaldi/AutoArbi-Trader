@@ -16,7 +16,9 @@ export const useStyles = makeStyles((theme) => ({
     documents: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        flexWrap: 'wrap'
     },
     items: {
         display: 'flex',

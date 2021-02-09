@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start",
+    "//": "TODO: Set back to 'next start' before deploy",
+    "start": "next",
     "test": "npx jest ./src",
     "lint-staged": "npx lint-staged",
     "lint": "npx eslint ./src"
