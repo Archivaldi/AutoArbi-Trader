@@ -45,7 +45,6 @@ app.get("/login", (req,res) => {
 
 app.get("/sighup", (req,res) => {
     res.sendFile(__dirname + "/signup.html");
-    // let client_id = "test123";
 
     // let options = {
     //     url: base_url+'/auto/'+client_id,
@@ -72,8 +71,17 @@ app.get("/sighup", (req,res) => {
 app.post("/sighup/typingdna", (req,res) => {
     let typingPattern = req.body.typingPattern;
     console.log(typingPattern);
+    
+    let client_id = "test123";
 
-    res.send({message: "We got it"});
+    typingDnaClient.auto(client_id, typingPattern, function(res) {
+        console.log(res)
+        if (res.status === 200){
+            res.send({message: "Success!"});
+        } else {
+            res.send({message: "Got some issue"});
+        }
+    })
 })
 
 
