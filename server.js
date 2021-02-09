@@ -8,6 +8,7 @@ const path = require('path');
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 const session = require('express-session');
+const request = require("request");
 
 //keys
 const keys = require('./keys');
@@ -33,7 +34,31 @@ const TypingDnaClient = require('typingdnaclient');
 const typingDnaClient = new TypingDnaClient(typingDna_apiKey, typingDna_secret);
 console.log("Instantiated the typing dna client");
 let base_url = 'api.typingdna.com';
+let client_id = test123;
 
+let options = {
+    hostname: base_url,
+    port: 443,
+    path: '/auto/'+id,
+    method: "POST",
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Cache-Control': 'no-cache',
+        'Authorization': 'Basic ' + new Buffer (typingDna_apiKey + ':' + typingDna_secret).toString('base64'),
+    }
+}
+
+var responseData = '';
+
+request(options, function(response) {
+    response.on('data', function(chunk){
+        console.log(responseData += chunk);
+    });
+
+    response.on('end', () => {
+        console.log(JSON.parse(responseData));
+    });
+})
 
 //main page 
 app.get("/", (req,res) => {
