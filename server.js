@@ -12,6 +12,7 @@ const session = require('express-session');
 //keys
 const keys = require('./keys');
 
+
 //allow sessions
 app.use(session({ secret: keys.secret.secret, cookie: { maxAge: 1 * 1000 * 60 * 60 * 24 * 365 } }));
 
