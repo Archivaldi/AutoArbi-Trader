@@ -9,7 +9,7 @@
 <body>
     <div>
         <div id="test_1_div">
-            <label for="test_1">Please type the following text: "<span id="text_to_type_1"> Hello world! I'm here to create a new account</span>"</label>
+            <label for="test_1">Please type the following text: "<span id="text_to_type_1"> I'm here to create a new account</span>"</label>
             <br>
             <input type="text" id="test_1">
         </div>
@@ -40,7 +40,7 @@
             tdna.stop();
 
             if ($(`#test_${num}`).value !== ""){
-                if ($(`#text_to_type_${num}`).value === $(`#test_${num}`).value) {
+                if ($(`#text_to_type_${num}`).val() === $(`#test_${num}`).val()) {
                     var typingPattern = tdna.getTypingPattern({type:0, length:160});
                     var patternQuality = tdna.getQuality(typingPattern);
                     console.log(`Quality for the test ${num}: ${patternQuality}`);
@@ -62,17 +62,17 @@
                                 }
                             } else {
                                 alert("Something went wrong. Please try again");
-                                 $(`#test_${num}`).value = "";
+                                 $(`#test_${num}`).val() = "";
                             }
                         })
                     } else {
                         alert("Something went wrong. Please try again");
-                        $(`#test_${num}`).value = "";
+                        $(`#test_${num}`).val() = "";
                     }
                 }   
             } else {
                 alert("The text doens't match. Please try again");
-                $(`#test_${num}`).value = "";
+                $(`#test_${num}`).val() = "";
             }
         }
     </script>
