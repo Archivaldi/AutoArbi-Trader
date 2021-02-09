@@ -31,16 +31,12 @@ connection.connect((err)=> {
 const {typingDna_apiKey, typingDna_secret} = keys.typingDna;
 const TypingDnaClient = require('typingdnaclient');
 const typingDnaClient = new TypingDnaClient(typingDna_apiKey, typingDna_secret);
-console.log("Instantiated the typing dna client");
 let base_url = 'api.typingdna.com';
 let client_id = "test123";
 
-console.log(typingDna_apiKey, typingDna_secret)
-
 let options = {
-    hostname: base_url,
+    url: base_url+'/auto/'+client_id,
     port: 443,
-    path: '/auto/'+client_id,
     method: "POST",
     headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -51,8 +47,12 @@ let options = {
 
 var responseData = '';
 
-request(options, function(response) {
-    console.log(response);
+request(options, function(error, response, body) {
+    if (error) {
+        console.log(error);
+    } else {
+        console.log(body);
+    }
 });
 
 //main page 
