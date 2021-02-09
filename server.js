@@ -35,6 +35,8 @@ console.log("Instantiated the typing dna client");
 let base_url = 'api.typingdna.com';
 let client_id = test123;
 
+console.log(typingDna_apiKey, typingDna_secret)
+
 let options = {
     hostname: base_url,
     port: 443,
