@@ -52,17 +52,7 @@ let options = {
 var responseData = '';
 
 request(options, function(response) {
-    response.on('data', function(chunk){
-        console.log(responseData += chunk);
-    });
-
-    response.on('end', () => {
-        console.log(JSON.parse(responseData));
-    });
-
-    response.on('error', (e) => {
-        console.log(e)
-    });
+    console.log(response);
 });
 
 //main page 
