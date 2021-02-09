@@ -41,7 +41,7 @@
 
             if ($(`#test_${num}`).val() !== ""){
                 if ($(`#text_to_type_${num}`).text() === $(`#test_${num}`).val()) {
-                    var typingPattern = tdna.getTypingPattern({type:0, length: $(`#text_to_type_${num}`).text().length});
+                    var typingPattern = tdna.getTypingPattern({type:1, length: $(`#text_to_type_${num}`).text().length});
                     var patternQuality = tdna.getQuality(typingPattern);
                     console.log(`Quality for the test ${num}: ${patternQuality}`);
                     if (patternQuality > 0.5){
