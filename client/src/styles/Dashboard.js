@@ -64,7 +64,7 @@ export const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(3),
         display: 'grid',
         gap: '1.5rem',
-        gridTemplateRows: '5vh 42vh 42vh'
+        gridTemplateRows: '5vh 38vh 38vh'
     },
     logo: {
         maxWidth: 50,

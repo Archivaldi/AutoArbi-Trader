@@ -1,32 +1,32 @@
 export const dummyData = {
     seller: {
-        name: 'Nate Ryan',
+        name: 'Artur Markov',
         title: 'Seller',
         docs: [
             {
                 id: '5aea17efuju86',
-                type: 'Doc Name',
-                completed: false
+                type: 'Government ID',
+                completed: true
             },
             {
                 id: '5aea17ded86',
                 type: 'Bill of Sale',
-                completed: false
+                completed: true
             },
             {
                 id: '5aea17theh386',
                 type: 'Title',
-                completed: false
+                completed: true
             },
             {
                 id: '5aea17efae9386',
                 type: 'Registration',
-                completed: false
+                completed: true
             },
         ]
     },
     buyer: {
-        name: 'Artur Markov',
+        name: 'Nate Ryan',
         title: 'Buyer',
         docs: [
             {

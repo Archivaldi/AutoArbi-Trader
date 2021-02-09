@@ -1,8 +1,5 @@
 import React from 'react';
-import { useTheme } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
+import { Card, CardContent, Typography, } from '@material-ui/core';
 import { useStyles } from '../styles/UserProgressCardStyles'
 import ProgressBar from './ProgressBar';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
@@ -23,7 +20,7 @@ export default function UserProgressCard({ data: { docs, name, title } }) {
         <Card className={classes.root}>
             <CardContent className={classes.header}>
                 <div>
-                    <Typography component="h3" variant="h3">
+                    <Typography variant="h3">
                         {name}
                     </Typography>
                     <Typography variant="h6" color="textSecondary">
