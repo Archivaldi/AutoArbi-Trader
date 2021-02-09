@@ -31,7 +31,7 @@
                 var typingPattern = tdna.getTypingPattern({type:0, length:160});
                 var patternQuality = tdna.getQuality(typingPattern);
                 if (patternQuality > 0.5) {
-                    $ajax({
+                    $.ajax({
                         method: "POST",
                         url: "/sighup/typingdna",
                         data: typingPattern
