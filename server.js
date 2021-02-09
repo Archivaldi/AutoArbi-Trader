@@ -80,9 +80,9 @@ app.post("/sighup/typingdna", (req,res) => {
             }
             console.log(response)
             if (response.statusCode === 200){
-                response.send({message: "Success!"});
+                res.send({message: "Success!"});
             } else {
-                response.send({message: "Got some issue"});
+                res.send({message: "Got some issue"});
             }
     })
 })
