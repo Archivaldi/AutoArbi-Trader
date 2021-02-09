@@ -43,7 +43,7 @@
                 if ($(`#text_to_type_${num}`).value === $(`#test_${num}`).value) {
                     var typingPattern = tdna.getTypingPattern({type:0, length:160});
                     var patternQuality = tdna.getQuality(typingPattern);
-                    console.log(`Quality for the test ${number}: ${patternQuality}`);
+                    console.log(`Quality for the test ${num}: ${patternQuality}`);
                     if (patternQuality > 0.5){
                         $.ajax({
                             method: "POST",
