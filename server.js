@@ -27,6 +27,12 @@ connection.connect((err)=> {
     console.log("Database connected");
 });
 
+//TYPINGDNA api and secret
+const {typingDna_apiKey, typingDna_secret} = keys.typingDna;
+const TypingDnaClient = require('typingdnaclient');
+const typingDnaClient = new TypingDnaClient(typingDna_apiKey, typingDna_secret);
+console.log("Instantiated the typing dna client");
+let base_url = 'api.typingdna.com';
 
 
 //main page 

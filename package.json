@@ -15,6 +15,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "mysql": "^2.18.1",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "typingdnaclient": "^1.1.1"
   }
 }
