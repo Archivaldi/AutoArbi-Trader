@@ -74,14 +74,16 @@ app.post("/sighup/typingdna", (req,res) => {
     
     let client_id = "test123";
 
-    typingDnaClient.auto(client_id, typingPattern, res => {
+    typingDnaClient.auto(client_id, typingPattern, (error, res) => {
+        if (error){
+            console.log(error);
+        }
         console.log(res)
         if (res.status === 200){
             res.send({message: "Success!"});
         } else {
             res.send({message: "Got some issue"});
         }
-    })
 })
 
 
