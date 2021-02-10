@@ -104,7 +104,7 @@ app.get("/fill_form", async (req,res) => {
     const exampleData = {
         "title": "Jefferson County Texas Vehicle Bill Of Sale",
         "fontSize": 10,
-        "textColor": "#CC0000",
+        "textColor": "#fff",
         "data":
             {
                 seller: "Artur Markov",
