@@ -8,4 +8,9 @@ exports.mysql_data = {
 
 exports.secret = {
     secret: process.env.SECRET
+};
+
+exports.typingDna = {
+    typingDna_apiKey: process.env.TYPINGDNA_APIKEY,
+    typingDna_secret: process.env.TYPINGDNA_APISECRET
 }
