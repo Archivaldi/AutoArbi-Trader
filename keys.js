@@ -13,4 +13,9 @@ exports.secret = {
 exports.typingDna = {
     typingDna_apiKey: process.env.TYPINGDNA_APIKEY,
     typingDna_secret: process.env.TYPINGDNA_APISECRET
+};
+
+exports.anvil = {
+    apiKey: process.env.ANVIL_APIKEY,
+    bill_of_sale_id: process.env.ANVIL_BILLOFSALE_ID
 }
