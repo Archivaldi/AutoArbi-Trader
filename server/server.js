@@ -53,8 +53,6 @@ app.get("/sighup", (req,res) => {
 
 app.post("/sighup/typingdna", (req,res) => {
         let typingPattern = req.body.typingPattern;
-        console.log(typingPattern);
-        
         let client_id = "test123";
 
         typingDnaClient.auto(client_id, typingPattern, (error, response) => {
