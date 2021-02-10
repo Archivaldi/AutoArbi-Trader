@@ -25,6 +25,7 @@
                 var typingPattern = tdna.getTypingPattern({type:1, text: $(`#text_to_type_1`).text()});
                 $.ajax({
                     url: "/check_pattern",
+                    method: "POST",
                     data: {typingPattern}
                 }).then(r => {
                     if (r.message === "Success!"){
