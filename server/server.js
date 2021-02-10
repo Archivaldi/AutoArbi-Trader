@@ -70,6 +70,26 @@ app.post("/sighup/typingdna", (req,res) => {
     });
 });
 
+app.get("/check_pattern", (req,res) => {
+    let typingPattern = req.body.typingPattern;
+    console.log(typingPattern);
+    let client_id = "test123";
+    typingDnaClient.check(
+        {
+            userId: client_id,
+            type: 1,
+            device: 'desktop'
+        },
+        function (error, result) {
+            console.log(result);
+            if (error) {
+                res.send({"message": "got some error"});
+            } else {
+                res.send({message: "Success!"})
+            }
+        }
+        )
+})
 
 
 
