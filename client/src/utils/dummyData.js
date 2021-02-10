@@ -7,25 +7,25 @@ export const dummyData = {
                 id: '5aea17efuju86',
                 type: 'Government ID',
                 url: 'https://github.com/Archivaldi/4wheelz/blob/master/client/src/images/PlaceHolderID.jpg?raw=true',
-                completed: true
+                completed: false
             },
             {
                 id: '5aea17ded86',
                 type: 'Bill of Sale',
                 url: 'https://github.com/Archivaldi/4wheelz/blob/master/client/src/images/PlaceHolderBillOfSale.jpg?raw=true',
-                completed: true
+                completed: false
             },
             {
                 id: '5aea17theh386',
                 type: 'Vehicle Title',
                 url: 'https://github.com/Archivaldi/4wheelz/blob/master/client/src/images/PlaceHolderTitle.jpg?raw=true',
-                completed: true
+                completed: false
             },
             {
                 id: '5aea17efae9386',
                 type: 'Registration',
                 url: 'https://github.com/Archivaldi/4wheelz/blob/master/client/src/images/PlaceHolderReg.jpg?raw=true',
-                completed: true
+                completed: false
             },
         ]
     },

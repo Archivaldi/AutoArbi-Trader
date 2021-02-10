@@ -34,6 +34,7 @@ export default class MyApp extends App {
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700"
             as="font"
           />
+          <script src="https://www.typingdna.com/scripts/typingdna.js"></script>
         </Head>
         <StyledComponentProvider theme={theme}>
           <MaterialUiProvider theme={theme}>
