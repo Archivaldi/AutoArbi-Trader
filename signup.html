@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <div id="test_1_div">
+            <label for="test_1">Please type the following text: "<span id="text_to_type_1">I'm here to create a new account</span>"</label>
+            <br>
+            <input type="text" id="test_1">
+        </div>
+        <div id="test_2_div" style="display:none;">
+            <label for="test_2">Please type the following text: "<span id="text_to_type_2">I want to create a text to secure my information</span>"</label>
+            <br>
+            <input type="text" id="test_2">
+        </div>
+        <div id="test_3_div" style="display:none;">
+            <label for="test_3">Please type the following text:  "<span id="text_to_type_3">We are using new technology to add more security</span>"</label>
+            <br>
+            <input type="text" id="test_3">
+        </div>
+        <button onclick="check_accuracy()">Submit test</button>
+    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://www.typingdna.com/scripts/typingdna.js"></script>
+
+    <script>
+        var tdna = new TypingDNA();
+        let num = 1;
+
+        const check_accuracy = () => {
+
+            tdna.stop();
+
+            if ($(`#test_${num}`).val() !== ""){
+                if ($(`#text_to_type_${num}`).text() === $(`#test_${num}`).val()) {
+                    var typingPattern = tdna.getTypingPattern({type:1, text: $(`#text_to_type_${num}`).text()});
+                        $.ajax({
+                            method: "POST",
+                            url: "/sighup/typingdna",
+                            data: {typingPattern}
+                        }).then(r => {
+                            console.log(r.message);
+                            if (r.message === "Success!"){
+                                if (num === 3){
+                                    window.location.href = "/";
+                                } else {
+                                    $(`#test_${num}_div`).css("display", "none");
+                                    num += 1;
+                                    $(`#test_${num}_div`).css("display", "inline");
+                                    tdna.start();
+                                }
+                            } else {
+                                alert("Something went wrong. Please try again");
+                                 $(`#test_${num}`).val("");
+                            }
+                        })
+                }  else {
+                alert("The text doens't match. Please try again");
+                $(`#test_${num}`).val("");
+            } 
+            }
+        }
+    </script>
+</body>
+</html>
