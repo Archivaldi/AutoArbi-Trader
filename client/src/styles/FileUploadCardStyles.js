@@ -2,23 +2,21 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles(theme => ({
     root: {
-        display: 'grid',
-        minWidth: '260px'
+        height: '100%',
+        margin: 0,
+        padding: 0,
+        alignItems: 'center',
+        minWidth: '260px',
     },
     flex: {
         display: 'flex',
         flexWrap: 'wrap',
-        alignSelf: 'center',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+        height: '100%',
         alignItems: 'center',
-        margin: '2vw',
-        [theme.breakpoints.up('lg')]: {
-            margin: '1vw'
-        },
-        [theme.breakpoints.down('sm')]: {
-            margin: '2.5vw'
-        },
+        justifyContent: 'space-between',
+    },
+    buttonMargin: {
+        margin: '20px',
     },
     font: {
         fontSize: '3vw',
@@ -30,6 +28,11 @@ export const useStyles = makeStyles(theme => ({
         },
         [theme.breakpoints.down('sm')]: {
             fontSize: '1em'
+        },
+    },
+    disAppear: {
+        [theme.breakpoints.down('xs')]: {
+            display: 'none'
         },
     },
     icon: {

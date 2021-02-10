@@ -7,13 +7,13 @@ export const dummyData = {
                 id: '5aea17efuju86',
                 type: 'Government ID',
                 url: 'https://raw.githubusercontent.com/Archivaldi/4wheelz/nextjswire/client/src/images/PlaceHolderID.jpg',
-                completed: true
+                completed: false
             },
             {
                 id: '5aea17ded86',
                 type: 'Bill of Sale',
                 url: 'https://raw.githubusercontent.com/Archivaldi/4wheelz/nextjswire/client/src/images/PlaceHolderBillOfSale.jpg',
-                completed: false
+                completed: true
             },
             {
                 id: '5aea17theh386',
@@ -25,7 +25,7 @@ export const dummyData = {
                 id: '5aea17efae9386',
                 type: 'Registration',
                 url: 'https://raw.githubusercontent.com/Archivaldi/4wheelz/nextjswire/client/src/images/PlaceHolderReg.jpg',
-                completed: false
+                completed: true
             },
         ]
     },
