@@ -141,7 +141,7 @@ app.get("/fill_form", async (req,res) => {
         else {
             console.log("the file was created");
 
-            cloudinary.v2.uploader.upload("output.pdf", 
+            cloudinary.uploader.upload("output.pdf", 
                 function(error, result) {console.log(result, error); });
         }
     });
