@@ -145,7 +145,7 @@ app.get("/fill_form", async (req,res) => {
                 body: data
             };
 
-            request(oprions, (error, response, body) => {
+            request(options, (error, response, body) => {
                 if (error) {console.log(error)}
                 else {
                     console.log(body);
