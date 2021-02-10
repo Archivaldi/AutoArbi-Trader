@@ -69,6 +69,10 @@ app.post("/sighup/typingdna", (req,res) => {
 });
 
 app.get("/check_pattern", (req,res) => {
+    res.sendFile(__dirname + "/check_pattern.html");
+});
+
+app.post("/check_pattern", (req,res) => {
     let typingPattern = req.body.typingPattern;
     console.log(typingPattern);
     let client_id = "test123";
