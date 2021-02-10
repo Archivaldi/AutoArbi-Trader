@@ -29,7 +29,7 @@
                     data: {typingPattern}
                 }).then(r => {
                     if (r.message === "Success!"){
-                        console.log(r.message)
+                        window.location.href = "/";
                     } else {
                         alert("Something is wrong. Please try again");
                         $("#test_1").val("");
