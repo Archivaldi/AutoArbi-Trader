@@ -73,7 +73,7 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <img src="https://raw.githubusercontent.com/Archivaldi/4wheelz/nextjswire/client/src/images/AutoArbiTraderLogo.png" alt="logo" className={logo} />
+                    <img src="https://github.com/Archivaldi/4wheelz/blob/master/client/src/images/AutoArbiTraderLogo.png?raw=true" alt="logo" className={logo} />
                     <Typography variant="h6" noWrap>
                         <span className={auto}>auto</span> <span className={arbiTrader}>arbi-trader</span>
                     </Typography>
