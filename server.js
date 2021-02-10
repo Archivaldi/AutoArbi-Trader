@@ -10,6 +10,7 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const Anvil = require("@anvilco/anvil");
 const moment = require('moment');
+const cloudinary = require('cloudinary').v2;
 
 //keys
 const keys = require('./keys');
@@ -40,6 +41,7 @@ const typingDnaClient = new TypingDnaClient(typingDna_apiKey, typingDna_secret);
 
 //ANVIL api
 const anvilClient = new Anvil({apiKey: keys.anvil.apiKey});
+cloudinary.config({cloud_name: keys.cloudinary.cloud_name, api_key: keys.cloudinary.apikey, api_secret: keys.cloudinary.secret});
 
 
 
@@ -139,18 +141,8 @@ app.get("/fill_form", async (req,res) => {
         else {
             console.log("the file was created");
 
-            let options = {
-                url: "https://api.cloudinary.com/v1_1/fourwheels/image/upload",
-                method: "POST",
-                body: data
-            };
-
-            request(options, (error, response, body) => {
-                if (error) {console.log(error)}
-                else {
-                    console.log(body);
-                }
-            })
+            cloudinary.v2.uploader.upload("output.pdf", 
+                function(error, result) {console.log(result, error); });
         }
     });
 

@@ -21,5 +21,7 @@ exports.anvil = {
 };
 
 exports.cloudinary = {
-    api: process.env.CLOUDINARY_API
+    cloud_name: process.env.CLOUD_NAME,
+    apikey: process.env.CLOUD_APIKEY,
+    secret: process.env.CLOUD_SECRET
 }
