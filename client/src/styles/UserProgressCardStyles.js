@@ -35,10 +35,7 @@ export const useStyles = makeStyles((theme) => ({
         },
     },
     font: {
-        fontSize: '2.5vw',
-        [theme.breakpoints.down('lg')]: {
-            fontSize: '1.5vw'
-        },
+        fontSize: '1.5vw',
         [theme.breakpoints.down('sm')]: {
             fontSize: '1em'
         },

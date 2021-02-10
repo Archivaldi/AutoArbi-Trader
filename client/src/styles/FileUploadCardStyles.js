@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export const useStyles = makeStyles({
+export const useStyles = makeStyles(theme => ({
     root: {
         display: 'grid',
         minWidth: '260px'
@@ -12,13 +12,27 @@ export const useStyles = makeStyles({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        margin: '2.5vw'
-
+        margin: '2vw',
+        [theme.breakpoints.up('lg')]: {
+            margin: '1vw'
+        },
+        [theme.breakpoints.down('sm')]: {
+            margin: '2.5vw'
+        },
     },
     font: {
-        fontSize: '3vw'
+        fontSize: '3vw',
+        [theme.breakpoints.up('lg')]: {
+            fontSize: '2vw'
+        },
+        [theme.breakpoints.up('sm')]: {
+            fontSize: '1.5em'
+        },
+        [theme.breakpoints.down('sm')]: {
+            fontSize: '1em'
+        },
     },
     icon: {
         fontSize: '100%'
     }
-});
+}));

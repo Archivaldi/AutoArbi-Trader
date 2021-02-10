@@ -36,10 +36,20 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
     };
 
     const {
-        root, appBar, appBarShift, menuButton,
-        hide, logo, auto, arbiTrader, drawer,
-        drawerOpen, drawerClose, content,
-        toolbar
+        root,
+        appBar,
+        appBarShift,
+        menuButton,
+        hide,
+        logo,
+        auto,
+        arbiTrader,
+        drawer,
+        drawerOpen,
+        drawerClose,
+        content,
+        toolbar,
+        exitIcon
     } = classes
 
     return (
@@ -119,7 +129,7 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
                     <Divider />
                     <ListItem button={true}>
                         <ListItemIcon>
-                            <ExitToAppIcon style={{ color: '#ffcccb' }} />
+                            <ExitToAppIcon className={exitIcon} />
                         </ListItemIcon>
                         <ListItemText>Sign Out</ListItemText>
                     </ListItem>
