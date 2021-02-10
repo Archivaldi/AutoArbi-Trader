@@ -134,7 +134,7 @@ app.get("/fill_form", async (req,res) => {
       const {statusCode, data} = await anvilClient.fillPDF(keys.anvil.bill_of_sale_id, exampleData);
 
     // Data will be the filled PDF raw bytes
-    fs.writeFileSync('output.pdf', data, { encoding: null })
+    fs.writeFile('output.pdf', data, { encoding: null })
 
     res.send({statusCode});
     console.log(data);
