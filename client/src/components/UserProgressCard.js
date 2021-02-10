@@ -5,7 +5,16 @@ import ProgressBar from './ProgressBar';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 
 export default function UserProgressCard({ data: { docs, name, title } }) {
-    const { root, header, documents, items, progress, accent, font, userNameFont } = useStyles();
+    const {
+        root,
+        header,
+        documents,
+        items,
+        progress,
+        accent,
+        font,
+        userNameFont
+    } = useStyles();
 
     function percentage(arr) {
         var i = 0

@@ -14,11 +14,12 @@ export default function Dashboard() {
             classes={classes}
             allDocsComplete={checkForAllDocumentComplete(buyer, seller)}
         >
-            {seller.docs.map(({ id, type, completed }) => (
+            {seller.docs.map(({ id, type, completed, url }) => (
                 <FileUploadCard
                     key={id}
                     type={type}
                     completed={completed}
+                    url={url}
                 />
             ))}
         </MiniDrawer>

@@ -6,7 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-export default function ViewDocumentDialog({ open, handleDocumentClose, type }) {
+export default function ViewDocumentDialog({ url, open, handleDocumentClose, type }) {
     return (
         <div>
             <Dialog
@@ -18,7 +18,7 @@ export default function ViewDocumentDialog({ open, handleDocumentClose, type }) 
                 <DialogTitle id="alert-dialog-title">{`Viewing ${type} Document`}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Hello
+                        <img src={url} alt={type} />
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

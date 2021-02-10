@@ -10,7 +10,7 @@ import ViewDocumentDialog from './ViewDocumentDialog';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 import { useStyles } from '../styles/FileUploadCardStyles';
 
-export default function FileUploadCard({ type, completed }) {
+export default function FileUploadCard({ type, completed, url }) {
     const { root, flex, icon, font } = useStyles();
     const [uploadOpen, setUploadOpen] = useState(false);
     const [documentOpen, setDocumentOpen] = useState(false);
@@ -42,6 +42,7 @@ export default function FileUploadCard({ type, completed }) {
                 open={documentOpen}
                 handleDocumentClose={handleDocumentClose}
                 type={type}
+                url={url}
             />
             <CardContent className={flex}>
                 <Typography className={font} color="textSecondary">
