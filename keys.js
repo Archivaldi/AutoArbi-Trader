@@ -18,4 +18,8 @@ exports.typingDna = {
 exports.anvil = {
     apiKey: process.env.ANVIL_APIKEY,
     bill_of_sale_id: process.env.ANVIL_BILLOFSALE_ID
+};
+
+exports.cloudinary = {
+    api: process.env.CLOUDINARY_API
 }

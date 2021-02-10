@@ -138,8 +138,21 @@ app.get("/fill_form", async (req,res) => {
         if(err){console.log(err)}
         else {
             console.log("the file was created");
+
+            let options = {
+                url: "https://api.cloudinary.com/v1_1/fourwheels/image/upload",
+                method: "POST",
+                body: data
+            };
+
+            request(oprions, (error, response, body) => {
+                if (error) {console.log(error)}
+                else {
+                    console.log(body);
+                }
+            })
         }
-    })
+    });
 
     res.send({statusCode});
     console.log(data);
