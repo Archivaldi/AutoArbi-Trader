@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
     Button,
     TextField,
@@ -14,9 +14,10 @@ import { authSteps } from '../utils/authSteps';
 export default function FormDialog({ open, handleDialogClose, styles }) {
     const [increment, setIncrement] = useState(0);
     const [nextButton, setNextButton] = useState(true)
-    const [input, setInput] = useState('');
-    const { message } = authSteps;
-    let tdna = undefined;
+    const [input, setInput] = useState([]);
+    const [text, setText] = useState('')
+    const { message, url: { domain, port, path } } = authSteps;
+    const tDNA = useRef();
 
     const handleInputChange = (value) => {
         setInput(value)
@@ -26,24 +27,47 @@ export default function FormDialog({ open, handleDialogClose, styles }) {
     const handleIncrementUp = () => {
         setIncrement(increment + 1);
         setNextButton(true);
+        setText([...text, ...input])
         setInput('');
     }
 
     const backAndReset = () => {
-        handleDialogClose();
-        setInput('')
-        setNextButton(true)
         // reset test after dialog close animation
         setTimeout(() => {
+            handleDialogClose();
+            setInput('')
+            setNextButton(true)
             setIncrement(0)
         }, 200)
     }
 
+    const checkPattern = () => {
+        tDNA.current.stop()
+        const typingPattern = tDNA.current.getTypingPattern({
+            type: 1,
+            text: text.join('')
+        })
+        console.log(typingPattern);
+        fetch('http://localhost:8080/check_pattern', {
+            method: 'POST',
+            body: {
+                typingPattern
+            },
+            mode: 'no-cors'
+        }).then(res => {
+            if (res.message === "Success!") {
+                console.log("It worked")
+            } else {
+                console.log("It did not")
+            }
+        })
+    }
+
     useEffect(() => {
-        tdna = new TypingDNA();
-        console.log(tdna)
-        // return tdna
-    }, [])
+        if (!tDNA.current) {
+            tDNA.current = new TypingDNA();
+        }
+    }, [tDNA])
 
     return (
         <div>
@@ -59,6 +83,7 @@ export default function FormDialog({ open, handleDialogClose, styles }) {
                                 <span>Please type: {message[increment]}</span>
                                 <TextField
                                     autoFocus
+                                    autoComplete="off"
                                     margin="dense"
                                     id="name"
                                     label="Type Message Here"
