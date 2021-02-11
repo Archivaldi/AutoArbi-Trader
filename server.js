@@ -15,11 +15,12 @@ const cloudinary = require('cloudinary').v2;
 //keys
 const keys = require('./keys');
 
-//uuid 
+//uuid
 const { v4: uuidv4 } = require('uuid');
 
 
 //allow sessions
+app.use(bodyParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({ secret: keys.secret.secret, cookie: { maxAge: 1 * 1000 * 60 * 60 * 24 * 365 } }));
 
@@ -27,15 +28,15 @@ app.use(session({ secret: keys.secret.secret, cookie: { maxAge: 1 * 1000 * 60 * 
 const PORT = process.env.PORT || 8080;
 
 //mysql database connection
-const mysql = require('mysql');
-const connection = mysql.createConnection(process.env.JAWSDB_URL  || keys.mysql_data);
-connection.connect((err)=> {
-    if (err){ console.log(err) };
-    console.log("Database connected");
-});
+// const mysql = require('mysql');
+// const connection = mysql.createConnection(process.env.JAWSDB_URL  || keys.mysql_data);
+// connection.connect((err)=> {
+//     if (err){ console.log(err) };
+//     console.log("Database connected");
+// });
 
 //TYPINGDNA api and secret
-const {typingDna_apiKey, typingDna_secret} = keys.typingDna;
+const { typingDna_apiKey, typingDna_secret } = keys.typingDna;
 const TypingDnaClient = require('typingdnaclient');
 const typingDnaClient = new TypingDnaClient(typingDna_apiKey, typingDna_secret);
 
@@ -45,39 +46,34 @@ cloudinary.config({cloud_name: keys.cloudinary.cloud_name, api_key: keys.cloudin
 
 
 
-//main page 
-app.get("/", (req,res) => {
-    res.sendFile(__dirname + '/index.html');
-});
+//main page
+app.use(express.static(path.join(__dirname, './client/out')));
 
-app.get("/login", (req,res) => {
-    res.send({message: "We are on login page"});
-});
 
-app.get("/sighup", (req,res) => {
-    res.sendFile(__dirname + "/signup.html");
-});
+app.post("/sighup/typingdna", (req, res) => {
+    console.log(req.body)
+    console.log(req.data)
+    let typingPattern = req.body.typingPattern;
+    console.log(typingPattern);
 
 app.post("/sighup/typingdna", (req,res) => {
         let typingPattern = req.body.typingPattern;
         let client_id = "test123";
 
-        typingDnaClient.auto(client_id, typingPattern, (error, response) => {
-            if (error){
-                console.log(error);
-            }
-            console.log(response)
-            if (response.statusCode === 200){
-                res.send({message: "Success!"});
-            } else {
-                res.send({message: "Got some issue"});
-            };
+    typingDnaClient.auto(client_id, typingPattern, (error, response) => {
+        if (error) {
+            console.log(error);
+        }
+        console.log(response)
+        if (response.statusCode === 200) {
+            res.send({ message: "Success!" });
+        } else {
+            res.send({ message: "Got some issue" });
+        };
     });
 });
 
-app.get("/check_pattern", (req,res) => {
-    res.sendFile(__dirname + "/check_pattern.html");
-});
+
 
 app.post("/check_pattern", (req,res) => {
     let typingPattern = req.body.typingPattern;
@@ -92,7 +88,7 @@ app.post("/check_pattern", (req,res) => {
         function (error, result) {
             console.log(result);
             if (error) {
-                res.send({"message": "got some error"});
+                res.send({ "message": "got some error" });
             } else {
                 res.send({message: "Success!"})
             };
@@ -143,7 +139,7 @@ app.get("/fill_form", async (req,res) => {
 
             cloudinary.uploader.upload("output.pdf", 
                 function(error, result) {console.log(result, error); });
-        }
+        
     });
 
     res.send({statusCode});

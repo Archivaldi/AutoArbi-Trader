@@ -11,7 +11,7 @@ import AttachFileIcon from '@material-ui/icons/AttachFile';
 import { useStyles } from '../styles/FileUploadCardStyles';
 
 export default function FileUploadCard({ type, completed, url }) {
-    const { root, flex, icon, font } = useStyles();
+    const { root, flex, icon, font, buttonMargin, disAppear } = useStyles();
     const [uploadOpen, setUploadOpen] = useState(false);
     const [documentOpen, setDocumentOpen] = useState(false);
 
@@ -55,19 +55,19 @@ export default function FileUploadCard({ type, completed, url }) {
                 <div>
                     <Button
                         disabled={completed}
-                        className={font}
+                        className={`${font} ${buttonMargin}`}
                         color="secondary"
                         onClick={handleClickUploadOpen}
                     >
-                        Upload{completed ? 'ed' : ''}
+                        <span>Upload<span className={disAppear}>{completed ? 'ed' : ''}</span></span>
                     </Button>
                     <Button
                         disabled={!completed}
-                        className={font}
+                        className={`${font} ${buttonMargin}`}
                         color="secondary"
                         onClick={handleDocumentOpen}
                     >
-                        View Document
+                        <span>View <span className={disAppear}>Document</span></span>
                     </Button>
                 </div>
             </CardContent>

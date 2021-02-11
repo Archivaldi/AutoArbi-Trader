@@ -3,7 +3,6 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -21,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function FileUploadDialog({ open, handleUploadClose, type }) {
-    const classes = useStyles()
+    const { root } = useStyles()
     const [checked, setChecked] = useState(false);
     const handleChange = () => {
         setChecked(!checked);
@@ -39,7 +38,7 @@ export default function FileUploadDialog({ open, handleUploadClose, type }) {
                 <DialogTitle id="alert-dialog-title">{`Upload ${type} Document`}</DialogTitle>
                 <DialogContent>
                     {type === 'Bill of Sale' ? (
-                        <form className={classes.root} noValidate autoComplete="on">
+                        <form className={root} noValidate autoComplete="on">
                             <TextField color="secondary" id="standard-required" label="First Name" required />
                             <TextField color="secondary" id="standard-required" label="Last Name" required />
                             <TextField color="secondary" id="standard-required" label="Vin Number" required />

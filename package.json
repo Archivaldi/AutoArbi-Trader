@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "export": "concurrently \"npm start\" \"cd client && npm run export\""
   },
   "author": "Artur Markov, Nate Ryan",
   "license": "ISC",
@@ -21,5 +22,8 @@
     "mysql": "^2.18.1",
     "request": "^2.88.2",
     "typingdnaclient": "^1.1.1"
+  },
+  "devDependencies": {
+    "concurrently": "^5.3.0"
   }
 }
