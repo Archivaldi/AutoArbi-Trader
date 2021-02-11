@@ -25,10 +25,11 @@
                 var typingPattern = tdna.getTypingPattern({type:1, text: $(`#text_to_type_1`).text()});
                 $.ajax({
                     url: "/check_pattern",
+                    method: "POST",
                     data: {typingPattern}
                 }).then(r => {
                     if (r.message === "Success!"){
-                        console.log(r.message)
+                        window.location.href = "/";
                     } else {
                         alert("Something is wrong. Please try again");
                         $("#test_1").val("");
