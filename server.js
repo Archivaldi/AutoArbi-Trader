@@ -292,7 +292,7 @@ app.get("/createEtchSigh", (req,res) => {
 app.get("/download", async (req,res) => {
 
     async function main(){
-        const { statusCode, response, data, errors } = await anvilClient.downloadDocuments(documentGroupEid, {});
+        const { statusCode, response, data, errors } = await anvilClient.downloadDocuments(groupEid, {});
         if (statusCode === 200){
             fs.writeFile('output.pdf', data, { encoding: null }, function(err) {
                 if (err) {console.log(err)}
