@@ -289,6 +289,37 @@ app.get("/createEtchSigh", (req,res) => {
 });
 
 
+app.get("/download", async (req,res) => {
+
+    async function main(){
+        const { statusCode, response, data, errors } = await client.downloadDocuments(documentGroupEid, {});
+        if (statusCode === 200){
+            fs.writeFile('output.pdf', data, { encoding: null }, function(err) {
+                if (err) {console.log(err)}
+                else {
+                    cloudinary.uploader.upload("output.pdf", 
+                    function(error, result) {console.log(result, error); });
+                }
+            });
+
+            console.log(statusCode);
+        } else {
+            console.log(statusCode,  JSON.stringify(errors, null, 2))
+        };
+    }
+
+    main()
+        .then(() => {
+            res.send({message: "Succsess!"})
+        })
+        .catch((err) => {
+            console.log(err.stack || err.message);
+            process.exit(1);
+        })
+
+})
+
+
 
 app.listen(PORT, () => {
     console.log(`Listening on ${PORT}`);
