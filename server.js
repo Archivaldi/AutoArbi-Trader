@@ -17,6 +17,7 @@ const { v4: uuidv4 } = require('uuid');
 
 
 //allow sessions
+app.use(bodyParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({ secret: keys.secret.secret, cookie: { maxAge: 1 * 1000 * 60 * 60 * 24 * 365 } }));
 
@@ -43,6 +44,8 @@ app.use(express.static(path.join(__dirname, './client/out')));
 
 
 app.post("/sighup/typingdna", (req, res) => {
+    console.log(req.body)
+    console.log(req.data)
     let typingPattern = req.body.typingPattern;
     console.log(typingPattern);
 

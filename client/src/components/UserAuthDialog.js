@@ -41,25 +41,26 @@ export default function FormDialog({ open, handleDialogClose, styles }) {
         }, 200)
     }
 
-    const checkPattern = () => {
+    const checkPattern = async () => {
+        const myHeaders = new Headers();
+        myHeaders.append('Content-Type', 'application/json')
         tDNA.current.stop()
-        const typingPattern = tDNA.current.getTypingPattern({
+        const typingPattern = await tDNA.current.getTypingPattern({
             type: 1,
             text: text.join('')
         })
-        console.log(typingPattern);
-        fetch('http://localhost:8080/check_pattern', {
-            method: 'POST',
-            body: {
-                typingPattern
+        console.log({ typingPattern })
+        fetch('/sighup/typingdna', {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
             },
-            mode: 'no-cors'
+            method: "POST",
+            body: JSON.stringify({ typingPattern })
         }).then(res => {
-            if (res.message === "Success!") {
-                console.log("It worked")
-            } else {
-                console.log("It did not")
-            }
+            console.log({ res })
+            const server = res.json()
+            console.log({ server })
         })
     }
 

@@ -1,8 +1,8 @@
 export const authSteps = {
     message: [
-        "I'm here to create a new account",
-        "I want to create a text to secure my information",
-        "We are using new technology to add more security"
+        "test1",
+        "test2",
+        "test3"
     ],
     url: {
         domain: 'http//localhost:',
