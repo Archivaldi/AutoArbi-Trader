@@ -37,4 +37,7 @@ export const useStyles = makeStyles(theme => ({
         justifyContent: 'space-around',
         margin: '6px'
     },
+    dialog: {
+        minHeight: 160
+    }
 }));
