@@ -39,17 +39,8 @@ let base_url = 'https://api.typingdna.com';
 
 
 //main page
-app.get("/", (req, res) => {
-    res.sendFile(__dirname + '/index.html');
-});
+app.use(express.static(path.join(__dirname, './client/out')));
 
-app.get("/login", (req, res) => {
-    res.send({ message: "We are on login page" });
-});
-
-app.get("/sighup", (req, res) => {
-    res.sendFile(__dirname + "/signup.html");
-});
 
 app.post("/sighup/typingdna", (req, res) => {
     let typingPattern = req.body.typingPattern;
