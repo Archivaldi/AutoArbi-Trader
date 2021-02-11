@@ -152,6 +152,9 @@ app.get("/fill_form", async (req,res) => {
 
 });
 
+let groupEid = "";
+
+
 app.get("/createEtchSigh", (req,res) => {
 
     const signer_1_email = "artur.markov1860@gmail.com";
@@ -167,7 +170,9 @@ app.get("/createEtchSigh", (req,res) => {
             if (errors) {
             console.log('Error', errors)
             } else {
-            console.log(data.createEtchPacket)
+                console.log(data.createEtchPacket)
+                groupEid = data.createEtchPacket.eid;
+                console.loglog("GroupEid :", groupEid);
             }
         }
 
@@ -257,7 +262,7 @@ app.get("/createEtchSigh", (req,res) => {
                   {
                       id: "nate",
                       name: "Nate Ryan",
-                      email: "nathanieljryan1994@gmail.com",
+                      email: "archivaldi95@yandex.ru",
                       fields: [
                           {
                               fileId: "bill_of_sale",
