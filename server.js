@@ -172,7 +172,7 @@ app.get("/createEtchSigh", (req,res) => {
             } else {
                 console.log(data.createEtchPacket)
                 groupEid = data.createEtchPacket.eid;
-                console.loglog("GroupEid :", groupEid);
+                console.log("GroupEid :", groupEid);
             }
         }
 
