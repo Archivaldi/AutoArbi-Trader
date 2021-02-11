@@ -152,7 +152,7 @@ app.get("/fill_form", async (req,res) => {
 
 });
 
-app.get("/createEtchSign", (req,res) => {
+app.get("/createEtchSigh", (req,res) => {
 
     const signer_1_email = "artur.markov1860@gmail.com";
     const signer_1_name = "Artur Markov";
@@ -276,7 +276,8 @@ app.get("/createEtchSign", (req,res) => {
 
       function run (fn) {
         fn().then(() => {
-          process.exit(0)
+          //process.exit(0);
+          res.send({message: "Succsess!"})
         }).catch((err) => {
           console.log(err.stack || err.message)
           process.exit(1)
