@@ -262,10 +262,6 @@ app.get("/createEtchSigh", (req,res) => {
                           {
                               fileId: "bill_of_sale",
                               fieldId: "buyerSign"
-                          },
-                          {
-                              fileId: "texas_title",
-                              fieldId: "buyerSign"
                           }
                       ]
                   }
