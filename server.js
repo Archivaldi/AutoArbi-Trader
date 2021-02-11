@@ -102,8 +102,8 @@ app.post("/check_pattern", (req,res) => {
 app.get("/fill_form", async (req,res) => {
 
     const exampleData = {
-        "title": "Jefferson County Texas Vehicle Bill Of Sale",
-        "fontSize": 10,
+        "title": "Texas Vehicle Bill Of Sale",
+        "fontSize": 14,
         "textColor": "#222222",
         "data":
             {
@@ -150,6 +150,140 @@ app.get("/fill_form", async (req,res) => {
     console.log(data);
 
 
+});
+
+app.get("/createEtchSign", (req,res) => {
+
+    const signer_1_email = "artur.markov1860@gmail.com";
+    const signer_1_name = "Artur Markov";
+
+    const signer_2_email = "archivaldi95@yandex.ru";
+    const signer_2_name = "Nate Ryan";
+
+        async function main () {
+            const variables = getPacketVariables()
+            const { data: result } = await anvilClient.createEtchPacket({ variables })
+            const { data, errors } = result
+            if (errors) {
+            console.log('Error', errors)
+            } else {
+            console.log(data.createEtchPacket)
+            }
+        }
+
+      function getPacketVariables(){
+          return {
+              isDraft: false,
+              isTest: true,
+
+              name: `Docs - ${signer_2_name}`,
+              signatureEmailSubject: 'Docs ok',
+              signatureEmailBody: 'Please sigh dosc...',
+
+              files: [
+                  {
+                      id: "bill_of_sale",
+                      castEid: keys.anvil.bill_of_sale_id
+                  },
+                  {
+                      id: "texas_title",
+                      castEid: keys.anvil.title_id
+                  }
+              ],
+
+              data: {
+                payloads: {
+                    bill_of_sale: {
+                        data: {
+                            seller: "Artur Markov",
+                            sellerStreet: "1403 Fort Lloyd Pl",
+                            sellerCity: "Round Rock",
+                            sellerState: "TX",
+                            sellerZipCode: "78665",
+                            sellerCounty: "Williamson",
+                            buyer: "Nathaniel Ryan",
+                            buyerStreet: "1700 W Parmer St",
+                            buyerCity: "Austin",
+                            buyerState: "TX",
+                            buyerZipCode: "78727",
+                            buyer_county: "Jefferson",
+                            price: "10000",
+                            carYear: "2015",
+                            carMake: "Mazda",
+                            carBody: "Minivan",
+                            carModel: "5",
+                            carVin: "1SG13VNSSDN45693",
+                            carPlate: "NKR1897",
+                            odometer: "77356",
+                            dayMonth: moment().format("DD/MM"),
+                            year: "21",
+                            date: moment().format("MM/DD/YYYY"),
+                        }
+                    },
+                    texas_title: {
+                        data: {
+                            carVin: "1SG13VNSSDN45693",
+                            carYear: "2015",
+                            carMake: "Mazda",
+                            carBody: "Minivan",
+                            carModel: "5",
+                            carPlate: "NKR1897",
+                            odometer: "77356",
+                            seller: "Artur Markov",
+                            sellerFullAddress: "1403 Fort Lloyd Pl, Round Rock, TX, 78665",
+                            date: moment().format("MM/DD/YYYY")
+                        }
+                    }
+                }
+              },
+
+              signers: [
+                  {
+                      id: "artur",
+                      name: "Artur Markov",
+                      email: "artur.markov1860@gmail.com",
+
+                      fields: [
+                          {
+                              fileId: 'bill_of_sale',
+                              fieldId: 'sellerSign'
+                          },
+                          {
+                              fileId: "texas_title",
+                              fieldId: "sellerSign"
+                          }
+                      ]
+                  },
+                  {
+                      id: "nate",
+                      name: "Nate Ryan",
+                      email: "archivaldi95@yandex.ru",
+                      fields: [
+                          {
+                              fileId: "bill_of_sale",
+                              fieldId: "buyerSign"
+                          },
+                          {
+                              fileId: "texas_title",
+                              fieldId: "buyerSign"
+                          }
+                      ]
+                  }
+              ]
+          }
+      }
+
+
+      function run (fn) {
+        fn().then(() => {
+          process.exit(0)
+        }).catch((err) => {
+          console.log(err.stack || err.message)
+          process.exit(1)
+        })
+      }
+
+      run(main);
 });
 
 
