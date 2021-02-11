@@ -171,7 +171,7 @@ app.get("/createEtchSigh", (req,res) => {
             console.log('Error', errors)
             } else {
                 console.log(data.createEtchPacket)
-                groupEid = data.createEtchPacket.eid;
+                groupEid = data.createEtchPacket.documentGroup.eid;
                 console.log("GroupEid :", groupEid);
             }
         }
