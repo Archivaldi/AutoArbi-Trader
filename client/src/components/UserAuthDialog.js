@@ -50,7 +50,7 @@ export default function FormDialog({ open, handleDialogClose, styles }) {
             text: text.join('')
         })
         console.log({ typingPattern })
-        fetch('/sighup/typingdna', {
+        fetch('/api/typing-dna/signup', {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
