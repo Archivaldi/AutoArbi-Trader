@@ -1,4 +1,12 @@
 const router = require("express").Router();
+const Anvil = require("@anvilco/anvil");
+const moment = require('moment');
+const cloudinary = require('cloudinary').v2;
+const keys = require('../../config/keys');
+var fs = require('fs');
+
+const anvilClient = new Anvil({ apiKey: keys.anvil.apiKey });
+cloudinary.config({ cloud_name: keys.cloudinary.cloud_name, api_key: keys.cloudinary.apikey, api_secret: keys.cloudinary.secret });
 
 router.get("/fill_form", async (req, res) => {
 
