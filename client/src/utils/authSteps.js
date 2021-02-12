@@ -1,9 +1,7 @@
 export const authSteps = {
     message: [
-        "Nothing in this world is worth having or worth doing unless it means effort, pain, difficulty.",
-        "To sit home, read one's favorite paper, and scoff at the misdeeds of the men who do things is easy, but it is markedly ineffective. It is what evil men count upon the good men's doing.",
-        "The unforgivable crime is soft hitting. Do not hit at all if it can be avoided; but never hit softly.",
-    ],
+        "We are all connected; To each other, biologically. To the earth, chemically. To the rest of the universe atomically.",
+        "There’s as many atoms in a single molecule of your DNA as there are stars in the typical galaxy. We are, each of us, a little universe.",],
     url: {
         domain: 'http//localhost:',
         port: '8080',

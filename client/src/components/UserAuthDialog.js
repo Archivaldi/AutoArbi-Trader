@@ -15,22 +15,30 @@ import { authSteps } from '../utils/authSteps';
 export default function FormDialog({ open, handleDialogClose, styles }) {
     const [increment, setIncrement] = useState(0);
     const [checkInput, setCheckInput] = useState(false);
+    const [textSession, setTextSession] = useState('');
     const [input, setInput] = useState('');
     const { message } = authSteps;
     const tDNA = useRef();
 
     const handleInputChange = (value) => {
-        setInput(value)
-        value.length === message[increment].length && checkPattern()
+        setInput(value);
+        value.length === message[increment].length && setTextAndCheck()
     }
 
     const handleIncrementUp = () => {
         tDNA.current.start();
-        setIncrement(increment + 1);
         setCheckInput(false);
         setInput('');
+
+        increment === message.length - 1 ?
+            setIncrement(0) :
+            setIncrement(increment + 1);
     }
 
+    const setTextAndCheck = () => {
+        setTextSession([...textSession, input].join(''))
+        checkPattern()
+    }
 
     const backAndReset = () => {
         tDNA.current.reset();
@@ -43,11 +51,13 @@ export default function FormDialog({ open, handleDialogClose, styles }) {
         tDNA.current.stop();
         setCheckInput(true);
         const typingPattern = await tDNA.current.getTypingPattern({
-            type: 1,
-            text: input
-        })
+            type: 0,
+            length: input.length
+        });
+        const patternQuality = tDNA.current.getQuality(typingPattern);
 
         console.log(typingPattern);
+        console.log(patternQuality);
 
         const res = await fetch('/api/typing-dna/signup', {
             headers: {
@@ -57,7 +67,9 @@ export default function FormDialog({ open, handleDialogClose, styles }) {
             method: "POST",
             body: JSON.stringify({ typingPattern })
         })
-        await res.json();
+        const server = await res.json();
+
+        console.log(server)
 
         res.status === 200 && handleIncrementUp()
     }
