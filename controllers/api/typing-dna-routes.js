@@ -5,6 +5,8 @@ const keys = require('../../config/keys');
 const { typingDna_apiKey, typingDna_secret } = keys.typingDna;
 const typingDnaClient = new TypingDnaClient(typingDna_apiKey, typingDna_secret);
 
+let mess;
+
 router.post("/signup", (req, res) => {
     let typingPattern = req.body.typingPattern;
     let client_id = "test123";
@@ -13,16 +15,15 @@ router.post("/signup", (req, res) => {
         if (error) {
             console.log(error);
         }
-        console.log(response)
         if (response.statusCode === 200) {
-            res.send({ message: "Success!" });
+            res.json(response)
+            mess = response
+            console.log(mess);
         } else {
             res.send({ message: "Got some issue" });
         };
     });
 });
-
-
 
 router.post("/check-pattern", (req, res) => {
     let typingPattern = req.body.typingPattern;
