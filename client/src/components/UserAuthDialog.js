@@ -16,14 +16,12 @@ export default function FormDialog({ open, handleDialogClose, styles }) {
     const [increment, setIncrement] = useState(0);
     const [checkInput, setCheckInput] = useState(false);
     const [input, setInput] = useState('');
-    const [inputError, setInputError] = useState('');
-
-    const tDNA = useRef();
     const { message } = authSteps;
+    const tDNA = useRef();
 
     const handleInputChange = (value) => {
-        setInput(value);
-        value === message[increment] && checkPattern()
+        setInput(value)
+        value.length === message[increment].length && checkPattern()
     }
 
     const handleIncrementUp = () => {
@@ -34,10 +32,7 @@ export default function FormDialog({ open, handleDialogClose, styles }) {
     }
 
 
-    const backAndReset = (failed) => {
-        if (failed) {
-            setInput('Whoops! Something when wrong, please back-out and try again');
-        }
+    const backAndReset = () => {
         tDNA.current.reset();
         setCheckInput(false);
         setIncrement(0);
@@ -64,7 +59,7 @@ export default function FormDialog({ open, handleDialogClose, styles }) {
         })
         await res.json();
 
-        res.status === 200 && handleIncrementUp(res)
+        res.status === 200 && handleIncrementUp()
     }
 
 
@@ -73,11 +68,6 @@ export default function FormDialog({ open, handleDialogClose, styles }) {
             tDNA.current = new TypingDNA();
         }
     }, [tDNA])
-
-    useEffect(() => {
-        const input = [...input];
-        const expected = [...message[increment]]
-    }, [input])
 
     return (
         <div>
@@ -90,7 +80,7 @@ export default function FormDialog({ open, handleDialogClose, styles }) {
                     <Typography variant="body1" component="body1">
                         {increment < message.length ? (
                             <>
-                                <span>Please type: <span style={{ background: '#00b0ff', color: '#464646' }}>{message[increment]}</span></span>
+                                Please type <span style={{ color: 'rgba(255, 255, 255, 0.7)' }}>(typos accepted)</span>: {message[increment].substring(0, input.length)}<span style={{ background: '#0081cb', borderRadius: '2px' }}>{message[increment].substring(input.length, message[increment].length)}</span>
                                 <TextField
                                     autoFocus
                                     autoComplete="off"
@@ -99,6 +89,7 @@ export default function FormDialog({ open, handleDialogClose, styles }) {
                                     label="Type Message Here"
                                     color="secondary"
                                     value={input}
+                                    inputProps={{ spellCheck: 'false' }}
                                     disabled={checkInput}
                                     onChange={e => handleInputChange(e.target.value)}
                                     fullWidth
