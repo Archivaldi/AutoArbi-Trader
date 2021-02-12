@@ -13,31 +13,24 @@ import {
 import { authSteps } from '../utils/authSteps';
 
 export default function FormDialog({ open, handleDialogClose, styles }) {
-    const [increment, setIncrement] = useState(0);
-    const [checkInput, setCheckInput] = useState(false);
-    const [textSession, setTextSession] = useState('');
-    const [input, setInput] = useState('');
-    const { message } = authSteps;
-    const tDNA = useRef();
+    const { message, route, userId } = authSteps;
+    const [userID] = useState(userId);
 
-    const handleInputChange = (value) => {
-        setInput(value);
-        value.length === message[increment].length && setTextAndCheck()
-    }
+    const [checkInput, setCheckInput] = useState(false);
+    const [auth, setAuth] = useState(false);
+    const [authSession, setAuthSession] = useState(0);
+    const [increment, setIncrement] = useState(0);
+    const [input, setInput] = useState('');
+    const tDNA = useRef();
 
     const handleIncrementUp = () => {
         tDNA.current.start();
         setCheckInput(false);
         setInput('');
-
+        setAuthSession(authSession + 1)
         increment === message.length - 1 ?
             setIncrement(0) :
             setIncrement(increment + 1);
-    }
-
-    const setTextAndCheck = () => {
-        setTextSession([...textSession, input].join(''))
-        checkPattern()
     }
 
     const backAndReset = () => {
@@ -52,28 +45,42 @@ export default function FormDialog({ open, handleDialogClose, styles }) {
         setCheckInput(true);
         const typingPattern = await tDNA.current.getTypingPattern({
             type: 0,
-            length: input.length
+            text: input
         });
         const patternQuality = tDNA.current.getQuality(typingPattern);
 
-        console.log(typingPattern);
-        console.log(patternQuality);
+        if (patternQuality > 0.3) {
+            const res = await fetch(route.signUp, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify({
+                    typingPattern,
+                    patternQuality,
+                    authSession,
+                    userID,
+                    input
+                })
+            })
+            const { message } = await res.json();
 
-        const res = await fetch('/api/typing-dna/signup', {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            method: "POST",
-            body: JSON.stringify({ typingPattern })
-        })
-        const server = await res.json();
+            console.log(message)
 
-        console.log(server)
-
-        res.status === 200 && handleIncrementUp()
+            if (res.status === 200) {
+                handleIncrementUp();
+                if (message.result === 1 && message.enrollment === 1) {
+                    setAuth(true);
+                }
+            } else {
+                alert("An error occurred on our end. Please refresh and try again.")
+                handleIncrementUp()
+            }
+        } else {
+            handleIncrementUp()
+        }
     }
-
 
     useEffect(() => {
         if (!tDNA.current) {
@@ -81,18 +88,27 @@ export default function FormDialog({ open, handleDialogClose, styles }) {
         }
     }, [tDNA])
 
+    useEffect(() => {
+        input.length === message[increment].length && checkPattern()
+    }, [input])
+
     return (
         <div>
             <Dialog open={open} onClose={backAndReset} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title"><img width="200" src="https://github.com/Archivaldi/4wheelz/blob/master/client/src/images/ShoppedTypingDNA.png?raw=true" /></DialogTitle>
                 <DialogContent className={styles}>
                     <DialogContentText>
-                        To ensure the highest level of security, we are using a technology that will test who you are by the way you type!
+                        To ensure the highest level of security, we are using a technology that will test who you are by the way you type! Please note, it may take up to 5 attempts.
                     </DialogContentText>
                     <Typography variant="body1" component="body1">
-                        {increment < message.length ? (
+                        {!auth ? (
                             <>
-                                Please type <span style={{ color: 'rgba(255, 255, 255, 0.7)' }}>(typos accepted)</span>: {message[increment].substring(0, input.length)}<span style={{ background: '#0081cb', borderRadius: '2px' }}>{message[increment].substring(input.length, message[increment].length)}</span>
+                                <span>
+                                    Please type <span style={{ color: 'rgba(255, 255, 255, 0.7)' }}>(typos accepted)</span>:{" "}
+                                    {message[increment].substring(0, input.length)}
+                                    <span style={{ background: '#62bdf9', color: '#212121', borderTopLeftRadius: '2px', borderBottomLeftRadius: '2px' }}>{message[increment].charAt(input.length)}</span>
+                                    <span style={{ background: '#0081cb', borderTopRightRadius: '2px', borderBottomRightRadius: '2px' }}>{message[increment].substring(input.length + 1, message[increment].length)}</span>
+                                </span>
                                 <TextField
                                     autoFocus
                                     autoComplete="off"
@@ -103,12 +119,12 @@ export default function FormDialog({ open, handleDialogClose, styles }) {
                                     value={input}
                                     inputProps={{ spellCheck: 'false' }}
                                     disabled={checkInput}
-                                    onChange={e => handleInputChange(e.target.value)}
+                                    onChange={e => setInput(e.target.value)}
                                     fullWidth
                                 />
                             </>
                         ) : (
-                                <CircularProgress color="secondary" />
+                                <h1>Welcome {userID}</h1>
                             )}
                     </Typography>
                 </DialogContent>

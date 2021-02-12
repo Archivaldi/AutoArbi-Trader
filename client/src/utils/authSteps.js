@@ -1,10 +1,15 @@
+import { v4 as uuidv4 } from 'uuid';
+
 export const authSteps = {
     message: [
-        "We are all connected; To each other, biologically. To the earth, chemically. To the rest of the universe atomically.",
-        "There’s as many atoms in a single molecule of your DNA as there are stars in the typical galaxy. We are, each of us, a little universe.",],
-    url: {
-        domain: 'http//localhost:',
-        port: '8080',
-        path: '/check_pattern'
-    }
+        "It's the single best piece of advice. Constantly think about how you could be doing things better and questioning yourself.",
+        "There is no shame in not knowing. The problem arises when irrational thought and attendant behavior fill the vacuum left by ignorance.",
+        "This is the real secret of life -- to be completely engaged with what you are doing in the here and now. And instead of calling it work, realize it is play.",
+        "One of the basic rules of the universe is that nothing is perfect. Perfection simply doesn't exist. Without imperfection, neither you nor I would exist.",
+    ],
+    route: {
+        signUp: '/api/typing-dna/signup',
+        verify: '/api/typing-dna/verify'
+    },
+    userId: uuidv4()
 }

@@ -5,22 +5,36 @@ const keys = require('../../config/keys');
 const { typingDna_apiKey, typingDna_secret } = keys.typingDna;
 const typingDnaClient = new TypingDnaClient(typingDna_apiKey, typingDna_secret);
 
-router.post("/signup", ({ body: { typingPattern } }, res) => {
-    let client_id = "test123";
-    typingDnaClient.check(
+router.post("/signup", ({ body: {
+    typingPattern,
+    patternQuality,
+    authSession,
+    userID,
+    input
+} }, res) => {
+
+    console.log({ typingPattern })
+    console.log({ authSession })
+    console.log({ userID })
+    console.log({ input })
+    typingDnaClient.auto(
+        userID,
+        typingPattern,
         {
-            userId: client_id,
+            userId: userID,
             type: 0,
             device: 'desktop'
         },
-        function (error, result) {
+        (error, result) => {
             console.log(result);
             if (error) {
-                res.send({ "message": "got some error" });
+                res.send({ "message": error })
             } else {
-                res.send({ "message": "Success!" })
+                res.send({ "message": result });
             };
-        });
+        }
+    );
+
 });
 
 router.post("/check-pattern", (req, res) => {
@@ -38,7 +52,7 @@ router.post("/check-pattern", (req, res) => {
             if (error) {
                 res.send({ "message": "got some error" });
             } else {
-                res.send({ message: "Success!" })
+                res.send({ reuse })
             };
         });
 });
