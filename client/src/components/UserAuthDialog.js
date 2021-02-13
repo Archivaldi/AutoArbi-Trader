@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/router'
 import {
     Button,
     TextField,
@@ -11,7 +12,6 @@ import {
 } from '@material-ui/core';
 import { authSteps } from '../utils/authSteps';
 import { useStyles } from '../styles/AuthDialogSyles';
-
 
 export default function FormDialog({ open, handleDialogClose }) {
     const {
@@ -30,6 +30,7 @@ export default function FormDialog({ open, handleDialogClose }) {
     const [increment, setIncrement] = useState(0);
     const [input, setInput] = useState('');
     const tDNA = useRef();
+    const router = useRouter();
 
     const handleIncrementUp = () => {
         tDNA.current.start();
@@ -39,13 +40,19 @@ export default function FormDialog({ open, handleDialogClose }) {
         increment === message.length - 1 ?
             setIncrement(0) :
             setIncrement(increment + 1);
+        setTimeout(() => {
+            document.querySelector('#input').focus()
+        }, 500)
     }
 
     const backAndReset = () => {
         tDNA.current.reset();
-        setCheckInput(false);
-        setIncrement(0);
         handleDialogClose()
+        setTimeout(() => {
+            setCheckInput(false);
+            setIncrement(0);
+            setInput('')
+        }, 200)
     }
 
     const checkPattern = async () => {
@@ -56,8 +63,6 @@ export default function FormDialog({ open, handleDialogClose }) {
             text: input
         });
         const patternQuality = tDNA.current.getQuality(typingPattern);
-        console.log(patternQuality)
-
         if (patternQuality > 0.3) {
             const res = await fetch(route.signUp, {
                 headers: {
@@ -75,12 +80,13 @@ export default function FormDialog({ open, handleDialogClose }) {
             })
             const { message } = await res.json();
 
-            console.log(message)
-
             if (res.status === 200) {
                 handleIncrementUp();
                 if (message.result === 1 && message.enrollment === 1) {
                     setAuth(true);
+                    setTimeout(() => {
+                        router.push('/');
+                    }, 1000)
                 }
             } else {
                 alert("An error occurred on our end. Please refresh and try again.")
@@ -107,7 +113,7 @@ export default function FormDialog({ open, handleDialogClose }) {
                 <DialogTitle id="form-dialog-title"><img width="200" src="https://github.com/Archivaldi/4wheelz/blob/master/client/src/images/ShoppedTypingDNA.png?raw=true" /></DialogTitle>
                 <DialogContent className={content}>
                     <DialogContentText>
-                        <span>To ensure the highest level of security, we are using a technology that will test who you are by the way you type! {!auth && (<span>Please note, it may take up to 5 attempts.</span>)}</span>
+                        <span>To ensure the highest level of security, we are using a technology that will test who you are by the way you type! {!auth && (<span>*Please note, it may take up to 5 attempts.</span>)}</span>
                     </DialogContentText>
                     <Typography variant="body1" component="body1">
                         {!auth ? (
@@ -123,7 +129,7 @@ export default function FormDialog({ open, handleDialogClose }) {
                                     inputProps={{ spellCheck: 'false' }}
                                     autoComplete="off"
                                     margin="dense"
-                                    id="Tdna"
+                                    id="input"
                                     label="Type Phrase Here"
                                     color="secondary"
                                     value={input}

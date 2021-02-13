@@ -1,9 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles(theme => ({
-    content: {
-        minHeight: 230
-    },
     typos: {
         color: 'rgba(255, 255, 255, 0.7)'
     },
