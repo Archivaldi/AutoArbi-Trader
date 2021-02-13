@@ -56,6 +56,7 @@ export default function FormDialog({ open, handleDialogClose }) {
             text: input
         });
         const patternQuality = tDNA.current.getQuality(typingPattern);
+        console.log(patternQuality)
 
         if (patternQuality > 0.3) {
             const res = await fetch(route.signUp, {
@@ -122,7 +123,7 @@ export default function FormDialog({ open, handleDialogClose }) {
                                     inputProps={{ spellCheck: 'false' }}
                                     autoComplete="off"
                                     margin="dense"
-                                    id="name"
+                                    id="Tdna"
                                     label="Type Phrase Here"
                                     color="secondary"
                                     value={input}
