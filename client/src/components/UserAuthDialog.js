@@ -10,58 +10,84 @@ import {
     Typography
 } from '@material-ui/core';
 import { authSteps } from '../utils/authSteps';
+import { useStyles } from '../styles/AuthDialogSyles';
 
-export default function FormDialog({ open, handleDialogClose, styles }) {
+
+export default function FormDialog({ open, handleDialogClose }) {
+    const {
+        content,
+        typos,
+        currentChar,
+        charsToBeTyped,
+        welcome
+    } = useStyles();
+    const { message, route, userId } = authSteps;
+    const [userID] = useState(userId);
+
+    const [checkInput, setCheckInput] = useState(false);
+    const [auth, setAuth] = useState(false);
+    const [authSession, setAuthSession] = useState(0);
     const [increment, setIncrement] = useState(0);
-    const [nextButton, setNextButton] = useState(true)
-    const [input, setInput] = useState([]);
-    const [text, setText] = useState('')
-    const { message, url: { domain, port, path } } = authSteps;
+    const [input, setInput] = useState('');
     const tDNA = useRef();
 
-    const handleInputChange = (value) => {
-        setInput(value)
-        value === message[increment] && setNextButton(false);
-    }
-
     const handleIncrementUp = () => {
-        setIncrement(increment + 1);
-        setNextButton(true);
-        setText([...text, ...input])
+        tDNA.current.start();
+        setCheckInput(false);
         setInput('');
+        setAuthSession(authSession + 1)
+        increment === message.length - 1 ?
+            setIncrement(0) :
+            setIncrement(increment + 1);
     }
 
     const backAndReset = () => {
-        // reset test after dialog close animation
-        setTimeout(() => {
-            handleDialogClose();
-            setInput('')
-            setNextButton(true)
-            setIncrement(0)
-        }, 200)
+        tDNA.current.reset();
+        setCheckInput(false);
+        setIncrement(0);
+        handleDialogClose()
     }
 
     const checkPattern = async () => {
-        const myHeaders = new Headers();
-        myHeaders.append('Content-Type', 'application/json')
-        tDNA.current.stop()
+        tDNA.current.stop();
+        setCheckInput(true);
         const typingPattern = await tDNA.current.getTypingPattern({
-            type: 1,
-            text: text.join('')
-        })
-        console.log({ typingPattern })
-        fetch('/api/typing-dna/signup', {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            method: "POST",
-            body: JSON.stringify({ typingPattern })
-        }).then(res => {
-            console.log({ res })
-            const server = res.json()
-            console.log({ server })
-        })
+            type: 0,
+            text: input
+        });
+        const patternQuality = tDNA.current.getQuality(typingPattern);
+
+        if (patternQuality > 0.3) {
+            const res = await fetch(route.signUp, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify({
+                    typingPattern,
+                    patternQuality,
+                    authSession,
+                    userID,
+                    input
+                })
+            })
+            const { message } = await res.json();
+
+            console.log(message)
+
+            if (res.status === 200) {
+                handleIncrementUp();
+                if (message.result === 1 && message.enrollment === 1) {
+                    setAuth(true);
+                }
+            } else {
+                alert("An error occurred on our end. Please refresh and try again.")
+                handleIncrementUp()
+            }
+        } else {
+            handleIncrementUp()
+        }
     }
 
     useEffect(() => {
@@ -70,34 +96,43 @@ export default function FormDialog({ open, handleDialogClose, styles }) {
         }
     }, [tDNA])
 
+    useEffect(() => {
+        input.length === message[increment].length && checkPattern()
+    }, [input])
+
     return (
         <div>
             <Dialog open={open} onClose={backAndReset} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title"><img width="200" src="https://github.com/Archivaldi/4wheelz/blob/userAuthFE/client/src/images/ShoppedTypingDNA.png?raw=true" /></DialogTitle>
-                <DialogContent className={styles}>
+                <DialogTitle id="form-dialog-title"><img width="200" src="https://github.com/Archivaldi/4wheelz/blob/master/client/src/images/ShoppedTypingDNA.png?raw=true" /></DialogTitle>
+                <DialogContent className={content}>
                     <DialogContentText>
-                        To ensure the highest level of security, we are using a technology that will test who you are by the way you type!
+                        <span>To ensure the highest level of security, we are using a technology that will test who you are by the way you type! {!auth && (<span>Please note, it may take up to 5 attempts.</span>)}</span>
                     </DialogContentText>
                     <Typography variant="body1" component="body1">
-                        {increment < message.length ? (
+                        {!auth ? (
                             <>
-                                <span>Please type: {message[increment]}</span>
+                                <span>
+                                    Please type <span className={typos}>(typos accepted)</span>:{" "}
+                                    {message[increment].substring(0, input.length)}
+                                    <span className={currentChar}>{message[increment].charAt(input.length)}</span>
+                                    <span className={charsToBeTyped}>{message[increment].substring(input.length + 1, message[increment].length)}</span>
+                                </span>
                                 <TextField
                                     autoFocus
+                                    inputProps={{ spellCheck: 'false' }}
                                     autoComplete="off"
                                     margin="dense"
                                     id="name"
-                                    label="Type Message Here"
-                                    type="email"
+                                    label="Type Phrase Here"
                                     color="secondary"
                                     value={input}
-                                    disabled={!nextButton}
-                                    onChange={e => handleInputChange(e.target.value)}
+                                    disabled={checkInput}
+                                    onChange={e => setInput(e.target.value)}
                                     fullWidth
                                 />
                             </>
                         ) : (
-                                <span>Thank you for participating!</span>
+                                <h3 className={welcome}>Welcome {userID}</h3>
                             )}
                     </Typography>
                 </DialogContent>
@@ -105,22 +140,6 @@ export default function FormDialog({ open, handleDialogClose, styles }) {
                     <Button onClick={backAndReset} color="secondary">
                         Go Back
                     </Button>
-                    {increment < message.length ? (
-                        <Button
-                            onClick={handleIncrementUp}
-                            color="secondary"
-                            disabled={nextButton}
-                        >
-                            Next
-                        </Button>
-                    ) : (
-                            <Button
-                                onClick={checkPattern}
-                                color="secondary"
-                            >
-                                Submit
-                            </Button>
-                        )}
                 </DialogActions>
             </Dialog>
         </div>
