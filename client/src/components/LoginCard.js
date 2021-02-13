@@ -12,7 +12,6 @@ import UserAuthDialog from './UserAuthDialog';
 export default function LoginCard({ useStyles }) {
     const {
         root,
-        dialog,
         brand,
         auto,
         arbiTrader,
@@ -42,7 +41,6 @@ export default function LoginCard({ useStyles }) {
     return (
         <>
             <UserAuthDialog
-                styles={dialog}
                 open={authDialogOpen}
                 handleDialogClose={handleDialogClose}
             />

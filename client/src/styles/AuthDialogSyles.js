@@ -17,5 +17,8 @@ export const useStyles = makeStyles(theme => ({
         background: '#0081cb',
         borderTopRightRadius: '2px',
         borderBottomRightRadius: '2px'
+    },
+    welcome: {
+        textAlign: 'center'
     }
 }));

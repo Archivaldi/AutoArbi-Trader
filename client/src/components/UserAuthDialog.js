@@ -7,12 +7,20 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
-    Typography,
-    CircularProgress
+    Typography
 } from '@material-ui/core';
 import { authSteps } from '../utils/authSteps';
+import { useStyles } from '../styles/AuthDialogSyles';
 
-export default function FormDialog({ open, handleDialogClose, styles }) {
+
+export default function FormDialog({ open, handleDialogClose }) {
+    const {
+        content,
+        typos,
+        currentChar,
+        charsToBeTyped,
+        welcome
+    } = useStyles();
     const { message, route, userId } = authSteps;
     const [userID] = useState(userId);
 
@@ -96,35 +104,35 @@ export default function FormDialog({ open, handleDialogClose, styles }) {
         <div>
             <Dialog open={open} onClose={backAndReset} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title"><img width="200" src="https://github.com/Archivaldi/4wheelz/blob/master/client/src/images/ShoppedTypingDNA.png?raw=true" /></DialogTitle>
-                <DialogContent className={styles}>
+                <DialogContent className={content}>
                     <DialogContentText>
-                        To ensure the highest level of security, we are using a technology that will test who you are by the way you type! Please note, it may take up to 5 attempts.
+                        <span>To ensure the highest level of security, we are using a technology that will test who you are by the way you type! {!auth && (<span>Please note, it may take up to 5 attempts.</span>)}</span>
                     </DialogContentText>
                     <Typography variant="body1" component="body1">
                         {!auth ? (
                             <>
                                 <span>
-                                    Please type <span style={{ color: 'rgba(255, 255, 255, 0.7)' }}>(typos accepted)</span>:{" "}
+                                    Please type <span className={typos}>(typos accepted)</span>:{" "}
                                     {message[increment].substring(0, input.length)}
-                                    <span style={{ background: '#62bdf9', color: '#212121', borderTopLeftRadius: '2px', borderBottomLeftRadius: '2px' }}>{message[increment].charAt(input.length)}</span>
-                                    <span style={{ background: '#0081cb', borderTopRightRadius: '2px', borderBottomRightRadius: '2px' }}>{message[increment].substring(input.length + 1, message[increment].length)}</span>
+                                    <span className={currentChar}>{message[increment].charAt(input.length)}</span>
+                                    <span className={charsToBeTyped}>{message[increment].substring(input.length + 1, message[increment].length)}</span>
                                 </span>
                                 <TextField
                                     autoFocus
+                                    inputProps={{ spellCheck: 'false' }}
                                     autoComplete="off"
                                     margin="dense"
                                     id="name"
-                                    label="Type Message Here"
+                                    label="Type Phrase Here"
                                     color="secondary"
                                     value={input}
-                                    inputProps={{ spellCheck: 'false' }}
                                     disabled={checkInput}
                                     onChange={e => setInput(e.target.value)}
                                     fullWidth
                                 />
                             </>
                         ) : (
-                                <h1>Welcome {userID}</h1>
+                                <h3 className={welcome}>Welcome {userID}</h3>
                             )}
                     </Typography>
                 </DialogContent>

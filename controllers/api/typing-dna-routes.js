@@ -7,16 +7,8 @@ const typingDnaClient = new TypingDnaClient(typingDna_apiKey, typingDna_secret);
 
 router.post("/signup", ({ body: {
     typingPattern,
-    patternQuality,
-    authSession,
-    userID,
-    input
+    userID
 } }, res) => {
-
-    console.log({ typingPattern })
-    console.log({ authSession })
-    console.log({ userID })
-    console.log({ input })
     typingDnaClient.auto(
         userID,
         typingPattern,
@@ -34,7 +26,6 @@ router.post("/signup", ({ body: {
             };
         }
     );
-
 });
 
 router.post("/check-pattern", (req, res) => {
