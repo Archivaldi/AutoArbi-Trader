@@ -42,7 +42,7 @@ export default function FormDialog({ open, handleDialogClose }) {
             setIncrement(increment + 1);
         setTimeout(() => {
             document.querySelector('#input').focus()
-        }, 500)
+        }, 100)
     }
 
     const backAndReset = () => {
