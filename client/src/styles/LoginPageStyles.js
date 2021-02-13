@@ -37,8 +37,8 @@ export const useStyles = makeStyles(theme => ({
         justifyContent: 'space-around',
         margin: '6px'
     },
-    formControl: {
-        margin: theme.spacing(1),
-        minWidth: 120,
-    },
+    email: {
+        display: 'flex',
+        flexDirection: 'column'
+    }
 }));
