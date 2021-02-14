@@ -13,7 +13,13 @@ import {
 import { useStyles } from '../styles/AuthDialogSyles';
 import { authSteps } from '../utils/authSteps'
 
-export default function FormDialog({ open, setAuthDialogOpen, handleGoBackReset, userRole, user_id }) {
+export default function FormDialog({
+    userRole,
+    user_id,
+    open,
+    setAuthDialogOpen,
+    handleGoBackReset,
+}) {
     const {
         content,
         typos,
@@ -77,9 +83,13 @@ export default function FormDialog({ open, setAuthDialogOpen, handleGoBackReset,
             })
             const { message } = await res.json();
 
-            console.log(message)
             if (message === 'not verified') {
                 handleIncrementUp();
+            } else {
+                setAuth(true);
+                setTimeout(() => {
+                    router.push('/')
+                }, 1000)
             }
         } else {
             handleIncrementUp()
@@ -128,7 +138,7 @@ export default function FormDialog({ open, setAuthDialogOpen, handleGoBackReset,
                                 />
                             </>
                         ) : (
-                                <h3 className={welcome}>Welcome {userID}</h3>
+                                <h3 className={welcome}>🥳 Thank you for participating! 🎉 Redirecting...</h3>
                             )}
                     </Typography>
                 </DialogContent>
