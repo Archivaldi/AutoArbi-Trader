@@ -17,5 +17,11 @@ export const useStyles = makeStyles(theme => ({
     },
     welcome: {
         textAlign: 'center'
+    },
+    content: {
+        minHeight: 260,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-around'
     }
 }));

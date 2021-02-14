@@ -6,46 +6,95 @@ import {
     Button,
     Typography,
     TextField,
-    Select
+    Snackbar,
+    CircularProgress
 } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 import UserAuthDialog from './UserAuthDialog';
 import { authSteps } from '../utils/authSteps';
+import useForm from '../utils/useForm';
+import { validateEmail } from '../utils/validateEmail';
 
 export default function LoginCard({ useStyles }) {
-    const { landing } = authSteps.appScript;
+    const { landing, secondAuth } = authSteps.appScript;
     const {
         root,
         brand,
         auto,
         arbiTrader,
         buttons,
-        logo
+        logo,
+        email
     } = useStyles();;
-    const [userRole, setUserRole] = useState(null);
+    const [authType, setAuthType] = useState(null);
     const [authDialogOpen, setAuthDialogOpen] = useState(false);
+    const [passwordError, setPasswordError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('Error!');
+    const [apiCall, setApiCall] = useState(false);
+    const { values, updateValue } = useForm({
+        emailInput: '',
+        passwordInput: '',
+        passwordInputVerify: ''
+    })
+    const { emailInput, passwordInput, passwordInputVerify } = values;
 
-    const handleDialogOpen = () => {
-        setAuthDialogOpen(true)
+    const handleAuthType = (selection) => {
+        setAuthType(selection);
     };
 
-    const handleDialogClose = () => {
-        setAuthDialogOpen(false)
-        setUserRole(null)
-    };
+    const handleGoBackReset = () => {
+        setAuthType(null);
+        setApiCall(false)
+    }
 
-    const handleUserSelection = (user) => {
-        setUserRole(user)
-    };
-
-    useEffect(() => {
-        userRole === 'seller' && handleDialogOpen()
-    }, [userRole])
+    const handleSecondFormAuth = () => {
+        if (
+            authType === 'signup' && passwordInput !== passwordInputVerify ||
+            authType === 'signup' && passwordInputVerify === '' ||
+            passwordInput === '' ||
+            emailInput === '' ||
+            !validateEmail(emailInput)
+        ) {
+            if (passwordError === false) {
+                setPasswordError(true)
+                setTimeout(() => {
+                    setPasswordError(false)
+                }, 3000)
+            }
+            if (authType === 'signup' && passwordInput !== passwordInputVerify) {
+                setErrorMessage('Passwords do not match!')
+            }
+            if (authType === 'signup' && passwordInputVerify === '') {
+                setErrorMessage('Re-Enter Password Empty!')
+            }
+            if (passwordInput === '') {
+                setErrorMessage('Password Empty!')
+            }
+            if (emailInput === '') {
+                setErrorMessage('Email Empty!')
+            }
+            if (!validateEmail(emailInput)) {
+                setErrorMessage('Not a valid Email!')
+            }
+        } else {
+            if (authType === 'signup') {
+                console.log("API call to signup")
+                setApiCall(true)
+                setAuthDialogOpen(true)
+            } else {
+                console.log("API call to login")
+                setApiCall(true)
+                setAuthDialogOpen(true)
+            }
+        }
+    }
 
     return (
         <>
             <UserAuthDialog
                 open={authDialogOpen}
-                handleDialogClose={handleDialogClose}
+                setAuthDialogOpen={setAuthDialogOpen}
+                handleGoBackReset={handleGoBackReset}
             />
             <Card className={root}>
                 <div className={brand}>
@@ -55,45 +104,89 @@ export default function LoginCard({ useStyles }) {
                     </Typography>
                 </div>
                 <CardContent>
-                    {userRole == "buyer" ? (
-                        <TextField
-                            color="secondary"
-                            id="standard-required"
-                            label="Transaction ID"
-                            required
-
-                        />
+                    {apiCall === false ? (
+                        <>
+                            {authType === null ? (
+                                <Typography align="center" color="textSecondary">
+                                    {landing}
+                                </Typography>
+                            ) : (
+                                    <>
+                                        <Snackbar open={passwordError} onClick={() => setPasswordError(false)}>
+                                            <Alert severity="error">
+                                                {errorMessage}
+                                            </Alert>
+                                        </Snackbar>
+                                        <Typography color="textSecondary">
+                                            {secondAuth}
+                                        </Typography>
+                                        <div className={email}>
+                                            <TextField
+                                                color="secondary"
+                                                type="email"
+                                                label="Email"
+                                                id="emailInput"
+                                                name="emailInput"
+                                                value={emailInput}
+                                                onChange={updateValue}
+                                                required
+                                            />
+                                            <TextField
+                                                color="secondary"
+                                                type="password"
+                                                label="Password"
+                                                id="passwordInput"
+                                                name="passwordInput"
+                                                onChange={updateValue}
+                                                value={passwordInput}
+                                                required
+                                            />
+                                            {authType === 'signup' && (
+                                                <TextField
+                                                    color="secondary"
+                                                    type="password"
+                                                    label="Re-Enter Password"
+                                                    id="passwordInputVerify"
+                                                    name="passwordInputVerify"
+                                                    onChange={updateValue}
+                                                    value={passwordInputVerify}
+                                                    required
+                                                />
+                                            )}
+                                        </div>
+                                    </>
+                                )}
+                        </>
                     ) : (
-                            <Typography color="textSecondary">
-                                {landing}
-                            </Typography>
+                            <CircularProgress color="secondary" />
                         )}
                 </CardContent>
                 <CardActions className={buttons}>
-                    {userRole == "buyer" ? (
+                    {authType === null ? (
                         <>
                             <Button
                                 size="large"
                                 color="secondary"
-                                onClick={() => handleUserSelection(null)}
-                            >Go Back</Button>
+                                onClick={() => handleAuthType('login')}
+                            >Logging In</Button>
                             <Button
                                 size="large"
                                 color="secondary"
-                            >Submit</Button>
+                                onClick={() => handleAuthType('signup')}
+                            >Signing Up</Button>
                         </>
                     ) : (
                             <>
                                 <Button
                                     size="large"
                                     color="secondary"
-                                    onClick={() => handleUserSelection("buyer")}
-                                >Login</Button>
+                                    onClick={() => handleAuthType(null)}
+                                >Go Back</Button>
                                 <Button
                                     size="large"
                                     color="secondary"
-                                    onClick={() => handleUserSelection("seller")}
-                                >Sign Up</Button>
+                                    onClick={handleSecondFormAuth}
+                                >{authType === 'login' ? "Login" : "Sign Up"}</Button>
                             </>
                         )}
                 </CardActions>

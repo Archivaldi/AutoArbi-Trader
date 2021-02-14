@@ -13,13 +13,13 @@ import {
 import { authSteps } from '../utils/authSteps';
 import { useStyles } from '../styles/AuthDialogSyles';
 
-export default function FormDialog({ open, handleDialogClose }) {
+export default function FormDialog({ open, setAuthDialogOpen, handleGoBackReset }) {
     const {
         content,
         typos,
         currentChar,
         charsToBeTyped,
-        welcome
+        welcome,
     } = useStyles();
     const { message, route, userId } = authSteps;
     const [userID] = useState(userId);
@@ -47,7 +47,8 @@ export default function FormDialog({ open, handleDialogClose }) {
 
     const backAndReset = () => {
         tDNA.current.reset();
-        handleDialogClose()
+        setAuthDialogOpen(false)
+        handleGoBackReset();
         setTimeout(() => {
             setCheckInput(false);
             setIncrement(0);
@@ -115,7 +116,7 @@ export default function FormDialog({ open, handleDialogClose }) {
                     <DialogContentText>
                         <span>To ensure the highest level of security, we are using a technology that will test who you are by the way you type! {!auth && (<span>*Please note, it may take up to 5 attempts.</span>)}</span>
                     </DialogContentText>
-                    <Typography variant="body1" component="body1">
+                    <Typography variant="body1">
                         {!auth ? (
                             <>
                                 <span>
