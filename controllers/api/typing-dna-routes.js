@@ -9,12 +9,14 @@ const typingDnaClient = new TypingDnaClient(typingDna_apiKey, typingDna_secret);
 
 router.post("/check-pattern", (req, res) => {
     //client should send to the server user_id, role from previous response
-    const {user_id, role, typingPattern} = req.body;
+    const { user_id, role, typingPattern } = req.body;
 
     typingDnaClient.auto(
+        userID,
+        typingPattern,
         {
-            userId: user_id,
-            type: 1,
+            userId: userID,
+            type: 0,
             device: 'desktop'
         },
         function (error, result) {
@@ -22,26 +24,26 @@ router.post("/check-pattern", (req, res) => {
             if (error) {
                 res.send({ "message": "got some error" });
             } else {
-                if (role === "seller"){
-                    connection.query("SELECT * FROM Users LEFT JOIN Cars USING (user_id) WHERE user_id = ?", 
-                    [user_id],
-                    (err, result) => {
-                        if (err) throw err;
-                        else {
-                            req.session = result[0];
-                            res.send({ message: "Verification success" });
-                        };
-                    });
+                if (role === "seller") {
+                    connection.query("SELECT * FROM Users LEFT JOIN Cars USING (user_id) WHERE user_id = ?",
+                        [user_id],
+                        (err, result) => {
+                            if (err) throw err;
+                            else {
+                                req.session = result[0];
+                                res.send({ message: "Verification success" });
+                            };
+                        });
                 } else {
                     connection.query("SELECT * FROM Users WHERE user_id = ?",
-                    [user_id],
-                    (err,result) => {
-                        if (err) throw err;
-                        else {
-                            req.session = result[0];
-                            res.send({message: "Verification success"})
-                        }
-                    })
+                        [user_id],
+                        (err, result) => {
+                            if (err) throw err;
+                            else {
+                                req.session = result[0];
+                                res.send({ message: "Verification success" })
+                            }
+                        })
                 }
             };
         });

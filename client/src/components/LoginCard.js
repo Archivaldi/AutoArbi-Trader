@@ -7,7 +7,11 @@ import {
     Typography,
     TextField,
     Snackbar,
-    CircularProgress
+    CircularProgress,
+    Select,
+    MenuItem,
+    FormControl,
+    FormHelperText
 } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import UserAuthDialog from './UserAuthDialog';
@@ -16,7 +20,8 @@ import useForm from '../utils/useForm';
 import { validateEmail } from '../utils/validateEmail';
 
 export default function LoginCard({ useStyles }) {
-    const { landing, secondAuth } = authSteps.appScript;
+    const { landing, secondAuthLogin, secondAuthSignUp } = authSteps.appScript;
+    const { signUp } = authSteps.route;
     const {
         root,
         brand,
@@ -24,9 +29,12 @@ export default function LoginCard({ useStyles }) {
         arbiTrader,
         buttons,
         logo,
-        email
+        email,
+        formControl,
+        selectEmpty
     } = useStyles();;
     const [authType, setAuthType] = useState(null);
+    const [userRole, setUserRole] = useState(null);
     const [authDialogOpen, setAuthDialogOpen] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('Error!');
@@ -47,10 +55,11 @@ export default function LoginCard({ useStyles }) {
         setApiCall(false)
     }
 
-    const handleSecondFormAuth = () => {
+    const handleSecondFormAuth = async () => {
         if (
             authType === 'signup' && passwordInput !== passwordInputVerify ||
             authType === 'signup' && passwordInputVerify === '' ||
+            authType === 'signup' && !userRole ||
             passwordInput === '' ||
             emailInput === '' ||
             !validateEmail(emailInput)
@@ -67,6 +76,9 @@ export default function LoginCard({ useStyles }) {
             if (authType === 'signup' && passwordInputVerify === '') {
                 setErrorMessage('Re-Enter Password Empty!')
             }
+            if (authType === 'signup' && !userRole) {
+                setErrorMessage('Transation Role Empty!')
+            }
             if (passwordInput === '') {
                 setErrorMessage('Password Empty!')
             }
@@ -78,11 +90,23 @@ export default function LoginCard({ useStyles }) {
             }
         } else {
             if (authType === 'signup') {
-                console.log("API call to signup")
                 setApiCall(true)
-                setAuthDialogOpen(true)
+                console.log(`${signUp}/${userRole}`)
+                const res = await fetch(`${signUp}/${userRole}`, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    method: "POST",
+                    body: JSON.stringify({
+                        emailInput,
+                        passwordInput
+                    })
+                })
+
+                // setAuthDialogOpen(true)
             } else {
-                console.log("API call to login")
+                console.log(`fetch login`)
                 setApiCall(true)
                 setAuthDialogOpen(true)
             }
@@ -118,7 +142,7 @@ export default function LoginCard({ useStyles }) {
                                             </Alert>
                                         </Snackbar>
                                         <Typography color="textSecondary">
-                                            {secondAuth}
+                                            {authType === 'signup' ? <span>{secondAuthSignUp}</span> : <span>{secondAuthLogin}</span>}
                                         </Typography>
                                         <div className={email}>
                                             <TextField
@@ -142,16 +166,34 @@ export default function LoginCard({ useStyles }) {
                                                 required
                                             />
                                             {authType === 'signup' && (
-                                                <TextField
-                                                    color="secondary"
-                                                    type="password"
-                                                    label="Re-Enter Password"
-                                                    id="passwordInputVerify"
-                                                    name="passwordInputVerify"
-                                                    onChange={updateValue}
-                                                    value={passwordInputVerify}
-                                                    required
-                                                />
+                                                <>
+                                                    <TextField
+                                                        color="secondary"
+                                                        type="password"
+                                                        label="Re-Enter Password"
+                                                        id="passwordInputVerify"
+                                                        name="passwordInputVerify"
+                                                        onChange={updateValue}
+                                                        value={passwordInputVerify}
+                                                        required
+                                                    />
+                                                    <FormControl className={formControl} color="secondary" required>
+                                                        <Select
+                                                            value={userRole}
+                                                            onChange={e => setUserRole(e.target.value)}
+                                                            displayEmpty
+                                                            className={selectEmpty}
+                                                            inputProps={{ 'aria-label': 'Without label' }}
+                                                        >
+                                                            <MenuItem value="" disabled>
+                                                                Transaction Role
+                                                            </MenuItem>
+                                                            <MenuItem value="buyer">Buying</MenuItem>
+                                                            <MenuItem value="seller">Selling</MenuItem>
+                                                        </Select>
+                                                        <FormHelperText>Transaction Role</FormHelperText>
+                                                    </FormControl>
+                                                </>
                                             )}
                                         </div>
                                     </>
@@ -178,11 +220,13 @@ export default function LoginCard({ useStyles }) {
                     ) : (
                             <>
                                 <Button
+                                    disabled={apiCall}
                                     size="large"
                                     color="secondary"
                                     onClick={() => handleAuthType(null)}
                                 >Go Back</Button>
                                 <Button
+                                    disabled={apiCall}
                                     size="large"
                                     color="secondary"
                                     onClick={handleSecondFormAuth}
