@@ -13,7 +13,7 @@ import {
 import { authSteps } from '../utils/authSteps';
 import { useStyles } from '../styles/AuthDialogSyles';
 
-export default function FormDialog({ open, handleDialogClose, handleGoBackReset }) {
+export default function FormDialog({ open, setAuthDialogOpen, handleGoBackReset }) {
     const {
         content,
         typos,
@@ -47,7 +47,7 @@ export default function FormDialog({ open, handleDialogClose, handleGoBackReset 
 
     const backAndReset = () => {
         tDNA.current.reset();
-        handleDialogClose();
+        setAuthDialogOpen(false)
         handleGoBackReset();
         setTimeout(() => {
             setCheckInput(false);

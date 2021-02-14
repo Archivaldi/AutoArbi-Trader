@@ -13,6 +13,7 @@ import Alert from '@material-ui/lab/Alert';
 import UserAuthDialog from './UserAuthDialog';
 import { authSteps } from '../utils/authSteps';
 import useForm from '../utils/useForm';
+import { validateEmail } from '../utils/validateEmail';
 
 export default function LoginCard({ useStyles }) {
     const { landing, secondAuth } = authSteps.appScript;
@@ -28,6 +29,7 @@ export default function LoginCard({ useStyles }) {
     const [authType, setAuthType] = useState(null);
     const [authDialogOpen, setAuthDialogOpen] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('Error!');
     const [apiCall, setApiCall] = useState(false);
     const { values, updateValue } = useForm({
         emailInput: '',
@@ -35,14 +37,6 @@ export default function LoginCard({ useStyles }) {
         passwordInputVerify: ''
     })
     const { emailInput, passwordInput, passwordInputVerify } = values;
-
-    const handleDialogOpen = () => {
-        setAuthDialogOpen(true)
-    };
-
-    const handleDialogClose = () => {
-        setAuthDialogOpen(false)
-    };
 
     const handleAuthType = (selection) => {
         setAuthType(selection);
@@ -55,22 +49,43 @@ export default function LoginCard({ useStyles }) {
 
     const handleSecondFormAuth = () => {
         if (authType === 'signup') {
-            if (passwordInput !== passwordInputVerify) {
+            if (
+                passwordInput !== passwordInputVerify ||
+                passwordInput === '' ||
+                passwordInputVerify === '' ||
+                emailInput === '' ||
+                !validateEmail(emailInput)
+            ) {
                 if (passwordError === false) {
                     setPasswordError(true)
                     setTimeout(() => {
                         setPasswordError(false)
                     }, 3000)
                 }
+                if (passwordInput !== passwordInputVerify) {
+                    setErrorMessage('Passwords do not match!')
+                }
+                if (passwordInput === '') {
+                    setErrorMessage('Password Empty!')
+                }
+                if (passwordInputVerify === '') {
+                    setErrorMessage('Re-Enter Password Empty!')
+                }
+                if (emailInput === '') {
+                    setErrorMessage('Email Emapty!')
+                }
+                if (!validateEmail(emailInput)) {
+                    setErrorMessage('Not a valid Email!')
+                }
             } else {
                 console.log("API call to signup")
                 setApiCall(true)
-                handleDialogOpen()
+                setAuthDialogOpen(true)
             }
         } else {
             console.log("API call to login")
             setApiCall(true)
-            handleDialogOpen()
+            setAuthDialogOpen(true)
         }
     }
 
@@ -78,7 +93,7 @@ export default function LoginCard({ useStyles }) {
         <>
             <UserAuthDialog
                 open={authDialogOpen}
-                handleDialogClose={handleDialogClose}
+                setAuthDialogOpen={setAuthDialogOpen}
                 handleGoBackReset={handleGoBackReset}
             />
             <Card className={root}>
@@ -99,8 +114,8 @@ export default function LoginCard({ useStyles }) {
                                     <>
                                         <Snackbar open={passwordError} onClick={() => setPasswordError(false)}>
                                             <Alert severity="error">
-                                                Passwords do not match!
-                                    </Alert>
+                                                {errorMessage}
+                                            </Alert>
                                         </Snackbar>
                                         <Typography color="textSecondary">
                                             {secondAuth}
