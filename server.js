@@ -68,12 +68,12 @@ app.get("/login", (req,res) => {
         else if (result.length === 0) {
             res.send({error: "Invalid email. Please try again."});
         } else {
-            let {p_hash, user_id, role, email} = result[0];
+            let {p_hash, user_id, role} = result[0];
             bcrypt.compare(password, p_hash, (err, match)=> {
                 if (match){
-                    res.send({user_id, role, email});
+                    res.send({user_id, role});
                 } else {
-                    res.send({error: "Invalid email. Please try again."})
+                    res.send({error: "Invalid Password. Please try again."})
                 }
             })
         }
