@@ -8,17 +8,19 @@ export const useStyles = makeStyles(theme => ({
         alignItems: 'center',
     },
     root: {
-        minWidth: 275,
-        maxWidth: 300,
+        width: 300,
+        height: 400,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        justifyContent: 'space-between',
     },
     brand: {
         display: 'grid',
         gridAutoFlow: 'column',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        padding: '8px'
     },
     logo: {
         maxWidth: 50,
@@ -37,8 +39,8 @@ export const useStyles = makeStyles(theme => ({
         justifyContent: 'space-around',
         margin: '6px'
     },
-    formControl: {
-        margin: theme.spacing(1),
-        minWidth: 120,
-    },
+    email: {
+        display: 'flex',
+        flexDirection: 'column'
+    }
 }));
