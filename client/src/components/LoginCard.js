@@ -71,7 +71,7 @@ export default function LoginCard({ useStyles }) {
                 setErrorMessage('Password Empty!')
             }
             if (emailInput === '') {
-                setErrorMessage('Email Emapty!')
+                setErrorMessage('Email Empty!')
             }
             if (!validateEmail(emailInput)) {
                 setErrorMessage('Not a valid Email!')
@@ -168,12 +168,12 @@ export default function LoginCard({ useStyles }) {
                                 size="large"
                                 color="secondary"
                                 onClick={() => handleAuthType('login')}
-                            > Login </Button>
+                            >Logging In</Button>
                             <Button
                                 size="large"
                                 color="secondary"
                                 onClick={() => handleAuthType('signup')}
-                            >Sign Up</Button>
+                            >Signing Up</Button>
                         </>
                     ) : (
                             <>
