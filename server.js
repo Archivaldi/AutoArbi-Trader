@@ -8,6 +8,7 @@ const { secret: { secret } } = require('./config/keys');
 const TypingDNAClient = require('typingdnaclient');
 const PORT = process.env.PORT || 8080;
 const connection = require('./config/db');
+const randomstring = require('randomstring');
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
