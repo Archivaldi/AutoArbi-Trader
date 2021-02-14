@@ -10,10 +10,10 @@ import {
     DialogTitle,
     Typography
 } from '@material-ui/core';
-import { authSteps } from '../utils/authSteps';
 import { useStyles } from '../styles/AuthDialogSyles';
+import { authSteps } from '../utils/authSteps'
 
-export default function FormDialog({ open, setAuthDialogOpen, handleGoBackReset }) {
+export default function FormDialog({ open, setAuthDialogOpen, handleGoBackReset, userRole, user_id }) {
     const {
         content,
         typos,
@@ -21,9 +21,6 @@ export default function FormDialog({ open, setAuthDialogOpen, handleGoBackReset 
         charsToBeTyped,
         welcome,
     } = useStyles();
-    const { message, route, userId } = authSteps;
-    const [userID] = useState(userId);
-
     const [checkInput, setCheckInput] = useState(false);
     const [auth, setAuth] = useState(false);
     const [authSession, setAuthSession] = useState(0);
@@ -31,6 +28,7 @@ export default function FormDialog({ open, setAuthDialogOpen, handleGoBackReset 
     const [input, setInput] = useState('');
     const tDNA = useRef();
     const router = useRouter();
+    const { message, route } = authSteps;
 
     const handleIncrementUp = () => {
         tDNA.current.start();
@@ -54,7 +52,7 @@ export default function FormDialog({ open, setAuthDialogOpen, handleGoBackReset 
             setIncrement(0);
             setInput('')
         }, 200)
-    }
+    };
 
     const checkPattern = async () => {
         tDNA.current.stop();
@@ -65,7 +63,7 @@ export default function FormDialog({ open, setAuthDialogOpen, handleGoBackReset 
         });
         const patternQuality = tDNA.current.getQuality(typingPattern);
         if (patternQuality > 0.3) {
-            const res = await fetch(route.signUp, {
+            const res = await fetch(route.verify, {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
@@ -73,25 +71,15 @@ export default function FormDialog({ open, setAuthDialogOpen, handleGoBackReset 
                 method: "POST",
                 body: JSON.stringify({
                     typingPattern,
-                    patternQuality,
-                    authSession,
-                    userID,
-                    input
+                    user_id,
+                    userRole
                 })
             })
             const { message } = await res.json();
 
-            if (res.status === 200) {
+            console.log(message)
+            if (message === 'not verified') {
                 handleIncrementUp();
-                if (message.result === 1 && message.enrollment === 1) {
-                    setAuth(true);
-                    setTimeout(() => {
-                        router.push('/');
-                    }, 1000)
-                }
-            } else {
-                alert("An error occurred on our end. Please refresh and try again.")
-                handleIncrementUp()
             }
         } else {
             handleIncrementUp()
@@ -110,7 +98,7 @@ export default function FormDialog({ open, setAuthDialogOpen, handleGoBackReset 
 
     return (
         <div>
-            <Dialog open={open} onClose={backAndReset} aria-labelledby="form-dialog-title">
+            <Dialog open={open} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title"><img width="200" src="https://github.com/Archivaldi/4wheelz/blob/master/client/src/images/ShoppedTypingDNA.png?raw=true" /></DialogTitle>
                 <DialogContent className={content}>
                     <DialogContentText>
