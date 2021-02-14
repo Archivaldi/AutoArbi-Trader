@@ -63,10 +63,12 @@ export default function LoginCard({ useStyles }) {
                     }, 3000)
                 }
             } else {
+                console.log("API call to signup")
                 setApiCall(true)
                 handleDialogOpen()
             }
         } else {
+            console.log("API call to login")
             setApiCall(true)
             handleDialogOpen()
         }
