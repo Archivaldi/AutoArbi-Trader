@@ -6,9 +6,9 @@ const { typingDna_apiKey, typingDna_secret } = keys.typingDna;
 const typingDnaClient = new TypingDnaClient(typingDna_apiKey, typingDna_secret);
 
 router.post("/signup", ({ body: {
-    typingPattern,
-    userID
+    typingPattern
 } }, res) => {
+    let userID = "test123"
     typingDnaClient.auto(
         userID,
         typingPattern,

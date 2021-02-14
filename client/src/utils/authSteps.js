@@ -11,5 +11,5 @@ export const authSteps = {
         signUp: '/api/typing-dna/signup',
         verify: '/api/typing-dna/verify'
     },
-    userId: "test123"
+    userId: uuidv4()
 }
