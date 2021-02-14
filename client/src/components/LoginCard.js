@@ -48,44 +48,44 @@ export default function LoginCard({ useStyles }) {
     }
 
     const handleSecondFormAuth = () => {
-        if (authType === 'signup') {
-            if (
-                passwordInput !== passwordInputVerify ||
-                passwordInput === '' ||
-                passwordInputVerify === '' ||
-                emailInput === '' ||
-                !validateEmail(emailInput)
-            ) {
-                if (passwordError === false) {
-                    setPasswordError(true)
-                    setTimeout(() => {
-                        setPasswordError(false)
-                    }, 3000)
-                }
-                if (passwordInput !== passwordInputVerify) {
-                    setErrorMessage('Passwords do not match!')
-                }
-                if (passwordInput === '') {
-                    setErrorMessage('Password Empty!')
-                }
-                if (passwordInputVerify === '') {
-                    setErrorMessage('Re-Enter Password Empty!')
-                }
-                if (emailInput === '') {
-                    setErrorMessage('Email Emapty!')
-                }
-                if (!validateEmail(emailInput)) {
-                    setErrorMessage('Not a valid Email!')
-                }
-            } else {
+        if (
+            authType === 'signup' && passwordInput !== passwordInputVerify ||
+            authType === 'signup' && passwordInputVerify === '' ||
+            passwordInput === '' ||
+            emailInput === '' ||
+            !validateEmail(emailInput)
+        ) {
+            if (passwordError === false) {
+                setPasswordError(true)
+                setTimeout(() => {
+                    setPasswordError(false)
+                }, 3000)
+            }
+            if (authType === 'signup' && passwordInput !== passwordInputVerify) {
+                setErrorMessage('Passwords do not match!')
+            }
+            if (authType === 'signup' && passwordInputVerify === '') {
+                setErrorMessage('Re-Enter Password Empty!')
+            }
+            if (passwordInput === '') {
+                setErrorMessage('Password Empty!')
+            }
+            if (emailInput === '') {
+                setErrorMessage('Email Emapty!')
+            }
+            if (!validateEmail(emailInput)) {
+                setErrorMessage('Not a valid Email!')
+            }
+        } else {
+            if (authType === 'signup') {
                 console.log("API call to signup")
                 setApiCall(true)
                 setAuthDialogOpen(true)
+            } else {
+                console.log("API call to login")
+                setApiCall(true)
+                setAuthDialogOpen(true)
             }
-        } else {
-            console.log("API call to login")
-            setApiCall(true)
-            setAuthDialogOpen(true)
         }
     }
 
@@ -168,7 +168,7 @@ export default function LoginCard({ useStyles }) {
                                 size="large"
                                 color="secondary"
                                 onClick={() => handleAuthType('login')}
-                            >Login</Button>
+                            > Login </Button>
                             <Button
                                 size="large"
                                 color="secondary"
