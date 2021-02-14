@@ -7,6 +7,7 @@ import {
     Typography,
     TextField,
     Snackbar,
+    CircularProgress
 } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import UserAuthDialog from './UserAuthDialog';
@@ -27,6 +28,7 @@ export default function LoginCard({ useStyles }) {
     const [authType, setAuthType] = useState(null);
     const [authDialogOpen, setAuthDialogOpen] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
+    const [apiCall, setApiCall] = useState(false);
     const { values, updateValue } = useForm({
         emailInput: '',
         passwordInput: '',
@@ -47,7 +49,8 @@ export default function LoginCard({ useStyles }) {
     };
 
     const handleGoBackReset = () => {
-
+        setAuthType(null);
+        setApiCall(false)
     }
 
     const handleSecondFormAuth = () => {
@@ -59,9 +62,13 @@ export default function LoginCard({ useStyles }) {
                         setPasswordError(false)
                     }, 3000)
                 }
+            } else {
+                setApiCall(true)
+                handleDialogOpen()
             }
         } else {
-            alert('you are logging in')
+            setApiCall(true)
+            handleDialogOpen()
         }
     }
 
@@ -70,6 +77,7 @@ export default function LoginCard({ useStyles }) {
             <UserAuthDialog
                 open={authDialogOpen}
                 handleDialogClose={handleDialogClose}
+                handleGoBackReset={handleGoBackReset}
             />
             <Card className={root}>
                 <div className={brand}>
@@ -79,55 +87,61 @@ export default function LoginCard({ useStyles }) {
                     </Typography>
                 </div>
                 <CardContent>
-                    {authType === null ? (
-                        <Typography color="textSecondary">
-                            {landing}
-                        </Typography>
-                    ) : (
-                            <>
-                                <Snackbar open={passwordError} onClick={() => setPasswordError(false)}>
-                                    <Alert severity="error">
-                                        Passwords do not match!
-                                    </Alert>
-                                </Snackbar>
-                                <Typography color="textSecondary">
-                                    {secondAuth}
+                    {apiCall === false ? (
+                        <>
+                            {authType === null ? (
+                                <Typography align="center" color="textSecondary">
+                                    {landing}
                                 </Typography>
-                                <div className={email}>
-                                    <TextField
-                                        color="secondary"
-                                        type="email"
-                                        label="Email"
-                                        id="emailInput"
-                                        name="emailInput"
-                                        value={emailInput}
-                                        onChange={updateValue}
-                                        required
-                                    />
-                                    <TextField
-                                        color="secondary"
-                                        type="password"
-                                        label="Password"
-                                        id="passwordInput"
-                                        name="passwordInput"
-                                        onChange={updateValue}
-                                        value={passwordInput}
-                                        required
-                                    />
-                                    {authType === 'signup' && (
-                                        <TextField
-                                            color="secondary"
-                                            type="password"
-                                            label="Re-Enter Password"
-                                            id="passwordInputVerify"
-                                            name="passwordInputVerify"
-                                            onChange={updateValue}
-                                            value={passwordInputVerify}
-                                            required
-                                        />
-                                    )}
-                                </div>
-                            </>
+                            ) : (
+                                    <>
+                                        <Snackbar open={passwordError} onClick={() => setPasswordError(false)}>
+                                            <Alert severity="error">
+                                                Passwords do not match!
+                                    </Alert>
+                                        </Snackbar>
+                                        <Typography color="textSecondary">
+                                            {secondAuth}
+                                        </Typography>
+                                        <div className={email}>
+                                            <TextField
+                                                color="secondary"
+                                                type="email"
+                                                label="Email"
+                                                id="emailInput"
+                                                name="emailInput"
+                                                value={emailInput}
+                                                onChange={updateValue}
+                                                required
+                                            />
+                                            <TextField
+                                                color="secondary"
+                                                type="password"
+                                                label="Password"
+                                                id="passwordInput"
+                                                name="passwordInput"
+                                                onChange={updateValue}
+                                                value={passwordInput}
+                                                required
+                                            />
+                                            {authType === 'signup' && (
+                                                <TextField
+                                                    color="secondary"
+                                                    type="password"
+                                                    label="Re-Enter Password"
+                                                    id="passwordInputVerify"
+                                                    name="passwordInputVerify"
+                                                    onChange={updateValue}
+                                                    value={passwordInputVerify}
+                                                    required
+                                                />
+                                            )}
+                                        </div>
+                                    </>
+                                )}
+                        </>
+                    ) : (
+                            <CircularProgress color="secondary" />
                         )}
                 </CardContent>
                 <CardActions className={buttons}>
