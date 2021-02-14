@@ -33,10 +33,12 @@ router.post("/signup", ({ body: {
 router.post("/check-pattern", (req, res) => {
     let typingPattern = req.body.typingPattern;
     console.log(typingPattern);
-    let client_id = "test123";
+    //client should send to the server user_id, role and email from previous response
+    //const {user_id, role, email} = req.body;
+
     typingDnaClient.check(
         {
-            userId: client_id,
+            userId: req.session.user_id,
             type: 1,
             device: 'desktop'
         },
@@ -45,7 +47,10 @@ router.post("/check-pattern", (req, res) => {
             if (error) {
                 res.send({ "message": "got some error" });
             } else {
-                res.send({ reuse })
+                //req.session.user_id = user_id;
+                //req.session.role = role;
+                //req.session.email = email;
+                res.send({ result })
             };
         });
 });

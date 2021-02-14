@@ -9,6 +9,8 @@ const TypingDNAClient = require('typingdnaclient');
 const PORT = process.env.PORT || 8080;
 const connection = require('./config/db');
 const randomstring = require('randomstring');
+const {v4: uuidv4} = require("uuid");
+const bcrypt = require('bcrypt');
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -24,202 +26,122 @@ app.use(
 app.use(express.static(path.join(__dirname, './client/out')));
 app.use(require('./controllers/'));
 
-app.get("/test", (req,res) => {
-    res.sendFile(path.join(__dirname, "./index.html"));
-});
-
-//the route to signup new users
-app.post("/sighup/:title", (req,res) => {
-
+app.post("/signup/:role",  async (req,res) => {
     //we use route to see the user's title. We need to save it in state when user clicks "seller or buyer" buttons when the users signs up
-    let {title} = req.params;
+    let {role} = req.params;
 
     //generate uuid
     const user_id = uuidv4();
 
-    //here I take vars that fit both titles
-    //const {email, password, firstName, lastName, street, city, state, zip_code} = req.body;
+    //vars from body
+    const {email, password} = req.body;
 
-    //vars got test
-    let email = "example@mail.com"
-    let firstName = "Artur";
-    let lastName = "Markov";
-    let street = "1403 Fort Lloyd Pl";
-    let city = "Round Rock";
-    let state = "TX";
-    let zip_code = "94015";
-    let password = "test123";
+    let p_hash = await bcrypt.hash(password, 10);
 
-    //if the user is a seller we run two function to add car and the user and we add more vars
-    if (title == "seller"){
-
-        //generate transaction_id for the seller
-        let transaction_id = randomstring.generate(10);
-        //additional vars for the seller
-        //let {price, year, odometer, make, model, body, vin, plate, title_number} = req.body
-
-        //add this vars for tests
-        let price = 10000;
-        let year = 2015;
-        let odometer = 20536;
-        let make = "Mazda";
-        let model = "5";
-        let body = "mv";
-        let vin = "asdfasdf23423";
-        let plate = "12fjh34";
-        let title_number = "123345782";
-
-        //we have to insert car first cuz of the tables in the database
-        const insert_car = () => {
-            connection.query(
-                'INSERT INTO Cars(price, year, odometer, make, model, body, vin, plate, title_number) VALUES (?,?,?,?,?,?,?,?,?)',
-                [price, year, odometer, make, model, body, vin, plate, title_number],
-                (err, result) => {
-                    if (err) throw err;
-                    else {
-                        let car_id = result.insertId;
-                        bcrypt.hash(password, 10, function(e, hash) {
-                            if(err) throw err;
-                            else {
-                                insert_user(car_id, hash)
-                            }
-                        });
-                    };
-                }
-            );
-        };
-
-        //insert the seller with the car_id
-        const insert_user = (car_id, hash) => {
-            connection.query("INSERT INTO Users(car_id, user_id, firstName, lastName, street, city, state, zip_code, password_hash, title, email, transaction_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
-                [car_id, user_id, firstName, lastName, street, city, state, zip_code, hash, title, email, transaction_id],
-                function (err, result) {
-                    if (err) throw err;
-                    else {
-                        //the server gives info back to the client. We can give any info that needed
-                        req.session.user_id = user_id;
-                        req.session.transaction_id = transaction_id;
-                        res.send({user_id});
-                    }
-                }
-            );
-        };
-
-        
-        insert_car();
-
-        //if the user is a buyer we generate uuid and run only one fuction to insert the user
-    } else {
-
-        //should have transaction_id in the form
-        //const {transaction_id} = req.body;
-        const transaction_id = "fnsDIo901f"
-        //insert the buyer without car_id
-        function insert_byuer(){
-            bcrypt.hash(password, 10, function(e, hash){
-                if (e) throw new Error(e);
-                else {
-                    connection.query("INSERT INTO Users(user_id, firstName, lastName, street, city, state, zip_code, password_hash, title, email, transaction_id) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
-                    [user_id, firstName, lastName, street, city, state, zip_code, hash, title, email, transaction_id],
-                    function (err, result){
-                        if (err) throw err;
-                        else {
-                            req.session.user_id = user_id;
-                            res.send({user_id});
-                        }
-                    }
-                    );
-                }
-            })
-        };
-
-        insert_byuer();
-    };
-
-
-
-    //let password_hash = await bcrypt.hash(password, 10);
-    // const result = await connection.query(
-    //     'INSERT INTO Cars(price, year, odometer, make, model, body, vin, plate, title_number) VALUES (?,?,?,?,?,?,?,?,?)',
-    //     [price, year, odometer, make, model, body, vin, plate, title_number]
-    // );
-
-        // try {
-        //     const insert = await connection.query(
-        //         'INSERT INTO Cars(price, year, odometer, make, model, body, vin, plate, title_number) VALUES (?,?,?,?,?,?,?,?,?)',
-        //         [price, year, odometer, make, model, body, vin, plate, title_number]
-        //     );
-        //     hash_password = await bcrypt.hash(password, 10);
-        //     console.log(results); 
-        // } catch (e) {
-        //     console.error(e)
-        // }
-
-
-});
-
-
-app.get("/login", (req,res) => {
-    //we check typing pattern at the same time when user logins
-    //const {email, password, typingPattern} = req.body;
-
-
-
-    const user_id = "";
-
-    //1 step is to check email
-    connection.query("SELECT * FROM Users WHERE email = ?",
-    [email],
+    connection.query("INSERT INTO Users(email, p_hash, user_id, role) VALUES (?,?,?,?)", 
+    [email, p_hash, user_id, role],
     (err, result) => {
         if (err) throw err;
-
-        //send error if no email found
-        else if (result.length === 0){
-            res.send({"error": "Invalid email"});
-        }
         else {
-            let {password_hash} = result[0];
-            user_id = result[0].user_id;
-            check_password(password_hash);
+            req.session.user_id = user_id;
+            req.session.role = role;
+            res.send({user_id});
         }
     }
     );
-
-    //step 2 is to check password
-    async function check_password(hash){
-        try {
-            let match = await bcrypt.compare(password, hash);
-            if (match){
-                typing_dna_verify();
-            } else {
-                //if password is invalid send error
-                res.send({"error": "Ivalid password"});
-            }
-        } catch(e) {
-            console.log(e)
-        }
-    };
-
-    //step 3 verify typing dna
-    async function typing_dna_verify(){
-        try {
-           const result = await TypingDNAClient.verify(user_id, typingPattern);
-           console.log(result);
-        } catch(e){
-            throw e;
-        }
-    }
-});
-
-
-app.get("/user_id", (req,res) => {
-    let user_id = randomstring.generate(10);
-    req.session.user_id = user_id;
-    res.send({message: "Done"});
 });
 
 app.get("/session", (req,res) => {
-    res.send({user_id: req.session.user_id});
+    res.send(req.session);
+});
+
+app.get("/login", (req,res) => {
+    //server gets the email and the password
+    //const {email, password} = req.body;
+
+    //test vars
+    let email = "example@mail.com";
+    let password = "test123";
+
+    connection.query("SELECT * FROM Users WHERE email=?", [email], (err, result) => {
+        if (err) throw err;
+        else if (result.length === 0) {
+            res.send({error: "Invalid email. Please try again."});
+        } else {
+            let {p_hash, user_id, role, email} = result[0];
+            bcrypt.compare(password, p_hash, (err, match)=> {
+                if (match){
+                    res.send({user_id, role, email});
+                } else {
+                    res.send({error: "Invalid email. Please try again."})
+                }
+            })
+        }
+    });
+});
+
+app.get("/checkUser", (req,res) => {
+    const {user_id, role} = req.session;
+
+    if (role === "seller"){
+        connection.query("SELECT * FROM Users LEFT JOIN Cars USING (car_id) WHERE user_id = ?", [user_id], (err, result) => {
+            if (err) throw err;
+            else {
+                res.send(result);
+            }
+        });
+    } else {
+        connection.query("SELECT * FROM Users WHERE user_id = ?", [user_id], (err, result) => {
+            if (err) throw err;
+             else {
+                 res.send(result);
+             }
+        });
+    };
+});
+
+app.post("/addInfo", (req,res) => {
+    const {role, user_id} = req.session;
+    const {firstName, lastName, street, city, state, zip_code} = req.body;
+
+    if (role === "buyer"){
+        const {transaction_id} = req.body;
+        connection.query("Update Users SET firstName = ?, lastName = ?, street = ?, city = ?, state = ?, zip_code = ?, transaction_id = ? WHERE user_id = ?",
+        [firstName, lastName, street, city, state, zip_code, transaction_id, user_id],
+        (err, result) => {
+            if (err) throw err;
+            else {
+                res.send({message: "All info is aplied"});
+            }
+        });
+    } else {
+        const {price, year, odometer, make, model, body, vin, plate, title_number} = req.body;
+        const transaction_id = randomstring.generate(10);
+        connection.query("INSERT INTO Cars(price, year, odometer, make, model, body, vin, plate, title_number) VALUES (?,?,?,?,?,?,?,?,?)",
+        [price, year, odometer, make, model, body, vin, plate, title_number],
+        (err, result) => {
+            if (err) throw err;
+            else {
+                let car_id = result.insertId;
+                insert_seller(car_id);
+            }
+        })
+
+        const insert_seller = (car_id) => {
+            connection.query("Update Users SET firstName = ?, lastName = ?, street = ?, city = ?, state = ?, zip_code = ?, transaction_id = ?, car_id = ? WHERE user_id = ?",
+            [firstName, lastName, street, city, state, zip_code, transaction_id, car_id, user_id],
+            (err, result) => {
+                if (err) throw err;
+                else {
+                    res.send({message: "All info is aplied"});
+                };
+            });
+        };
+    };
+});
+
+app.get("/logout", (req,res) => {
+    req.session = null;
 })
 
 app.listen(PORT, () => {
