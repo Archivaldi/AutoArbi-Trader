@@ -3,64 +3,12 @@ const Anvil = require("@anvilco/anvil");
 const moment = require('moment');
 const cloudinary = require('cloudinary').v2;
 const keys = require('../../config/keys');
+const extract = require('extract-zip');
 var fs = require('fs');
+const path = require('path');
 
 const anvilClient = new Anvil({ apiKey: keys.anvil.apiKey });
 cloudinary.config({ cloud_name: keys.cloudinary.cloud_name, api_key: keys.cloudinary.apikey, api_secret: keys.cloudinary.secret });
-
-router.get("/fill_form", async (req, res) => {
-
-    const exampleData = {
-        "title": "Texas Vehicle Bill Of Sale",
-        "fontSize": 14,
-        "textColor": "#222222",
-        "data":
-        {
-            seller: "Artur Markov",
-            sellerStreet: "1403 Fort Lloyd Pl",
-            sellerCity: "Round Rock",
-            sellerState: "TX",
-            sellerZipCode: "78665",
-            sellerCounty: "Williamson",
-            buyer: "Nathaniel Ryan",
-            buyerStreet: "1700 W Parmer St",
-            buyerCity: "Austin",
-            buyerState: "TX",
-            buyerZipCode: "78727",
-            buyer_county: "Jefferson",
-            price: "10000",
-            carYear: "2015",
-            carMake: "Mazda",
-            carBody: "Minivan",
-            carModel: "5",
-            carVin: "1SG13VNSSDN45693",
-            carPlate: "NKR1897",
-            odometer: "77356",
-            dayMonth: moment().format("DD/MM"),
-            year: "21",
-            date: moment().format("MM/DD/YYYY"),
-        }
-    };
-
-    const { statusCode, data } = await anvilClient.fillPDF(keys.anvil.bill_of_sale_id, exampleData);
-
-    // Data will be the filled PDF raw bytes
-    fs.writeFile('output.pdf', data, { encoding: null }, function (err) {
-        if (err) { console.log(err) }
-        else {
-            console.log("the file was created");
-
-            cloudinary.uploader.upload("output.pdf",
-                function (error, result) { console.log(result, error); });
-
-        }
-    });
-
-    res.send({ statusCode });
-    console.log(data);
-
-
-});
 
 let groupEid = "";
 
@@ -199,22 +147,27 @@ router.get("/createEtchSigh", (req, res) => {
 });
 
 
-router.get("/download", async (req, res) => {
+router.get("/download", (req, res) => {
 
     async function main() {
-        const { statusCode, response, data, errors } = await anvilClient.downloadDocuments(groupEid, {});
-        if (statusCode === 200) {
-            fs.writeFile('output.zip', data, { encoding: null }, function (err) {
-                if (err) { console.log(err) }
-                else {
-                    console.log("Created zip file");
+        try {
+            const { statusCode, response, data, errors } = await anvilClient.downloadDocuments(groupEid, {});
+            if (statusCode === 200){
+                fs.writeFileSync('output.zip', data, {encoding: null});
+                await (extract(path.join(__dirname, "../../output.zip"), {dir: path.join(__dirname, `../../Unzip/${groupEid}`)}));
+                const files = fs.readdirSync(path.join(__dirname, `../../Unzip/${groupEid}`));
+                console.log(files);
+                for (let i = 0; i < files.length; i++){
+                    const {secure_url} = await cloudinary.uploader.upload(path.join(__dirname, `../../Unzip/${groupEid}/${files[i]}`));
+                    console.log(secure_url);
                 }
-            });
 
-            console.log(statusCode);
-        } else {
-            console.log(statusCode, JSON.stringify(errors, null, 2))
-        };
+            } else {
+                console.log(JSON.stringify(errors, null,2))
+            }
+        } catch(error) {
+            console.log(error);
+        }
     }
 
     main()
