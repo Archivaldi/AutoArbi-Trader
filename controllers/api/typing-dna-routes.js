@@ -6,10 +6,12 @@ const { typingDna_apiKey, typingDna_secret } = keys.typingDna;
 const typingDnaClient = new TypingDnaClient(typingDna_apiKey, typingDna_secret);
 
 router.post("/signup", ({ body: {
-    typingPattern
+    typingPattern,
+    userID
 } }, res) => {
-    let userID = "test123"
     typingDnaClient.auto(
+        //into userID we have to store req.session.user_id
+        //it means server doesn't need to get user_id from the client because we store sessions when the user types all the info
         userID,
         typingPattern,
         {

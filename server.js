@@ -5,7 +5,10 @@ const bodyParser = require("body-parser");
 const session = require('cookie-session');
 const cookieParser = require('cookie-parser');
 const { secret: { secret } } = require('./config/keys');
+const TypingDNAClient = require('typingdnaclient');
 const PORT = process.env.PORT || 8080;
+const connection = require('./config/db');
+
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -111,7 +114,7 @@ app.post("/sighup/:title", (req,res) => {
         //const {transaction_id} = req.body;
         const transaction_id = "fnsDIo901f"
         //insert the buyer without car_id
-        function insert_byuer(pass){
+        function insert_byuer(){
             bcrypt.hash(password, 10, function(e, hash){
                 if (e) throw new Error(e);
                 else {
@@ -153,6 +156,69 @@ app.post("/sighup/:title", (req,res) => {
 
 
 });
+
+
+app.get("/login", (req,res) => {
+    //we check typing pattern at the same time when user logins
+    //const {email, password, typingPattern} = req.body;
+
+
+
+    const user_id = "";
+
+    //1 step is to check email
+    connection.query("SELECT * FROM Users WHERE email = ?",
+    [email],
+    (err, result) => {
+        if (err) throw err;
+
+        //send error if no email found
+        else if (result.length === 0){
+            res.send({"error": "Invalid email"});
+        }
+        else {
+            let {password_hash} = result[0];
+            user_id = result[0].user_id;
+            check_password(password_hash);
+        }
+    }
+    );
+
+    //step 2 is to check password
+    async function check_password(hash){
+        try {
+            let match = await bcrypt.compare(password, hash);
+            if (match){
+                typing_dna_verify();
+            } else {
+                //if password is invalid send error
+                res.send({"error": "Ivalid password"});
+            }
+        } catch(e) {
+            console.log(e)
+        }
+    };
+
+    //step 3 verify typing dna
+    async function typing_dna_verify(){
+        try {
+           const result = await TypingDNAClient.verify(user_id, typingPattern);
+           console.log(result);
+        } catch(e){
+            throw e;
+        }
+    }
+});
+
+
+app.get("/user_id", (req,res) => {
+    let user_id = uuidv4();
+    req.session.user_id = user_id;
+});
+
+app.get("/session", (req,res) => {
+    res.send({user_id: req.session.user_id});
+})
 
 app.listen(PORT, () => {
     console.log(`Listening on ${PORT}`);
