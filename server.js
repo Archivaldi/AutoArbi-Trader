@@ -212,7 +212,7 @@ app.get("/login", (req,res) => {
 
 
 app.get("/user_id", (req,res) => {
-    let user_id = uuidv4();
+    let user_id = randomstring(10);
     req.session.user_id = user_id;
     res.send({message: "Done"});
 });
