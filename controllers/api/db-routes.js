@@ -44,7 +44,7 @@ router.post("/login", (req, res) => {
     });
 });
 
-router.get("/session", (req, res) => {
+router.post("/session", (req, res) => {
     res.send(req.session);
 });
 

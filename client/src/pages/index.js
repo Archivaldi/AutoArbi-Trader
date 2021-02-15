@@ -4,7 +4,6 @@ import LoginCard from '../components/LoginCard';
 import { useStyles } from '../styles/LoginPageStyles'
 
 export default function Dashboard() {
-    const { buyer, seller } = dummyData;
     const { page } = useStyles();
     return (
         <div className={page}>
