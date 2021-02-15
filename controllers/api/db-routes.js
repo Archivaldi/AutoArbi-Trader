@@ -121,6 +121,7 @@ router.post("/add-info", (req, res) => {
 
 router.post("/hooks", (req,res) => {
     console.log(req.body);
+    res.send({statusCode: 200})
 });
 
 router.get("/logout", (req, res) => {
