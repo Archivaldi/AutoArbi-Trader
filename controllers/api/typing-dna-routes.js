@@ -25,7 +25,7 @@ router.post("/check-pattern", (req, res) => {
                 res.send({ "message": "got some error" });
             } else {
                 if (role === "seller") {
-                    connection.query("SELECT * FROM Users LEFT JOIN Cars USING (user_id) WHERE user_id = ?",
+                    connection.query("SELECT * FROM Users LEFT JOIN Cars USING (car_id) WHERE user_id = ?",
                         [user_id],
                         (err, result) => {
                             if (err) throw err;
