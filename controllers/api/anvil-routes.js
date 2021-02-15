@@ -181,7 +181,7 @@ router.post("/hooks", async (req,res) => {
                         }
 
                         const payloads = {
-                            url: "api/db/updateUrls",
+                            url: "https://desolate-hollows-77552.herokuapp.com/api/db/updateUrls",
                             method: "POST",
                             body: {bill_of_sale, title_url},
                         };
