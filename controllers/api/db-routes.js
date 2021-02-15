@@ -129,7 +129,7 @@ router.post("/updateUrls", (req,res) => {
     const {bill_of_sale_url, title_url} = req.body;
     const {user_id} = req.session;
     connection.query("UPDATE Users SET billOfSale = ?, title = ?", 
-    [bill_of_sale, title_url], 
+    [bill_of_sale_url, title_url], 
     (err, result) => {
         if (err) throw err;
         else {
