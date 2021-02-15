@@ -5,20 +5,14 @@ const randomstring = require('randomstring');
 const connection = require('../../config/db');
 
 router.post("/signup/:role", async (req, res) => {
-    //we use route to see the user's title. We need to save it in state when user clicks "seller or buyer" buttons when the users signs up
-    let { role } = req.params;
+    const { role } = req.params;
+    const { passwordInput, emailInput } = req.body;
 
-    //generate uuid
     const user_id = uuidv4();
-
-    //vars from body
-    const password = req.body.passwordInput;
-    const email = req.body.emailInput;
-
-    let p_hash = await bcrypt.hash(password, 10);
+    const p_hash = await bcrypt.hash(passwordInput, 10);
 
     connection.query("INSERT INTO Users(email, p_hash, user_id, role) VALUES (?,?,?,?)",
-        [email, p_hash, user_id, role],
+        [emailInput, p_hash, user_id, role],
         (err, result) => {
             if (err) throw err;
             else {
@@ -30,25 +24,16 @@ router.post("/signup/:role", async (req, res) => {
     );
 });
 
-router.get("/session", (req, res) => {
-    res.send(req.session);
-});
+router.post("/login", (req, res) => {
+    const { passwordInput, emailInput } = req.body;
 
-router.get("/login", (req, res) => {
-    //server gets the email and the password
-    //const {email, password} = req.body;
-
-    //test vars
-    let email = "example@mail.com";
-    let password = "test123";
-
-    connection.query("SELECT * FROM Users WHERE email=?", [email], (err, result) => {
+    connection.query("SELECT * FROM Users WHERE email=?", [emailInput], (err, result) => {
         if (err) throw err;
         else if (result.length === 0) {
             res.send({ error: "Invalid email. Please try again." });
         } else {
             let { p_hash, user_id, role } = result[0];
-            bcrypt.compare(password, p_hash, (err, match) => {
+            bcrypt.compare(passwordInput, p_hash, (err, match) => {
                 if (match) {
                     res.send({ user_id, role });
                 } else {
@@ -57,6 +42,10 @@ router.get("/login", (req, res) => {
             })
         }
     });
+});
+
+router.get("/session", (req, res) => {
+    res.send(req.session);
 });
 
 router.get("/check-user", (req, res) => {

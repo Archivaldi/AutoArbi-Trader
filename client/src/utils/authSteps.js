@@ -9,6 +9,7 @@ export const authSteps = {
     ],
     route: {
         signUp: '/api/db/signup',
+        login: '/api/db/login',
         verify: '/api/typing-dna/check-pattern'
     }
 }

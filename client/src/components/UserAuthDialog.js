@@ -77,8 +77,7 @@ export default function FormDialog({
                 method: "POST",
                 body: JSON.stringify({
                     typingPattern,
-                    user_id,
-                    userRole
+                    user_id
                 })
             })
             const { message } = await res.json();
@@ -112,7 +111,7 @@ export default function FormDialog({
                 <DialogTitle id="form-dialog-title"><img width="200" src="https://github.com/Archivaldi/4wheelz/blob/master/client/src/images/ShoppedTypingDNA.png?raw=true" /></DialogTitle>
                 <DialogContent className={content}>
                     <DialogContentText>
-                        <span>To ensure the highest level of security, we are using a technology that will test who you are by the way you type! {!auth && (<span>*Please note, it may take up to 5 attempts.</span>)}</span>
+                        <span>To ensure the highest level of security, we are using a technology that will test who you are by the way you type!</span>
                     </DialogContentText>
                     <Typography variant="body1">
                         {!auth ? (
