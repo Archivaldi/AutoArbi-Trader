@@ -8,40 +8,39 @@ const typingDnaClient = new TypingDnaClient(typingDna_apiKey, typingDna_secret);
 
 
 router.post("/check-pattern", (req, res) => {
-    //client should send to the server user_id, role from previous response
-    const { user_id, role, typingPattern } = req.body;
+    const { typingPattern, user_id, userRole } = req.body;
 
     typingDnaClient.auto(
-        userID,
+        user_id,
         typingPattern,
         {
-            userId: userID,
             type: 0,
             device: 'desktop'
         },
         function (error, result) {
-            console.log(result);
             if (error) {
                 res.send({ "message": "got some error" });
             } else {
-                if (role === "seller") {
+                if (userRole === "seller") {
                     connection.query("SELECT * FROM Users LEFT JOIN Cars USING (car_id) WHERE user_id = ?",
                         [user_id],
-                        (err, result) => {
+                        (err, response) => {
                             if (err) throw err;
-                            else {
-                                req.session = result[0];
-                                res.send({ message: "Verification success" });
-                            };
+                            if (result.result === 1 && result.enrollment === 1 && result.messageCode === 1 && result.highConfidence === 1) {
+                                res.send({ message: 'verified' });
+                            } else {
+                                res.send({ message: 'not verified' });
+                            }
                         });
                 } else {
                     connection.query("SELECT * FROM Users WHERE user_id = ?",
                         [user_id],
-                        (err, result) => {
+                        (err, response) => {
                             if (err) throw err;
-                            else {
-                                req.session = result[0];
-                                res.send({ message: "Verification success" })
+                            if (result.result === 1 && result.enrollment === 1 && result.messageCode === 1 && result.highConfidence === 1) {
+                                res.send({ message: 'verified' });
+                            } else {
+                                res.send({ message: 'not verified' });
                             }
                         })
                 }

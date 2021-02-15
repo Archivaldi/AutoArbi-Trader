@@ -10,14 +10,12 @@ router.post("/signup/:role", async (req, res) => {
 
     //generate uuid
     const user_id = uuidv4();
-  
+
     //vars from body
     const password = req.body.passwordInput;
     const email = req.body.emailInput;
 
-    console.log(email, password)
     let p_hash = await bcrypt.hash(password, 10);
-    console.log(p_hash);
 
     connection.query("INSERT INTO Users(email, p_hash, user_id, role) VALUES (?,?,?,?)",
         [email, p_hash, user_id, role],

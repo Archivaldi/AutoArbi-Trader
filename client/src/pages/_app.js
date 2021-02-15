@@ -11,15 +11,18 @@ import theme from '../themes/dark';
 
 export default class MyApp extends App {
   componentDidMount() {
-
     const jssStyles = document.querySelector('#jss-server-side');
     if (jssStyles) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
   }
 
+
+
   render() {
     const { Component, pageProps } = this.props;
+
+    
 
     return (
       <>
