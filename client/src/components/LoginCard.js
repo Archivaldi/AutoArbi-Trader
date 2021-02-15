@@ -36,9 +36,9 @@ export default function LoginCard({ useStyles }) {
     const [authType, setAuthType] = useState(null);
     const [userRole, setUserRole] = useState(null);
     const [authDialogOpen, setAuthDialogOpen] = useState(false);
-    const [passwordError, setPasswordError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('Error!');
     const [apiCall, setApiCall] = useState(false);
+    const [errorDisplayed, setErrorDisplayed] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('Error!');
     const { values, updateValue } = useForm({
         emailInput: '',
         passwordInput: '',
@@ -53,8 +53,8 @@ export default function LoginCard({ useStyles }) {
 
     const handleGoBackReset = () => {
         setAuthType(null);
-        setApiCall(false)
-    }
+        setApiCall(false);
+    };
 
     const handleSecondFormAuth = async () => {
         if (
@@ -65,10 +65,10 @@ export default function LoginCard({ useStyles }) {
             emailInput === '' ||
             !validateEmail(emailInput)
         ) {
-            if (passwordError === false) {
-                setPasswordError(true)
+            if (errorDisplayed === false) {
+                setErrorDisplayed(true)
                 setTimeout(() => {
-                    setPasswordError(false)
+                    setErrorDisplayed(false)
                 }, 3000)
             }
             if (authType === 'signup' && passwordInput !== passwordInputVerify) {
@@ -90,7 +90,7 @@ export default function LoginCard({ useStyles }) {
                 setErrorMessage('Not a valid Email!')
             }
         } else {
-            setApiCall(true)
+            setApiCall(true);
             const res = await fetch(`${authType === 'signup' ? signUp : login}${authType === 'signup' ? `/${userRole}` : ''}`, {
                 headers: {
                     'Accept': 'application/json',
@@ -102,12 +102,25 @@ export default function LoginCard({ useStyles }) {
                     passwordInput
                 })
             })
-            const { user_id } = await res.json();
-            if (user_id !== undefined) {
-                userID.current = user_id;
-                setAuthDialogOpen(true);
+
+            const { user_id, error } = await res.json();
+
+            if (error) {
+                setApiCall(false);
+                setErrorMessage('Invalid Password! Please try again.');
+                if (errorDisplayed === false) {
+                    setErrorDisplayed(true)
+                    setTimeout(() => {
+                        setErrorDisplayed(false)
+                    }, 1500)
+                }
             } else {
-                console.log("User ID not captured");
+                if (user_id !== undefined) {
+                    userID.current = user_id;
+                    setAuthDialogOpen(true);
+                } else {
+                    console.log("User ID not captured");
+                }
             }
         }
     }
@@ -137,7 +150,7 @@ export default function LoginCard({ useStyles }) {
                                 </Typography>
                             ) : (
                                     <>
-                                        <Snackbar open={passwordError} onClick={() => setPasswordError(false)}>
+                                        <Snackbar open={errorDisplayed} onClick={() => setPasswordError(false)}>
                                             <Alert severity="error">
                                                 {errorMessage}
                                             </Alert>

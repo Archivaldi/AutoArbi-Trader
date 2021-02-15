@@ -44,9 +44,7 @@ export default function FormDialog({
         increment === message.length - 1 ?
             setIncrement(0) :
             setIncrement(increment + 1);
-        setTimeout(() => {
-            document.querySelector('#input').focus()
-        }, 100)
+        document.querySelector('#input').focus()
     }
 
     const backAndReset = () => {
