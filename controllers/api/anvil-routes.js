@@ -198,21 +198,17 @@ router.post("/hooks", async (req,res) => {
             main()
                 .then(() => {
                     console.log("Sending request to db.....");
-                    // const payloads = {
-                    //     url: "https://desolate-hollows-77552.herokuapp.com/api/db/updateUrls",
-                    //     method: "POST",
-                    //     data: {bill_of_sale_url, title_url},
-                    // };
-                    // request(payloads, (error, response, body) => {
-                    //     if (error) throw error;
-                    //     else {
-                    //         res.send({statusCode: 200});
-                    //     };
-                    // });
-                    fetch("https://desolate-hollows-77552.herokuapp.com/api/db/updateUrls", {
+                    const payloads = {
+                        url: "https://desolate-hollows-77552.herokuapp.com/api/db/updateUrls",
                         method: "POST",
-                        body: {bill_of_sale_url, title_url}
-                    }).then(() => res.send({statusCode: 200}))
+                        json: {bill_of_sale_url, title_url},
+                    };
+                    request(payloads, (error, response, body) => {
+                        if (error) throw error;
+                        else {
+                            res.send({statusCode: 200});
+                        };
+                    });
                 })
                 .catch((err) => {
                     console.log(err.stack || err.message);
@@ -242,7 +238,6 @@ router.get("/download", (req, res) => {
                     const {secure_url} = await cloudinary.uploader.upload(path.join(__dirname, `../../Unzip/${groupEid}/${files[i]}`));
                     console.log(secure_url);
                 }
-
             } else {
                 console.log(JSON.stringify(errors, null,2))
             }
