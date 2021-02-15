@@ -120,6 +120,7 @@ router.post("/add-info", (req, res) => {
 });
 
 router.post("/updateUrls", (req,res) => {
+    console.log("Got the URLs....");
     req.session.user_id = '21ee0b6e-45c2-4136-ae61-a2e474f478b0';
     const {bill_of_sale, title_url} = req.body;
     const {user_id} = req.session;
