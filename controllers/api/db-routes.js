@@ -3,9 +3,9 @@ const bcrypt = require('bcrypt');
 const { v4: uuidv4 } = require("uuid");
 const randomstring = require('randomstring');
 const connection = require('../../config/db');
-import { encryptRSA, decryptRSA } from '@anvilco/encryption';
+const { encryptRSA, decryptRSA } = require('@anvilco/encryption');
 const {anvil} = require("../../config/keys");
-import { generateAESKey, encryptAES, decryptAES } from '@anvilco/encryption';
+const { generateAESKey, encryptAES, decryptAES } = require('@anvilco/encryption');
 console.log(anvil.public_key);
 
 router.post("/signup/:role", async (req, res) => {
