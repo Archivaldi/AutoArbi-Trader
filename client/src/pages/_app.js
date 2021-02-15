@@ -4,7 +4,6 @@ import Head from 'next/head';
 import { StylesProvider } from '@material-ui/styles';
 import { ThemeProvider as StyledComponentProvider } from 'styled-components';
 import { ThemeProvider as MaterialUiProvider } from '@material-ui/core/styles';
-import {useRouter} from 'next/router';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 
@@ -19,40 +18,6 @@ export default class MyApp extends App {
     }
   }
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-  render() {
-    const { Component, pageProps } = this.props;
-
-    return (
-      <>
-        <Head>
-          <title>auto arbi-trader</title>
-          <meta
-            name="viewport"
-            content="minimum-scale=1, initial-scale=1, width=device-width"
-          />
-          <meta name="theme-color" content={theme.palette.primary.main} />
-          <link
-            rel="preload"
-            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700"
-            as="font"
-          />
-          <script src="https://www.typingdna.com/scripts/typingdna.js"></script>
-        </Head>
-        <StyledComponentProvider theme={theme}>
-          <MaterialUiProvider theme={theme}>
-            <StylesProvider injectFirst>
-              <CssBaseline />
-              <Component {...pageProps} />
-            </StylesProvider>
-          </MaterialUiProvider>
-        </StyledComponentProvider>
-      </>
-    );
-=======
-=======
->>>>>>> Stashed changes
   checkSession(){
     fetch("/api/db/session")
       .then(r => {
@@ -66,7 +31,7 @@ export default class MyApp extends App {
         }
       });
   };
-
+  
 
 
   render() {
@@ -104,9 +69,5 @@ export default class MyApp extends App {
         </>
       );
     }
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
   }
 }
