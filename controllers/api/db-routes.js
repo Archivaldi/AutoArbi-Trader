@@ -126,11 +126,11 @@ router.get("/sessions", (req,res) => {
 router.post("/updateUrls", (req,res) => {
     console.log("Got the URLs....");
     console.log(req.body);
+    console.log(req.data);
 
     req.session.user_id = '21ee0b6e-45c2-4136-ae61-a2e474f478b0';
     const {bill_of_sale_url, title_url} = req.body;
     const {user_id} = req.session;
-    console.log(req.session);
     console.log("User id:" , user_id);
     console.log("BIll od Sale: ", bill_of_sale_url);
     console.log("Title: ", title_url);
