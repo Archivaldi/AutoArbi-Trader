@@ -198,17 +198,21 @@ router.post("/hooks", async (req,res) => {
             main()
                 .then(() => {
                     console.log("Sending request to db.....");
-                    const payloads = {
-                        url: "https://desolate-hollows-77552.herokuapp.com/api/db/updateUrls",
+                    // const payloads = {
+                    //     url: "https://desolate-hollows-77552.herokuapp.com/api/db/updateUrls",
+                    //     method: "POST",
+                    //     data: {bill_of_sale_url, title_url},
+                    // };
+                    // request(payloads, (error, response, body) => {
+                    //     if (error) throw error;
+                    //     else {
+                    //         res.send({statusCode: 200});
+                    //     };
+                    // });
+                    fetch("https://desolate-hollows-77552.herokuapp.com/api/db/updateUrls", {
                         method: "POST",
-                        data: {bill_of_sale_url, title_url},
-                    };
-                    request(payloads, (error, response, body) => {
-                        if (error) throw error;
-                        else {
-                            res.send({statusCode: 200});
-                        };
-                    });
+                        body: {bill_of_sale_url, title_url}
+                    }).then(() => res.send({statusCode: 200}))
                 })
                 .catch((err) => {
                     console.log(err.stack || err.message);
