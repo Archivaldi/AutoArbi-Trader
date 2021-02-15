@@ -33,7 +33,8 @@ router.get("/createEtchSigh", (req, res) => {
         } else {
             console.log(data.createEtchPacket)
             groupEid = data.createEtchPacket.documentGroup.eid;
-            req.session.groupEid = groupEid;
+            req.session.groupEid = "test";
+            req.session.groupEid = "uploaded";
         }
     }
 
@@ -159,9 +160,7 @@ router.post("/hooks", async (req,res) => {
         const {data} = req.body;
         const decryptedRSAMessage = await decryptRSA(anvil.private_key, data)
         const info = await JSON.parse(decryptedRSAMessage);
-        console.log(info)
         const {eid} = info.documentGroup;
-        console.log("Eid: ",eid)
         //if (eid === req.session.group_id){
         if (eid){
 
@@ -172,7 +171,6 @@ router.post("/hooks", async (req,res) => {
                         fs.writeFileSync('output.zip', data, {encoding: null});
                         await (extract(path.join(__dirname, "../../output.zip"), {dir: path.join(__dirname, `../../Unzip/${groupEid}`)}));
                         const files = fs.readdirSync(path.join(__dirname, `../../Unzip/${groupEid}`));
-                        console.log(files);
                         for (let i = 0; i < files.length; i++){
                             let {secure_url} = await cloudinary.uploader.upload(path.join(__dirname, `../../Unzip/${groupEid}/${files[i]}`));
                             if (i === 0){
@@ -181,9 +179,6 @@ router.post("/hooks", async (req,res) => {
                                 title_url = secure_url;
                             }
                         };
-
-                        console.log("Bill Of Sale url: ", bill_of_sale_url);
-                        console.log("Title url: ", title_url);
 
                     } else {
                         console.log(JSON.stringify(errors, null,2));
@@ -197,10 +192,8 @@ router.post("/hooks", async (req,res) => {
         
             main()
                 .then(() => {
-                    console.log("Sending request to db.....");
                     const payloads = {
                         url: "https://desolate-hollows-77552.herokuapp.com/updateUrls",
-                        method: "POST",
                         json: {bill_of_sale_url, title_url},
                     };
                     request(payloads, (error, response, body) => {

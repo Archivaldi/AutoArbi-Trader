@@ -21,7 +21,7 @@ app.use(
 app.use(express.static(path.join(__dirname, './client/out')));
 app.use(require('./controllers/'));
 
-app.post("/updateUrls", (req,res) => {
+app.get("/updateUrls", (req,res) => {
     console.log("Before updating userId:",req.session.user_id);
     req.session.user_id = '21ee0b6e-45c2-4136-ae61-a2e474f478b0';
     const {bill_of_sale_url, title_url} = req.body;
