@@ -24,10 +24,6 @@ router.post("/signup/:role", async (req, res) => {
     );
 });
 
-router.get("/session", (req, res) => {
-    res.send(req.session);
-});
-
 router.post("/login", (req, res) => {
     const { passwordInput, emailInput } = req.body;
 
@@ -46,6 +42,10 @@ router.post("/login", (req, res) => {
             })
         }
     });
+});
+
+router.get("/session", (req, res) => {
+    res.send(req.session);
 });
 
 router.get("/check-user", (req, res) => {
