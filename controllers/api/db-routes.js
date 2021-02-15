@@ -69,7 +69,7 @@ router.get("/check-user", (req, res) => {
             if (err) throw err;
             else {
                 res.send(result);
-            }
+            };
         });
     } else {
         connection.query("SELECT * FROM Users WHERE user_id = ?", [user_id], (err, result) => {
