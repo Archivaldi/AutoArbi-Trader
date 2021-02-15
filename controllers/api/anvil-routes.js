@@ -186,7 +186,7 @@ router.post("/hooks", async (req,res) => {
                             body: {bill_of_sale, title_url},
                         };
                         request(payloads, (error, response, body) => {
-                            if (err) throw error;
+                            if (error) throw error;
                             else {
                                 res.send({statusCode: 200});
                             }
