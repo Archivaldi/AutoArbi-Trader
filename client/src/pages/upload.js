@@ -1,4 +1,5 @@
 import React from 'react';
+import AuthCheck from '../components/AuthCheck';
 import MiniDrawer from '../components/MiniDrawer';
 import FileUploadCard from '../components/FileUploadCard';
 import { dummyData } from '../utils/dummyData';
@@ -10,18 +11,20 @@ export default function Dashboard() {
     const classes = uploadStyles();
 
     return (
-        <MiniDrawer
-            classes={classes}
-            allDocsComplete={checkForAllDocumentComplete(buyer, seller)}
-        >
-            {seller.docs.map(({ id, type, completed, url }) => (
-                <FileUploadCard
-                    key={id}
-                    type={type}
-                    completed={completed}
-                    url={url}
-                />
-            ))}
-        </MiniDrawer>
+        <AuthCheck>
+            <MiniDrawer
+                classes={classes}
+                allDocsComplete={checkForAllDocumentComplete(buyer, seller)}
+            >
+                {seller.docs.map(({ id, type, completed, url }) => (
+                    <FileUploadCard
+                        key={id}
+                        type={type}
+                        completed={completed}
+                        url={url}
+                    />
+                ))}
+            </MiniDrawer>
+        </AuthCheck >
     )
 }

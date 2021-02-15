@@ -44,9 +44,7 @@ export default function FormDialog({
         increment === message.length - 1 ?
             setIncrement(0) :
             setIncrement(increment + 1);
-        setTimeout(() => {
-            document.querySelector('#input').focus()
-        }, 100)
+        document.querySelector('#input').focus()
     }
 
     const backAndReset = () => {
@@ -87,7 +85,7 @@ export default function FormDialog({
             } else {
                 setAuth(true);
                 setTimeout(() => {
-                    router.push('/')
+                    router.push('/dashboard')
                 }, 1000)
             }
         } else {

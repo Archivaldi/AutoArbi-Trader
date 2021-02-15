@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const TypingDnaClient = require('typingdnaclient');
 const keys = require('../../config/keys');
-const connection = require('../../config/db');
 
 const { typingDna_apiKey, typingDna_secret } = keys.typingDna;
 const typingDnaClient = new TypingDnaClient(typingDna_apiKey, typingDna_secret);
