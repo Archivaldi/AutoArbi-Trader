@@ -119,30 +119,4 @@ router.post("/add-info", (req, res) => {
     };
 });
 
-router.get("/sessions", (req,res) => {
-    res.send(req.session);
-})
-
-router.post("/updateUrls", (req,res) => {
-    console.log("Before updating userId:",req.session.user_id);
-    req.session.user_id = '21ee0b6e-45c2-4136-ae61-a2e474f478b0';
-    const {bill_of_sale_url, title_url} = req.body;
-    const {user_id} = req.session;
-    connection.query("UPDATE Users SET billOfSale = ?, title = ? WHERE user_id = ?", 
-    [bill_of_sale_url, title_url, user_id], 
-    (err, result) => {
-        if (err) throw err;
-        else {
-            req.session.billOfSale = bill_of_sale_url;
-            req.session.title = title_url;
-            console.log("Info inserted");
-            res.send({message: "Succses"});
-        };
-    });
-});
-
-router.get("/logout", (req, res) => {
-    req.session = null;
-});
-
 module.exports = router;

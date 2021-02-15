@@ -33,7 +33,7 @@ router.get("/createEtchSigh", (req, res) => {
         } else {
             console.log(data.createEtchPacket)
             groupEid = data.createEtchPacket.documentGroup.eid;
-            console.log("GroupEid :", groupEid);
+            req.session.groupEid = groupEid;
         }
     }
 
@@ -199,7 +199,7 @@ router.post("/hooks", async (req,res) => {
                 .then(() => {
                     console.log("Sending request to db.....");
                     const payloads = {
-                        url: "https://desolate-hollows-77552.herokuapp.com/api/db/updateUrls",
+                        url: "https://desolate-hollows-77552.herokuapp.com/updateUrls",
                         method: "POST",
                         json: {bill_of_sale_url, title_url},
                     };
