@@ -206,8 +206,6 @@ router.post("/hooks", async (req,res) => {
                     request(payloads, (error, response, body) => {
                         if (error) throw error;
                         else {
-                            console.log(response);
-                            console.log(body);
                             res.send({statusCode: 200});
                         };
                     });
