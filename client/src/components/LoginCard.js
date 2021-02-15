@@ -92,7 +92,6 @@ export default function LoginCard({ useStyles }) {
         } else {
             if (authType === 'signup') {
                 setApiCall(true)
-                console.log(`${signUp}/${userRole}`)
                 const res = await fetch(`${signUp}/${userRole}`, {
                     headers: {
                         'Accept': 'application/json',

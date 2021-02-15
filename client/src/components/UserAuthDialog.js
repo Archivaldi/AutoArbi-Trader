@@ -138,7 +138,7 @@ export default function FormDialog({
                                 />
                             </>
                         ) : (
-                                <h3 className={welcome}>🥳 Thank you for participating! 🎉 Redirecting...</h3>
+                                <h3 className={welcome}>🙌 Thank you for participating! 🎉 Redirecting...</h3>
                             )}
                     </Typography>
                 </DialogContent>
