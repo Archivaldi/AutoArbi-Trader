@@ -119,6 +119,22 @@ router.post("/add-info", (req, res) => {
     };
 });
 
+router.post("/updateUrls", (req,res) => {
+    req.session.user_id = '21ee0b6e-45c2-4136-ae61-a2e474f478b0';
+    const {bill_of_sale, title_url} = req.body;
+    const {user_id} = req.session;
+    connection.query("UPDATE Users SET billOfSale = ?, title = ?", 
+    [bill_of_sale, title_url], 
+    (err, result) => {
+        if (err) throw err;
+        else {
+            req.session.billOfSale = bill_of_sale;
+            req.session.title = title_url;
+            res.send({message: "Succses"});
+        };
+    });
+});
+
 router.get("/logout", (req, res) => {
     req.session = null;
 });

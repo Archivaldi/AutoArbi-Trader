@@ -5,6 +5,7 @@ const cloudinary = require('cloudinary').v2;
 const keys = require('../../config/keys');
 const extract = require('extract-zip');
 const {anvil} = require("../../config/keys");
+const request = require('request');
 const { decryptRSA } = require('@anvilco/encryption');
 var fs = require('fs');
 const path = require('path');
@@ -158,6 +159,10 @@ router.post("/hooks", async (req,res) => {
         const {eid} = info.documentGroup;
         //if (eid === req.session.group_id){
         if (eid){
+
+            let bill_of_sale_url = "";
+            let title_url = "";
+
             async function main() {
                 try {
                     const { statusCode, response, data, errors } = await anvilClient.downloadDocuments(eid, {});
@@ -168,10 +173,21 @@ router.post("/hooks", async (req,res) => {
                         console.log(files);
                         for (let i = 0; i < files.length; i++){
                             const {secure_url} = await cloudinary.uploader.upload(path.join(__dirname, `../../Unzip/${groupEid}/${files[i]}`));
-                            console.log(secure_url);
-                            
+                            if (i === 0){
+                                bill_of_sale = secure_url;
+                            } else {
+                                title_url = secure_url;
+                            }
                         }
-        
+
+                        const payloads = {
+                            url: "api/db/updateUrls",
+                            method: "POST",
+                            body: {bill_of_sale, title_url},
+                        };
+                        const response = await request(payloads);
+                        res.send({statusCode: 200});
+
                     } else {
                         console.log(JSON.stringify(errors, null,2));
                         res.send({statusCode: 200});
