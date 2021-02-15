@@ -5,7 +5,7 @@ const cloudinary = require('cloudinary').v2;
 const keys = require('../../config/keys');
 const extract = require('extract-zip');
 const {anvil} = require("../../config/keys");
-const { generateAESKey, encryptAES, decryptAES } = require('@anvilco/encryption');
+const { decryptRSA } = require('@anvilco/encryption');
 var fs = require('fs');
 const path = require('path');
 

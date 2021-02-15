@@ -3,7 +3,6 @@ const bcrypt = require('bcrypt');
 const { v4: uuidv4 } = require("uuid");
 const randomstring = require('randomstring');
 const connection = require('../../config/db');
-const { encryptRSA, decryptRSA } = require('@anvilco/encryption');
 
 router.post("/signup/:role", async (req, res) => {
     //we use route to see the user's title. We need to save it in state when user clicks "seller or buyer" buttons when the users signs up
