@@ -188,8 +188,9 @@ router.post("/hooks", async (req,res) => {
                         request(payloads, (error, response, body) => {
                             if (error) throw error;
                             else {
+                                console.log(body);
                                 res.send({statusCode: 200});
-                            }
+                            };
                         });
 
                     } else {
