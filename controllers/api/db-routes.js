@@ -127,7 +127,9 @@ router.post("/hooks", (req,res) => {
     if (action === "etchPacketComplete"){
         const {data} = req.body;
         const decryptedRSAMessage = decryptRSA(anvil.private_key, data)
-        console.log(decryptedRSAMessage);
+        const info = JSON.parse(decryptedRSAMessage);
+        const {eid} = info.documentGroup;
+        console.log(eid);
     }
     res.send({statusCode: 200})
 });
