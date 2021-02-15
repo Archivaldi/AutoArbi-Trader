@@ -99,7 +99,7 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
                 </div>
                 <Divider />
                 <List>
-                    <Link href="/">
+                    <Link href="/dashboard">
                         <ListItem button={true}>
                             <ListItemIcon>
                                 <AutorenewIcon />

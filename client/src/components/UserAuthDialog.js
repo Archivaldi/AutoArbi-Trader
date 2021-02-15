@@ -87,7 +87,7 @@ export default function FormDialog({
             } else {
                 setAuth(true);
                 setTimeout(() => {
-                    router.push('/')
+                    router.push('/dashboard')
                 }, 1000)
             }
         } else {
