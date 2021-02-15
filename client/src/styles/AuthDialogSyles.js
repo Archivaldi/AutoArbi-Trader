@@ -19,7 +19,6 @@ export const useStyles = makeStyles(theme => ({
         textAlign: 'center'
     },
     content: {
-        minHeight: 260,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-around'

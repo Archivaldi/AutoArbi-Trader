@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import {
     Card,
     CardActions,
@@ -32,7 +32,7 @@ export default function LoginCard({ useStyles }) {
         email,
         formControl,
         selectEmpty
-    } = useStyles();;
+    } = useStyles();
     const [authType, setAuthType] = useState(null);
     const [userRole, setUserRole] = useState(null);
     const [authDialogOpen, setAuthDialogOpen] = useState(false);
@@ -43,7 +43,8 @@ export default function LoginCard({ useStyles }) {
         emailInput: '',
         passwordInput: '',
         passwordInputVerify: ''
-    })
+    });
+    const userID = useRef();
     const { emailInput, passwordInput, passwordInputVerify } = values;
 
     const handleAuthType = (selection) => {
@@ -77,7 +78,7 @@ export default function LoginCard({ useStyles }) {
                 setErrorMessage('Re-Enter Password Empty!')
             }
             if (authType === 'signup' && !userRole) {
-                setErrorMessage('Transation Role Empty!')
+                setErrorMessage('Transaction Role Empty!')
             }
             if (passwordInput === '') {
                 setErrorMessage('Password Empty!')
@@ -91,7 +92,6 @@ export default function LoginCard({ useStyles }) {
         } else {
             if (authType === 'signup') {
                 setApiCall(true)
-                console.log(`${signUp}/${userRole}`)
                 const res = await fetch(`${signUp}/${userRole}`, {
                     headers: {
                         'Accept': 'application/json',
@@ -103,8 +103,13 @@ export default function LoginCard({ useStyles }) {
                         passwordInput
                     })
                 })
-
-                // setAuthDialogOpen(true)
+                const { user_id } = await res.json();
+                if (user_id !== undefined) {
+                    userID.current = user_id;
+                    setAuthDialogOpen(true);
+                } else {
+                    console.log("User ID not captured");
+                }
             } else {
                 console.log(`fetch login`)
                 setApiCall(true)
@@ -116,6 +121,8 @@ export default function LoginCard({ useStyles }) {
     return (
         <>
             <UserAuthDialog
+                user_id={userID.current}
+                userRole={userRole}
                 open={authDialogOpen}
                 setAuthDialogOpen={setAuthDialogOpen}
                 handleGoBackReset={handleGoBackReset}

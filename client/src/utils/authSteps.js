@@ -1,5 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
-
 export const authSteps = {
     appScript: {
         landing: "Hello 👋 Welcome to auto arbi-trader, your solution for private vehicle sales mediation! What will you be doing today?",
@@ -11,7 +9,6 @@ export const authSteps = {
     ],
     route: {
         signUp: '/api/db/signup',
-        verify: '/api/typing-dna/verify'
-    },
-    userId: uuidv4()
+        verify: '/api/typing-dna/check-pattern'
+    }
 }
