@@ -18,6 +18,7 @@ export default class MyApp extends App {
     }
   }
 
+<<<<<<< HEAD
   checkSession(){
     fetch("/api/db/session")
       .then(r => {
@@ -69,5 +70,40 @@ export default class MyApp extends App {
         </>
       );
     }
+=======
+
+
+  render() {
+    const { Component, pageProps } = this.props;
+
+    
+
+    return (
+      <>
+        <Head>
+          <title>auto arbi-trader</title>
+          <meta
+            name="viewport"
+            content="minimum-scale=1, initial-scale=1, width=device-width"
+          />
+          <meta name="theme-color" content={theme.palette.primary.main} />
+          <link
+            rel="preload"
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700"
+            as="font"
+          />
+          <script src="https://www.typingdna.com/scripts/typingdna.js"></script>
+        </Head>
+        <StyledComponentProvider theme={theme}>
+          <MaterialUiProvider theme={theme}>
+            <StylesProvider injectFirst>
+              <CssBaseline />
+              <Component {...pageProps} />
+            </StylesProvider>
+          </MaterialUiProvider>
+        </StyledComponentProvider>
+      </>
+    );
+>>>>>>> 3454d6ff1ffc71a3fc0a81b8208ab98238ccd73b
   }
 }

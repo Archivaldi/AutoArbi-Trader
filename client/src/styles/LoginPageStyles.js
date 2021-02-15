@@ -9,7 +9,7 @@ export const useStyles = makeStyles(theme => ({
     },
     root: {
         width: 300,
-        height: 400,
+        height: 455,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -37,10 +37,18 @@ export const useStyles = makeStyles(theme => ({
         display: 'flex',
         width: '100%',
         justifyContent: 'space-around',
-        margin: '6px'
+        marginLeft: '6px',
+        marginReft: '6px'
     },
     email: {
         display: 'flex',
         flexDirection: 'column'
-    }
+    },
+    formControl: {
+        marginTop: "1px",
+        minWidth: 120,
+    },
+    selectEmpty: {
+        marginTop: theme.spacing(2),
+    },
 }));
