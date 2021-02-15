@@ -34,7 +34,6 @@ router.get("/createEtchSigh", (req, res) => {
             console.log(data.createEtchPacket)
             groupEid = data.createEtchPacket.documentGroup.eid;
             req.session.groupEid = "test";
-            req.session.groupEid = "uploaded";
         }
     }
 
