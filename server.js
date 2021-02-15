@@ -38,6 +38,9 @@ app.post("/updateUrls", (req,res) => {
     });
 });
 
+app.get("/sessions", (req,res) => {
+    res.send(req.session);
+});
 app.get("/logout", (req, res) => {
     req.session = null;
     res.send(req.session);
