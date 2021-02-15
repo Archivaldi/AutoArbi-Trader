@@ -21,7 +21,7 @@ import { validateEmail } from '../utils/validateEmail';
 
 export default function LoginCard({ useStyles }) {
     const { landing, secondAuthLogin, secondAuthSignUp } = authSteps.appScript;
-    const { signUp } = authSteps.route;
+    const { signUp, login } = authSteps.route;
     const {
         root,
         brand,
@@ -90,30 +90,24 @@ export default function LoginCard({ useStyles }) {
                 setErrorMessage('Not a valid Email!')
             }
         } else {
-            if (authType === 'signup') {
-                setApiCall(true)
-                const res = await fetch(`${signUp}/${userRole}`, {
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    method: "POST",
-                    body: JSON.stringify({
-                        emailInput,
-                        passwordInput
-                    })
+            setApiCall(true)
+            const res = await fetch(`${authType === 'signup' ? signUp : login}${authType === 'signup' ? `/${userRole}` : ''}`, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify({
+                    emailInput,
+                    passwordInput
                 })
-                const { user_id } = await res.json();
-                if (user_id !== undefined) {
-                    userID.current = user_id;
-                    setAuthDialogOpen(true);
-                } else {
-                    console.log("User ID not captured");
-                }
+            })
+            const { user_id } = await res.json();
+            if (user_id !== undefined) {
+                userID.current = user_id;
+                setAuthDialogOpen(true);
             } else {
-                console.log(`fetch login`)
-                setApiCall(true)
-                setAuthDialogOpen(true)
+                console.log("User ID not captured");
             }
         }
     }
