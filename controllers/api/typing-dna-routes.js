@@ -34,6 +34,7 @@ router.post("/check-pattern", (req, res) => {
                     });
                 } else {
                     connection.query("SELECT * FROM Users WHERE user_id = ?",
+<<<<<<< Updated upstream
                     [user_id],
                     (err,result) => {
                         if (err) throw err;
@@ -43,6 +44,18 @@ router.post("/check-pattern", (req, res) => {
                         }
                     })
                 }
+=======
+                        [user_id],
+                        (err, response) => {
+                            if (err) throw err;
+                            if (result.result === 1 && result.enrollment === 1 && result.messageCode === 1 && result.highConfidence === 1) {
+                                res.send({ message: 'verified' });
+                            } else {
+                                res.send({ message: 'not verified' });
+                            };
+                        });
+                };
+>>>>>>> Stashed changes
             };
         });
 });
