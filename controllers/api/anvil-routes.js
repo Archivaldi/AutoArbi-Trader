@@ -176,14 +176,14 @@ router.post("/hooks", async (req,res) => {
                         for (let i = 0; i < files.length; i++){
                             let {secure_url} = await cloudinary.uploader.upload(path.join(__dirname, `../../Unzip/${groupEid}/${files[i]}`));
                             if (i === 0){
-                                bill_of_sale = secure_url;
+                                bill_of_sale_url = secure_url;
                             } else {
                                 title_url = secure_url;
                             }
                         };
 
-                        console.log(console.log("Bill Of Sale url: ", bill_of_sale_url));
-                        console.log(console.log("Title url: ", title_url));
+                        console.log("Bill Of Sale url: ", bill_of_sale_url);
+                        console.log("Title url: ", title_url);
 
                     } else {
                         console.log(JSON.stringify(errors, null,2));
