@@ -3,6 +3,10 @@ const bcrypt = require('bcrypt');
 const { v4: uuidv4 } = require("uuid");
 const randomstring = require('randomstring');
 const connection = require('../../config/db');
+import { encryptRSA, decryptRSA } from '@anvilco/encryption';
+const {anvil} = require("../../config/keys");
+import { generateAESKey, encryptAES, decryptAES } from '@anvilco/encryption';
+console.log(anvil.public_key);
 
 router.post("/signup/:role", async (req, res) => {
     //we use route to see the user's title. We need to save it in state when user clicks "seller or buyer" buttons when the users signs up
@@ -120,7 +124,13 @@ router.post("/add-info", (req, res) => {
 });
 
 router.post("/hooks", (req,res) => {
-    console.log(req.body);
+    const {action} = req.body;
+    if (action === "etchPacketComplete"){
+        const {data} = req.body;
+        const encryptedRSAMessage = encryptRSA(publicKey, data)
+        const origRSAMessage = decryptRSA(privateKey, encryptedRSAMessage);
+        console.log(origRSAMessage);
+    }
     res.send({statusCode: 200})
 });
 
