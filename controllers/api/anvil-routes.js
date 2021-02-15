@@ -146,6 +146,55 @@ router.get("/createEtchSigh", (req, res) => {
     run(main);
 });
 
+router.post("/hooks", async (req,res) => {
+    const {action} = req.body;
+    if (action === "etchPacketComplete"){
+        const {data} = req.body;
+        const decryptedRSAMessage = await decryptRSA(anvil.private_key, data)
+        const info = await JSON.parse(decryptedRSAMessage);
+        console.log(info)
+        const {eid} = info.documentGroup;
+        //if (eid === req.session.group_id){
+        if (eid){
+            async function main() {
+                try {
+                    const { statusCode, response, data, errors } = await anvilClient.downloadDocuments(eid, {});
+                    if (statusCode === 200){
+                        fs.writeFileSync('output.zip', data, {encoding: null});
+                        await (extract(path.join(__dirname, "../../output.zip"), {dir: path.join(__dirname, `../../Unzip/${groupEid}`)}));
+                        const files = fs.readdirSync(path.join(__dirname, `../../Unzip/${groupEid}`));
+                        console.log(files);
+                        for (let i = 0; i < files.length; i++){
+                            const {secure_url} = await cloudinary.uploader.upload(path.join(__dirname, `../../Unzip/${groupEid}/${files[i]}`));
+                            console.log(secure_url);
+                            
+                        }
+        
+                    } else {
+                        console.log(JSON.stringify(errors, null,2));
+                        res.send({statusCode: 200});
+                    }
+                } catch(error) {
+                    console.log(error);
+                    res.send({statusCode: 200});
+                }
+            }
+        
+            main()
+                .then(() => {
+                    res.send({statusCode: 200});
+                })
+                .catch((err) => {
+                    console.log(err.stack || err.message);
+                    res.send({statusCode: 200});
+                    process.exit(1);
+                })
+        } else {
+            res.send({statusCode: 200});
+        }
+    };
+});
+
 
 router.get("/download", (req, res) => {
 

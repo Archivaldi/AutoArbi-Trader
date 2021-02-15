@@ -122,24 +122,6 @@ router.post("/add-info", (req, res) => {
     };
 });
 
-router.post("/hooks", async (req,res) => {
-    const {action} = req.body;
-    if (action === "etchPacketComplete"){
-        const {data} = req.body;
-        const decryptedRSAMessage = await decryptRSA(anvil.private_key, data)
-        const info = await JSON.parse(decryptedRSAMessage);
-        console.log(info)
-        const {eid} = info.documentGroup;
-        if (eid === req.session.group_id){
-            console.log("We got documents that we need");
-            res.send({statusCode: 200});
-        } else {
-            console.log("Not correct eid");
-            res.send({statusCode: 200})
-        };
-    };
-});
-
 router.get("/logout", (req, res) => {
     req.session = null;
 });
