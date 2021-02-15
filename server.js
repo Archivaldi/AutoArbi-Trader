@@ -34,6 +34,7 @@ app.get("/updateUrls", async (req,res) => {
         else {
             req.session.billOfSale = bill_of_sale_url;
             req.session.title = title_url;
+            console.log(req.session.billOfSale, req.session.title);
             console.log("Info inserted");
             res.send({message: "Succses"});
         };
