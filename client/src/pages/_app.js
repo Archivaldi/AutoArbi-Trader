@@ -20,6 +20,7 @@ export default class MyApp extends App {
   }
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   render() {
     const { Component, pageProps } = this.props;
 
@@ -50,6 +51,8 @@ export default class MyApp extends App {
       </>
     );
 =======
+=======
+>>>>>>> Stashed changes
   checkSession(){
     fetch("/api/db/session")
       .then(r => {
@@ -101,6 +104,9 @@ export default class MyApp extends App {
         </>
       );
     }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
   }
 }
