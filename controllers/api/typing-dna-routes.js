@@ -34,17 +34,6 @@ router.post("/check-pattern", (req, res) => {
                     });
                 } else {
                     connection.query("SELECT * FROM Users WHERE user_id = ?",
-<<<<<<< Updated upstream
-                    [user_id],
-                    (err,result) => {
-                        if (err) throw err;
-                        else {
-                            req.session = result[0];
-                            res.send({message: "Verification success"})
-                        }
-                    })
-                }
-=======
                         [user_id],
                         (err, response) => {
                             if (err) throw err;
@@ -55,7 +44,6 @@ router.post("/check-pattern", (req, res) => {
                             };
                         });
                 };
->>>>>>> Stashed changes
             };
         });
 });
