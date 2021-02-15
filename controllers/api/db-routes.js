@@ -30,8 +30,8 @@ router.post("/signup/:role", async (req, res) => {
     );
 });
 
-router.get("/session", (req, res) => {
-    res.send({user_id: "test123"});
+router.post("/session", (req, res) => {
+    res.send(req.session);
 });
 
 router.get("/login", (req, res) => {

@@ -185,8 +185,12 @@ router.post("/hooks", async (req,res) => {
                             method: "POST",
                             body: {bill_of_sale, title_url},
                         };
-                        const response = await request(payloads);
-                        res.send({statusCode: 200});
+                        request(payloads, (error, response, body) => {
+                            if (err) throw error;
+                            else {
+                                res.send({statusCode: 200});
+                            }
+                        });
 
                     } else {
                         console.log(JSON.stringify(errors, null,2));
