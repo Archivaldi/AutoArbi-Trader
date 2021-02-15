@@ -6,7 +6,6 @@ const connection = require('../../config/db');
 const { encryptRSA, decryptRSA } = require('@anvilco/encryption');
 const {anvil} = require("../../config/keys");
 const { generateAESKey, encryptAES, decryptAES } = require('@anvilco/encryption');
-console.log(anvil.public_key);
 
 router.post("/signup/:role", async (req, res) => {
     //we use route to see the user's title. We need to save it in state when user clicks "seller or buyer" buttons when the users signs up
@@ -127,8 +126,8 @@ router.post("/hooks", (req,res) => {
     const {action} = req.body;
     if (action === "etchPacketComplete"){
         const {data} = req.body;
-        const encryptedRSAMessage = encryptRSA(publicKey, data)
-        const origRSAMessage = decryptRSA(privateKey, encryptedRSAMessage);
+        const encryptedRSAMessage = encryptRSA(anvil.public_key, data)
+        const origRSAMessage = decryptRSA(anvil.private_key, encryptedRSAMessage);
         console.log(origRSAMessage);
     }
     res.send({statusCode: 200})
