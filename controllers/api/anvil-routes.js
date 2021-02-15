@@ -150,6 +150,10 @@ router.get("/createEtchSigh", (req, res) => {
 });
 
 router.post("/hooks", async (req,res) => {
+
+    let bill_of_sale_url = "";
+    let title_url = "";
+
     const {action} = req.body;
     if (action === "etchPacketComplete"){
         const {data} = req.body;
@@ -159,9 +163,6 @@ router.post("/hooks", async (req,res) => {
         const {eid} = info.documentGroup;
         //if (eid === req.session.group_id){
         if (eid){
-
-            let bill_of_sale_url = "";
-            let title_url = "";
 
             async function main() {
                 try {
@@ -178,20 +179,10 @@ router.post("/hooks", async (req,res) => {
                             } else {
                                 title_url = secure_url;
                             }
-                        }
-
-                        const payloads = {
-                            url: "https://desolate-hollows-77552.herokuapp.com/api/db/updateUrls",
-                            method: "POST",
-                            body: {bill_of_sale, title_url},
                         };
-                        request(payloads, (error, response, body) => {
-                            if (error) throw error;
-                            else {
-                                console.log(body);
-                                res.send({statusCode: 200});
-                            };
-                        });
+
+                        console.log(bill_of_sale_url);
+                        console.log(title_url);
 
                     } else {
                         console.log(JSON.stringify(errors, null,2));
@@ -205,7 +196,18 @@ router.post("/hooks", async (req,res) => {
         
             main()
                 .then(() => {
-                    res.send({statusCode: 200});
+                    const payloads = {
+                        url: "https://desolate-hollows-77552.herokuapp.com/api/db/updateUrls",
+                        method: "POST",
+                        body: {bill_of_sale, title_url},
+                    };
+                    request(payloads, (error, response, body) => {
+                        if (error) throw error;
+                        else {
+                            console.log(body);
+                            res.send({statusCode: 200});
+                        };
+                    });
                 })
                 .catch((err) => {
                     console.log(err.stack || err.message);
