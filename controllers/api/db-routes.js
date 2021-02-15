@@ -119,8 +119,13 @@ router.post("/add-info", (req, res) => {
     };
 });
 
+router.post("/hooks", (req,res) => {
+    console.log(req.body);
+})
+
+
 router.get("/logout", (req, res) => {
     req.session = null;
-})
+});
 
 module.exports = router;
