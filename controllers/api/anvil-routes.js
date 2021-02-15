@@ -161,7 +161,7 @@ router.post("/hooks", async (req,res) => {
         const info = await JSON.parse(decryptedRSAMessage);
         console.log(info)
         const {eid} = info.documentGroup;
-        console.log("Eid: ",ied)
+        console.log("Eid: ",eid)
         //if (eid === req.session.group_id){
         if (eid){
 
