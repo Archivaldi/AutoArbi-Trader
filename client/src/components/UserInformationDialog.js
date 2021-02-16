@@ -18,21 +18,21 @@ import useForm from '../utils/useForm';
 export default function UserInformationDialog() {
     const { content, root, logoutButton } = useStyles();
     const { logout, session } = authSteps.route;
-    const { userInfo } = appRoute;
+    const { userInfo, addUserInfo } = appRoute;
     const [infoDialogOpen, setInfoDialogOpen] = useState(false);
     const [apiCall, setApiCall] = useState(false);
     const [userRole, setUserRole] = useState(null);
     const [errorDisplayed, setErrorDisplayed] = useState(false);
     const [errorMessage, setErrorMessage] = useState('Error!');
     const { values, updateValue } = useForm({
-        firstName: '',
-        lastName: '',
-        state: '',
-        county: '',
-        city: '',
-        street: '',
-        zip: '',
-        transactionId: '',
+        firstName: 'Nate',
+        lastName: 'Ryan',
+        state: 'TX',
+        county: 'Williamson',
+        city: 'Austin',
+        street: '12300 Patron',
+        zip: '78758',
+        transactionId: '6nPP2i',
         price: '',
         vin: '',
         year: '',
@@ -65,8 +65,7 @@ export default function UserInformationDialog() {
     } = values;
 
     const handleSuccessCall = () => {
-        setApiCall(false);
-        setInfoDialogOpen(false)
+        window.location.replace('/dashboard');
     }
 
     const handleFormSubmit = async () => {
@@ -98,9 +97,34 @@ export default function UserInformationDialog() {
             }
         } else {
             setApiCall(true);
-            setTimeout(() => {
-                handleSuccessCall()
-            }, 1000)
+            const res = fetch(addUserInfo, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify({
+                    firstName,
+                    lastName,
+                    state,
+                    county,
+                    city,
+                    street,
+                    zip,
+                    transactionId,
+                    price,
+                    vin,
+                    year,
+                    make,
+                    model,
+                    body,
+                    odometer,
+                    titleNumber,
+                    licenseNumber
+                })
+            })
+            const message = await res.json()
+            console.log(message)
         }
     }
 
@@ -112,12 +136,13 @@ export default function UserInformationDialog() {
     };
 
     useEffect(() => {
-        (async function getUserRole() {
+        (async function getUserInformation() {
             const resOne = await fetch(session, {
                 method: 'POST'
             })
             const { role } = await resOne.json();
             setUserRole(role)
+
             const resTwo = await fetch(userInfo, {
                 method: 'POST'
             })
@@ -126,7 +151,6 @@ export default function UserInformationDialog() {
                 setInfoDialogOpen(true)
             }
         })()
-
     }, []);
 
     return (
@@ -154,7 +178,7 @@ export default function UserInformationDialog() {
                         <Divider />
                         <>
                             {userRole === "buyer" && (
-                                <TextField disabled={apiCall} value={transactionId} name="transactionId" onChange={updateValue} type="number" variant="outlined" id="outlined-size-normal" label="Transaction ID" color="secondary" />
+                                <TextField disabled={apiCall} value={transactionId} name="transactionId" onChange={updateValue} variant="outlined" id="outlined-size-normal" label="Transaction ID" color="secondary" />
                             )}
                             {userRole === "seller" && (
                                 <>
