@@ -48,6 +48,9 @@ router.get("/login", (req, res) => {
             res.send({ error: "Invalid email. Please try again." });
         } else {
             let { p_hash, user_id, role } = result[0];
+            req.session.user_id = user_id;
+            req.session.role = role;
+
             bcrypt.compare(password, p_hash, (err, match) => {
                 if (match) {
                     res.send({ user_id, role });
@@ -117,6 +120,29 @@ router.post("/add-info", (req, res) => {
                 });
         };
     };
+});
+
+router.get("/updateUrls", async (req,res) => {
+    const {bill_of_sale_url, title_url} = req.body;
+    const {user_id} = req.session;
+    connection.query("UPDATE Users SET billOfSale = ?, title = ? WHERE user_id = ?", 
+    [bill_of_sale_url, title_url, user_id], 
+    (err, result) => {
+        if (err) throw err;
+        else {
+            console.log("Info inserted");
+            res.send({message: "Succses"});
+        };
+    });
+});
+
+router.get("/sessions", (req,res) => {
+    res.send(req.session);
+})
+
+router.get("/logout", (req, res) => {
+    req.session = null;
+    res.send(req.session);
 });
 
 module.exports = router;
