@@ -41,10 +41,6 @@ export default function FileUploadDialog({ open, handleUploadClose, type }) {
             method: "POST",
             body: data
         });
-
-        const {url} = res;
-        // setImageUrl(url);
-        console.log(url);
     }
 
     return (

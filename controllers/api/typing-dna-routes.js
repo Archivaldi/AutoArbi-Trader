@@ -7,7 +7,7 @@ const typingDnaClient = new TypingDnaClient(typingDna_apiKey, typingDna_secret);
 
 
 router.post("/check-pattern", (req, res) => {
-    const { typingPattern, user_id } = req.body;
+    const { typingPattern, user_id, role } = req.body;
 
     typingDnaClient.auto(
         user_id,
@@ -28,6 +28,8 @@ router.post("/check-pattern", (req, res) => {
                         (err, response) => {
                             if (err) throw err;
                             if (result.result === 1 && result.enrollment === 1 && result.messageCode === 1 && result.highConfidence === 1) {
+                                req.session.user_id = user_id;
+                                req.session.role = role;
                                 res.send({ message: 'verified' });
                             } else {
                                 res.send({ message: 'not verified' });

@@ -30,12 +30,7 @@ router.post("/session", (req, res) => {
 
 router.post("/login", (req, res) => {
     //server gets the email and the password
-<<<<<<< Updated upstream
     const {emailInput, passwordInput} = req.body;
-=======
-    const { emailInput, passwordInput } = req.body;
-    console.log(emailInput, passwordInput);
->>>>>>> Stashed changes
 
     connection.query("SELECT * FROM Users WHERE email=?", [emailInput], (err, result) => {
         if (err) throw err;
@@ -176,20 +171,6 @@ router.post("/add-info", (req, res) => {
     };
 });
 
-<<<<<<< Updated upstream
-router.get("/updateUrls", async (req,res) => {
-    const {bill_of_sale_url, title_url} = req.body;
-    const {user_id} = req.session;
-    connection.query("UPDATE Users SET billOfSale = ?, title = ? WHERE user_id = ?", 
-    [bill_of_sale_url, title_url, user_id], 
-    (err, result) => {
-        if (err) throw err;
-        else {
-            console.log("Info inserted");
-            res.send({message: "Succses"});
-        };
-    });
-=======
 router.post("/updateUrls", async (req, res) => {
     const { bill_of_sale_url, title_url, seller_id, buyer_id } = req.body;
     connection.query("UPDATE Users SET billOfSale = ?, title = ? WHERE user_id = ? OR user_id = ?",
@@ -229,7 +210,6 @@ router.post("/documentUpload/:document", async (req, res) => {
     } catch (e) {
         console.log(e)
     }
->>>>>>> Stashed changes
 });
 
 router.get("/sessions", (req,res) => {
