@@ -23,9 +23,19 @@ router.post("/check-pattern", (req, res) => {
                 if (result.result === 1 && result.enrollment === 1 && result.messageCode === 1 && result.highConfidence === 1) {
                     req.session.user_id = user_id;
                     res.send({ message: 'verified' });
-                }
-                else {
-                    res.send({ message: 'not verified' });
+                } else {
+                    connection.query("SELECT * FROM Users WHERE user_id = ?",
+                        [user_id],
+                        (err, response) => {
+                            if (err) throw err;
+                            if (result.result === 1 && result.enrollment === 1 && result.messageCode === 1 && result.highConfidence === 1) {
+                                req.session.user_id = user_id;
+                                req.session.role = role;
+                                res.send({ message: 'verified' });
+                            } else {
+                                res.send({ message: 'not verified' });
+                            };
+                        });
                 };
             };
         });

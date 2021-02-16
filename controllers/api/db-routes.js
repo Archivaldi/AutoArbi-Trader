@@ -192,6 +192,34 @@ router.post("/updateUrls", async (req, res) => {
 });
 
 router.post("/documentUpload/:document", async (req, res) => {
+    const { document } = req.params;
+    const file = req.files.file;
+    console.log(document);
+    console.log(file);
+
+    try {
+        await file.mv(path.join(__dirname, `./../../Upload/${file.name}`));
+        const { secure_url } = await cloudinary.uploader.upload(path.join(__dirname, `./../../Upload/${file.name}`));
+        let query = "";
+
+        if (document === "registration") {
+            query = "UPDATE Users SET registration = ? WHERE user_id = ?"
+        } else if (document === "government_id") {
+            query = "UPDATE Users SET govId = ? WHERE user_id = ?"
+        }
+
+        connection.query(query, [secure_url, req.session.user_id], (err, result) => {
+            if (err) throw err;
+            else {
+                res.send({ url: secure_url })
+            }
+        })
+    } catch (e) {
+        console.log(e)
+    }
+});
+
+router.post("/documentUpload/:document", async (req, res) => {
     //the server will need to know if it's a registration or the gov_id. We set it into params
     const { document } = req.params;
     const file = req.files[document];

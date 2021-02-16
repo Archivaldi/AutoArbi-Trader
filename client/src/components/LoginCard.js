@@ -44,7 +44,7 @@ export default function LoginCard({ useStyles }) {
         passwordInput: '',
         passwordInputVerify: ''
     });
-    const userID = useRef();
+    const userID = useRef(); 
     const { emailInput, passwordInput, passwordInputVerify } = values;
 
     const handleAuthType = (selection) => {
@@ -103,7 +103,7 @@ export default function LoginCard({ useStyles }) {
                 })
             })
 
-            const { user_id, error } = await res.json();
+            const { user_id, role, error } = await res.json();
 
             if (error) {
                 setApiCall(false);
@@ -117,6 +117,7 @@ export default function LoginCard({ useStyles }) {
             } else {
                 if (user_id !== undefined) {
                     userID.current = user_id;
+                    
                     setAuthDialogOpen(true);
                 } else {
                     console.log("User ID not captured");
