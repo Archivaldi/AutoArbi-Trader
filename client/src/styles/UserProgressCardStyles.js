@@ -4,7 +4,9 @@ export const useStyles = makeStyles((theme) => ({
     root: {
         display: 'grid',
         gap: '1em',
-        minWidth: '260px'
+        minWidth: '260px',
+        height: '50vh',
+        marginBottom: '2em'
     },
     header: {
         display: 'grid',

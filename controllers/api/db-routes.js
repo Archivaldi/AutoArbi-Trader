@@ -20,19 +20,15 @@ router.post("/signup/:role", async (req, res) => {
         (err, result) => {
             if (err) throw err;
             else {
-                req.session.user_id = user_id;
                 req.session.role = role;
-                res.send({ user_id });
+                res.send({ user_id, role });
             }
         }
     );
 });
 
-router.post("/session", (req, res) => {
-    res.send(req.session);
-});
 
-router.get("/login", (req, res) => {
+router.post("/login", (req, res) => {
     //server gets the email and the password
     const { emailInput, passwordInput } = req.body;
 
@@ -45,6 +41,7 @@ router.get("/login", (req, res) => {
 
             bcrypt.compare(passwordInput, p_hash, (err, match) => {
                 if (match) {
+                    req.session.role = role;
                     res.send({ user_id, role });
                 } else {
                     res.send({ error: "Invalid Password. Please try again." })
@@ -58,25 +55,30 @@ router.post("/session", (req, res) => {
     res.send(req.session);
 });
 
-router.get("/check-user", (req, res) => {
+router.post("/check-user", (req, res) => {
     const { user_id, role } = req.session;
 
     if (role === "seller") {
         connection.query("SELECT * FROM Users LEFT JOIN Cars USING (car_id) WHERE user_id = ?", [user_id], (err, result) => {
+            const { firstName, lastName, middleName, street, city, state, zip_code, county, transaction_id, price, year, odometer, make, model, body, vin, plate, title_number } = result[0]
             if (err) throw err;
-            else {
-                if (!result[0].firstName) {
-                    res.send({ error: "Need all info" });
-                } else {
-                    takeSecondPerson(result[0].transaction_id);
-                }
+            else if (!firstName || !lastName || !middleName || !street || !city || !state || !zip_code || !county || !transaction_id || !price || !year || !odometer || !make || !model || !body || !vin || !plate || title_number) {
+                res.send({
+                    firstName, lastName, middleName, street, city, state, zip_code, county, transaction_id, price, year, odometer, make, model, body, vin, plate, title_number
+                });
+            } else {
+                takeSecondPerson(result[0].transaction_id);
             };
         });
     } else if (role === "buyer") {
         connection.query("SELECT * FROM Users WHERE user_id = ?", [user_id], (err, result) => {
+            const { firstName, lastName, middleName, street, city, state, zip_code, county, transaction_id } = result[0]
             if (err) throw err;
-            else if (!result[0].firstName) {
-                res.send({ error: "Need all info" });
+            else if (!firstName || !lastName || !middleName || !street || !city || !state || !zip_code || !county || !transaction_id) {
+                res.send({
+                    firstName, lastName, middleName, street, city, state, zip_code, county, transaction_id
+                });
+
             }
             else {
                 takeSecondPerson(result[0].transaction_id);
@@ -113,7 +115,8 @@ router.post("/add-info", (req, res) => {
             } else if (result.length === 1) {
                 update_buyer();
             } else {
-                res.send({ error: "This Transaction ID already have buyer and seller" });
+                res.send({ error: "This Transaction ID already hae buyer and seller" });
+
             }
         })
 
@@ -242,9 +245,9 @@ router.post('/updateGroupId', (req, res) => {
     }
 })
 
-router.post("/sessions", (req, res) => {
+router.post("/session", (req, res) => {
     res.send(req.session);
-})
+});
 
 router.post("/logout", (req, res) => {
     req.session = null;
