@@ -14,7 +14,7 @@ import { useStyles } from '../styles/AuthDialogSyles';
 import { authSteps } from '../utils/authSteps'
 
 export default function FormDialog({
-    userRole,
+    role,
     user_id,
     open,
     setAuthDialogOpen,
@@ -75,7 +75,8 @@ export default function FormDialog({
                 method: "POST",
                 body: JSON.stringify({
                     typingPattern,
-                    user_id
+                    user_id,
+                    role
                 })
             })
             const { message } = await res.json();
