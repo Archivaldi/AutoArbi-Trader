@@ -66,9 +66,15 @@ router.post("/check-user", (req, res) => {
                 res.send({
                     message: "Some info missing"
                 });
-            } else {
-                takeSecondPerson(result[0].transaction_id);
-            };
+            }
+            else {
+                res.send({
+                    firstName, lastName, title_number
+                })
+            }
+            // else {
+            //     takeSecondPerson(result[0].transaction_id);
+            // };
         });
     } else if (role === "buyer") {
         connection.query("SELECT * FROM Users WHERE user_id = ?", [user_id], (err, result) => {
@@ -78,10 +84,14 @@ router.post("/check-user", (req, res) => {
                 res.send({
                     message: "Some info missing"
                 });
+            } else {
+                res.send({
+                    firstName, lastName
+                })
             }
-            else {
-                takeSecondPerson(result[0].transaction_id);
-            }
+            // else {
+            //     takeSecondPerson(result[0].transaction_id);
+            // }
         });
     };
 
@@ -102,12 +112,12 @@ router.post("/check-user", (req, res) => {
 
 router.post("/add-info", (req, res) => {
     const { role, user_id } = req.session;
-    const { firstName, lastName, street, city, state, zip_code, county } = req.body;
+    const { firstName, lastName, street, city, state, zip, county } = req.body;
 
     if (role === "buyer") {
-        const { transaction_id } = req.body;
+        const { transactionId } = req.body;
 
-        connection.query("SELECT * FROM Users WHERE transaction_id = ?", [transaction_id], (err, result) => {
+        connection.query("SELECT * FROM Users WHERE transaction_id = ?", [transactionId], (err, result) => {
             if (err) throw err;
             else if (result.length === 0) {
                 res.send({ error: "Transaction ID is not recognized." });
@@ -121,7 +131,7 @@ router.post("/add-info", (req, res) => {
 
         const update_buyer = () => {
             connection.query("Update Users SET firstName = ?, lastName = ?, street = ?, city = ?, state = ?, zip_code = ?, transaction_id = ?, county = ? WHERE user_id = ?",
-                [firstName, lastName, street, city, state, zip_code, transaction_id, county, user_id],
+                [firstName, lastName, street, city, state, zip, transactionId, county, user_id],
                 (err, result) => {
                     if (err) throw err;
                     else {
@@ -132,7 +142,7 @@ router.post("/add-info", (req, res) => {
 
         const find_seller = () => {
             //the client gets the response with two people. The first person is the seller
-            connection.query("SELECT * FROM Users WHERE transaction_id = ? ORDER BY role DESC", [transaction_id], (err, result) => {
+            connection.query("SELECT * FROM Users WHERE transaction_id = ? ORDER BY role DESC", [transactionId], (err, result) => {
                 if (err) throw err;
                 else {
 
@@ -144,10 +154,10 @@ router.post("/add-info", (req, res) => {
             });
         };
     } else if (role === "seller") {
-        const { price, year, odometer, make, model, body, vin, plate, title_number } = req.body;
+        const { price, year, odometer, make, model, body, vin, titleNumber, licenseNumber } = req.body;
         const transaction_id = randomstring.generate(6);
         connection.query("INSERT INTO Cars(price, year, odometer, make, model, body, vin, plate, title_number) VALUES (?,?,?,?,?,?,?,?,?)",
-            [price, year, odometer, make, model, body, vin, plate, title_number],
+            [price, year, odometer, make, model, body, vin, licenseNumber, titleNumber],
             (err, result) => {
                 if (err) throw err;
                 else {
@@ -158,7 +168,7 @@ router.post("/add-info", (req, res) => {
 
         const insert_seller = (car_id) => {
             connection.query("Update Users SET firstName = ?, lastName = ?, street = ?, city = ?, state = ?, zip_code = ?, transaction_id = ?, car_id = ?, county = ? WHERE user_id = ?",
-                [firstName, lastName, street, city, state, zip_code, transaction_id, car_id, county, user_id],
+                [firstName, lastName, street, city, state, zip, transaction_id, car_id, county, user_id],
                 (err, result) => {
                     if (err) throw err;
                     else {

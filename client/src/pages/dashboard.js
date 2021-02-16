@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
+import { appRoute } from '../utils/appRoute';
 import AuthCheck from '../components/AuthCheck';
 import MiniDrawer from '../components/MiniDrawer';
 import UserProgressCard from '../components/UserProgressCard';
@@ -6,49 +7,44 @@ import UserInformationDialog from '../components/UserInformationDialog';
 import { dummyData } from '../utils/dummyData';
 import { dashboardStyles } from '../styles/GlobalDrawerStyles'
 import { checkForAllDocumentComplete } from '../utils/checkForAllDocComplete';
-import { appRoute } from '../utils/appRoute';
 
 export default function Dashboard() {
   const classes = dashboardStyles();
   const { buyer, seller } = dummyData;
   const { userInfo } = appRoute;
-  const [infoDialogOpen, setInfoDialogOpen] = useState(false);
+  const [dbUserInfo, setDbUserInfo] = useState(null);
 
   useEffect(() => {
-    (async function getUserInfo() {
-      const res = await fetch(userInfo, {
+    (async function getUserInformation() {
+      const resTwo = await fetch(userInfo, {
         method: 'POST'
       })
-      const {message} = await res.json();
-      console.log(message)
-      if (message === "Some info missing"){
-        setInfoDialogOpen(true)
-      }
+      const serverUserInfo = await resTwo.json();
+      console.log(serverUserInfo);
+      setDbUserInfo(serverUserInfo);
     })()
   }, []);
 
   return (
     <AuthCheck>
-      <MiniDrawer
-        allDocsComplete={checkForAllDocumentComplete(buyer, seller)}
-        classes={classes}
-      >
-        <>
-          <UserInformationDialog
-            open={infoDialogOpen}
-          />
-          <UserProgressCard
-            key={2}
-            data={seller}
-          />
-        </>
-        <>
-          <UserProgressCard
-            key={1}
-            data={buyer}
-          />
-        </>
-      </MiniDrawer>
+      {dbUserInfo === null ? (
+        <p>Loading</p>
+      ) : (
+          <MiniDrawer
+            allDocsComplete={checkForAllDocumentComplete(buyer, seller)}
+            classes={classes}
+          >
+            <UserInformationDialog />
+            <UserProgressCard
+              key={2}
+              data={seller}
+            />
+            <UserProgressCard
+              key={1}
+              data={buyer}
+            />
+          </MiniDrawer>
+        )}
     </AuthCheck>
   )
 }
