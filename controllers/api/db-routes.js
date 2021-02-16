@@ -28,9 +28,14 @@ router.post("/session", (req, res) => {
     res.send(req.session);
 });
 
-router.get("/login", (req, res) => {
+router.post("/login", (req, res) => {
     //server gets the email and the password
+<<<<<<< Updated upstream
     const {emailInput, passwordInput} = req.body;
+=======
+    const { emailInput, passwordInput } = req.body;
+    console.log(emailInput, passwordInput);
+>>>>>>> Stashed changes
 
     connection.query("SELECT * FROM Users WHERE email=?", [emailInput], (err, result) => {
         if (err) throw err;
@@ -171,6 +176,7 @@ router.post("/add-info", (req, res) => {
     };
 });
 
+<<<<<<< Updated upstream
 router.get("/updateUrls", async (req,res) => {
     const {bill_of_sale_url, title_url} = req.body;
     const {user_id} = req.session;
@@ -183,6 +189,47 @@ router.get("/updateUrls", async (req,res) => {
             res.send({message: "Succses"});
         };
     });
+=======
+router.post("/updateUrls", async (req, res) => {
+    const { bill_of_sale_url, title_url, seller_id, buyer_id } = req.body;
+    connection.query("UPDATE Users SET billOfSale = ?, title = ? WHERE user_id = ? OR user_id = ?",
+        [bill_of_sale_url, title_url, seller_id, buyer_id],
+        (err, result) => {
+            if (err) throw err;
+            else {
+                console.log("Info inserted");
+                res.send({ message: "Success" });
+            };
+        });
+});
+
+router.post("/documentUpload/:document", async (req, res) => {
+    const { document } = req.params;
+    const file = req.files.file;
+    console.log(document);
+    console.log(file);
+
+    try {
+        await file.mv(path.join(__dirname, `./../../Upload/${file.name}`));
+        const { secure_url } = await cloudinary.uploader.upload(path.join(__dirname, `./../../Upload/${file.name}`));
+        let query = "";
+
+        if (document === "registration") {
+            query = "UPDATE Users SET registration = ? WHERE user_id = ?"
+        } else if (document === "government_id") {
+            query = "UPDATE Users SET govId = ? WHERE user_id = ?"
+        }
+
+        connection.query(query, [secure_url, req.session.user_id], (err, result) => {
+            if (err) throw err;
+            else {
+                res.send({ url: secure_url })
+            }
+        })
+    } catch (e) {
+        console.log(e)
+    }
+>>>>>>> Stashed changes
 });
 
 router.get("/sessions", (req,res) => {

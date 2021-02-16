@@ -20,11 +20,32 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function FileUploadDialog({ open, handleUploadClose, type }) {
+    const [imageUrl, setImageUrl] = useState("")
     const { root } = useStyles()
     const [checked, setChecked] = useState(false);
     const handleChange = () => {
         setChecked(!checked);
     };
+
+    const uploadFile = async e => {
+        let doc = "";
+        if (type === "Government ID"){
+            doc = "government_id"
+        } else if (type === "REGISTRATION"){
+            doc = "registration"
+        };
+        const files = e.target.files;
+        const data = new FormData();
+        data.append("file", files[0]);
+        const res = await fetch(`/api/db/documentUpload/${doc}`, {
+            method: "POST",
+            body: data
+        });
+
+        const {url} = res;
+        // setImageUrl(url);
+        console.log(url);
+    }
 
     return (
         <div>
@@ -62,7 +83,9 @@ export default function FileUploadDialog({ open, handleUploadClose, type }) {
                                     Upload {type}
                                     <input
                                         type="file"
+                                        name={type}
                                         hidden
+                                        onChange={uploadFile}
                                     />
                                 </Button>
                                 <FormControlLabel
