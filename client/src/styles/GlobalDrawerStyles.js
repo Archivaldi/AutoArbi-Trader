@@ -79,7 +79,7 @@ const materialUIStyles = (theme, page) => {
             color: "#0081cb"
         },
         exitIcon: {
-            color: '#ffcccb'
+            color: '#d9534f'
         }
     }
     switch (page) {

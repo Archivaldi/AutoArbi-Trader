@@ -55,11 +55,11 @@ router.post("/check-user", (req, res) => {
 
     if (role === "seller") {
         connection.query("SELECT * FROM Users LEFT JOIN Cars USING (car_id) WHERE user_id = ?", [user_id], (err, result) => {
-            const { firstName, lastName, middleName, street, city, state, zip_code, county, registration, title, transaction_id, price, year, odometer, make, model, body, vin, plate, title_number } = result[0]
+            const { firstName, lastName, middleName, street, city, state, zip_code, county, transaction_id, price, year, odometer, make, model, body, vin, plate, title_number } = result[0]
             if (err) throw err;
-            else if (!firstName || !lastName || !middleName || !street || !city || !state || !zip_code || !county || !registration || !title || !transaction_id || !price || !year || !odometer || !make || !model || !body || !vin || !plate || title_number) {
+            else if (!firstName || !lastName || !middleName || !street || !city || !state || !zip_code || !county || !transaction_id || !price || !year || !odometer || !make || !model || !body || !vin || !plate || title_number) {
                 res.send({
-                    firstName, lastName, middleName, street, city, state, zip_code, county, registration, title, transaction_id, price, year, odometer, make, model, body, vin, plate, title_number
+                    firstName, lastName, middleName, street, city, state, zip_code, county, transaction_id, price, year, odometer, make, model, body, vin, plate, title_number
                 });
             } else {
                 takeSecondPerson(result[0].transaction_id);
