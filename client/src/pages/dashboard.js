@@ -12,19 +12,17 @@ export default function Dashboard() {
   const classes = dashboardStyles();
   const { buyer, seller } = dummyData;
   const { userInfo } = appRoute;
-  const [infoDialogOpen, setInfoDialogOpen] = useState(true);
+  const [infoDialogOpen, setInfoDialogOpen] = useState(false);
 
   useEffect(() => {
     (async function getUserInfo() {
       const res = await fetch(userInfo, {
         method: 'POST'
       })
-      const defaults = await res.json();
-      console.log(defaults)
-      for (let fields in defaults) {
-        if (defaults[fields] === null) {
-          setInfoDialogOpen(true);
-        }
+      const {message} = await res.json();
+      console.log(message)
+      if (message === "Some info missing"){
+        setInfoDialogOpen(true)
       }
     })()
   }, []);

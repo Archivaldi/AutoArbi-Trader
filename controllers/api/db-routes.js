@@ -60,11 +60,11 @@ router.post("/check-user", (req, res) => {
 
     if (role === "seller") {
         connection.query("SELECT * FROM Users LEFT JOIN Cars USING (car_id) WHERE user_id = ?", [user_id], (err, result) => {
-            const { firstName, lastName, middleName, street, city, state, zip_code, county, transaction_id, price, year, odometer, make, model, body, vin, plate, title_number } = result[0]
+            const { firstName, lastName, street, city, state, zip_code, county, transaction_id, price, year, odometer, make, model, body, vin, plate, title_number } = result[0];
             if (err) throw err;
-            else if (!firstName || !lastName || !middleName || !street || !city || !state || !zip_code || !county || !transaction_id || !price || !year || !odometer || !make || !model || !body || !vin || !plate || title_number) {
+            else if (!firstName || !lastName || !street || !city || !state || !zip_code || !county || !transaction_id || !price || !year || !odometer || !make || !model || !body || !vin || !plate || title_number) {
                 res.send({
-                    firstName, lastName, middleName, street, city, state, zip_code, county, transaction_id, price, year, odometer, make, model, body, vin, plate, title_number
+                    firstName, lastName, street, city, state, zip_code, county, transaction_id, price, year, odometer, make, model, body, vin, plate, title_number
                 });
             } else {
                 takeSecondPerson(result[0].transaction_id);
@@ -72,11 +72,11 @@ router.post("/check-user", (req, res) => {
         });
     } else if (role === "buyer") {
         connection.query("SELECT * FROM Users WHERE user_id = ?", [user_id], (err, result) => {
-            const { firstName, lastName, middleName, street, city, state, zip_code, county, transaction_id } = result[0]
+            const { firstName, lastName, street, city, state, zip_code, county, transaction_id } = result[0]
             if (err) throw err;
-            else if (!firstName || !lastName || !middleName || !street || !city || !state || !zip_code || !county || !transaction_id) {
+            else if (!firstName || !lastName || !street || !city || !state || !zip_code || !county || !transaction_id) {
                 res.send({
-                    firstName, lastName, middleName, street, city, state, zip_code, county, transaction_id
+                    message: "Some info missing"
                 });
 
             }
@@ -145,7 +145,7 @@ router.post("/add-info", (req, res) => {
         };
     } else if (role === "seller") {
         const { price, year, odometer, make, model, body, vin, plate, title_number } = req.body;
-        const transaction_id = randomstring.generate(10);
+        const transaction_id = randomstring.generate(6);
         connection.query("INSERT INTO Cars(price, year, odometer, make, model, body, vin, plate, title_number) VALUES (?,?,?,?,?,?,?,?,?)",
             [price, year, odometer, make, model, body, vin, plate, title_number],
             (err, result) => {

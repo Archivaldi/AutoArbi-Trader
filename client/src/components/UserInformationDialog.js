@@ -18,7 +18,6 @@ export default function UserInformationDialog({ open, userFields }) {
     const [userRole, setUserRole] = useState(null);
     const { values, updateValue } = useForm({
         firstName: '',
-        middleName: '',
         lastName: '',
         state: '',
         county: '',
@@ -38,7 +37,6 @@ export default function UserInformationDialog({ open, userFields }) {
     })
     const {
         firstName,
-        middleName,
         lastName,
         state,
         county,
@@ -86,7 +84,6 @@ export default function UserInformationDialog({ open, userFields }) {
                 <DialogContent className={content}>
                     <form className={root} noValidate autoComplete="off">
                         <TextField value={firstName} name="firstName" onChange={updateValue} variant="outlined" id="outlined-size-normal" label="First Name" color="secondary" />
-                        <TextField value={middleName} name="middleName" onChange={updateValue} variant="outlined" id="outlined-size-normal" label="Middle Name" color="secondary" />
                         <TextField value={lastName} name="lastName" onChange={updateValue} variant="outlined" id="outlined-size-normal" label="Last Name" color="secondary" />
                         <TextField value={state} name="state" onChange={updateValue} variant="outlined" id="outlined-size-normal" label="State" color="secondary" />
                         <TextField value={county} name="county" onChange={updateValue} variant="outlined" id="outlined-size-normal" label="County" color="secondary" />

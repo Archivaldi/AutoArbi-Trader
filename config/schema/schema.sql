@@ -24,7 +24,6 @@ CREATE TABLE Users (
     car_id INT,
     firstName VARCHAR(35),
     lastName VARCHAR(35),
-    middleName VARCHAR(35),
     street VARCHAR(45),
     city VARCHAR(35),
     state VARCHAR(5),

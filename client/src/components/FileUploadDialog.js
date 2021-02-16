@@ -31,7 +31,7 @@ export default function FileUploadDialog({ open, handleUploadClose, type }) {
         let doc = "";
         if (type === "Government ID"){
             doc = "government_id"
-        } else if (type === "REGISTRATION"){
+        } else if (type === "Registration"){
             doc = "registration"
         };
         const files = e.target.files;

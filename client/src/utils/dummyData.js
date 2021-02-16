@@ -7,7 +7,7 @@ export const dummyData = {
                 id: '5aea17efuju86',
                 type: 'Government ID',
                 url: 'https://github.com/Archivaldi/4wheelz/blob/master/client/src/images/PlaceHolderID.jpg?raw=true',
-                completed: false
+                completed: true
             },
             {
                 id: '5aea17ded86',
