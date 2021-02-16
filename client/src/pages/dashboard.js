@@ -54,10 +54,6 @@ export default function Dashboard() {
               userData={dbUserInfo.seller}
               data={seller}
             />
-            <UserProgressCard
-              key={1}
-              data={buyer}
-            />
           </MiniDrawer>
         )}
     </AuthCheck>
