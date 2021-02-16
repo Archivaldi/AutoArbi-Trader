@@ -6,16 +6,20 @@ import {
     DialogContent,
     DialogTitle,
     TextField,
-    Divider
+    Divider,
+    Snackbar
 } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 import { useStyles } from '../styles/UserInformationDialogStyles';
 import { authSteps } from '../utils/authSteps';
 import useForm from '../utils/useForm';
 
-export default function UserInformationDialog({ open, userFields }) {
+export default function UserInformationDialog({ open }) {
     const { content, root, logoutButton } = useStyles();
     const { logout, session } = authSteps.route;
     const [userRole, setUserRole] = useState(null);
+    const [errorDisplayed, setErrorDisplayed] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('Error!');
     const { values, updateValue } = useForm({
         firstName: '',
         lastName: '',
@@ -55,8 +59,40 @@ export default function UserInformationDialog({ open, userFields }) {
         licenseNumber
     } = values;
 
+    const handleFormSubmit = async () => {
+        if (
+            firstName === '' ||
+            lastName === '' ||
+            state === '' ||
+            county === '' ||
+            city === '' ||
+            street === '' ||
+            zip === '' ||
+            userRole === 'buyer' && transactionId === '' ||
+            userRole === 'seller' && price === '' ||
+            userRole === 'seller' && vin === '' ||
+            userRole === 'seller' && year === '' ||
+            userRole === 'seller' && make === '' ||
+            userRole === 'seller' && model === '' ||
+            userRole === 'seller' && body === '' ||
+            userRole === 'seller' && odometer === '' ||
+            userRole === 'seller' && titleNumber === '' ||
+            userRole === 'seller' && licenseNumber === ''
+        ) {
+            setErrorMessage('Missing Fields!')
+            if (errorDisplayed === false) {
+                setErrorDisplayed(true)
+                setTimeout(() => {
+                    setErrorDisplayed(false)
+                }, 3000)
+            }
+        } else {
+            console.log("send info")
+        }
+    }
+
     const handleLogout = async () => {
-        const res = await fetch(logout, {
+        await fetch(logout, {
             method: 'POST'
         })
         window.location.reload()
@@ -74,9 +110,13 @@ export default function UserInformationDialog({ open, userFields }) {
 
     return (
         <div>
+            <Snackbar open={errorDisplayed}>
+                <Alert severity="error">
+                    {errorMessage}
+                </Alert>
+            </Snackbar>
             <Dialog
                 open={open}
-                // onClose={handleClose}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
@@ -116,7 +156,7 @@ export default function UserInformationDialog({ open, userFields }) {
                     <Button size="large" className={logoutButton} onClick={handleLogout}>
                         Log Out
                     </Button>
-                    <Button size="large" color="secondary">
+                    <Button size="large" color="secondary" onClick={handleFormSubmit}>
                         Submit
                     </Button>
                 </DialogActions>

@@ -5,10 +5,8 @@ export default function useForm(defaults) {
 
     // passing event de-structured
     function updateValue({ target }) {
-        let { value, type, name } = target;
-        if (type === 'number') {
-            value = parseInt(value)
-        }
+        let { value, name } = target;
+
         setValues({
             // copy existing values
             ...values,

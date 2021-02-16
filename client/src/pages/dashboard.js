@@ -19,9 +19,8 @@ export default function Dashboard() {
       const res = await fetch(userInfo, {
         method: 'POST'
       })
-      const {message} = await res.json();
-      console.log(message)
-      if (message === "Some info missing"){
+      const { message } = await res.json();
+      if (message === "Some info missing") {
         setInfoDialogOpen(true)
       }
     })()
