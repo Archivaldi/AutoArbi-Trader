@@ -175,7 +175,7 @@ router.post("/add-info", (req, res) => {
     };
 });
 
-router.get("/updateUrls", async (req,res) => {
+router.post("/updateUrls", async (req,res) => {
     const {bill_of_sale_url, title_url} = req.body;
     const {user_id} = req.session;
     connection.query("UPDATE Users SET billOfSale = ?, title = ? WHERE user_id = ?", 
@@ -184,7 +184,7 @@ router.get("/updateUrls", async (req,res) => {
         if (err) throw err;
         else {
             console.log("Info inserted");
-            res.send({message: "Succses"});
+            res.send({message: "Success"});
         };
     });
 });
@@ -198,10 +198,10 @@ router.post("/documentUpload/:document", async (req,res) => {
         await file.mv(path.join(__dirname, `./../../Upload/${file.name}`));
         const {secure_url} = await cloudinary.uploader.upload(path.join(__dirname,  `./../../Upload/${file.name}`));
         let query = "";
-        
+
         if (document === "registration"){
             query = "UPLOAD Users SET registration = ? WHERE user_id = ?"
-        } else if (document === "goverment_id"){
+        } else if (document === "govermentId"){
             query = "UPLOAD Users SET govId = ? WHERE user_id = ?"
         }
 
@@ -214,6 +214,19 @@ router.post("/documentUpload/:document", async (req,res) => {
     } catch (e) {
         console.log(e)
     }
+});
+
+router.post('/updateGroupId', (req,res) => {
+    const {groupEid} = req.body;
+    const {user_id} = req.session;
+    connection.query("UPDATE Users SET groupId = ? WHERE user_id = ?",
+    [groupEid, user_id], 
+    (err, result) => {
+        if (err) throw err;
+        else {
+            res.send({mesasge: "Group ID succsessfully saved"});
+        }
+    })
 })
 
 router.post("/sessions", (req,res) => {
