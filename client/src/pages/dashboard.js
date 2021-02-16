@@ -12,7 +12,6 @@ export default function Dashboard() {
   const classes = dashboardStyles();
   const { buyer, seller } = dummyData;
   const { userInfo } = appRoute;
-  const initValues = useRef()
   const [infoDialogOpen, setInfoDialogOpen] = useState(true);
 
   useEffect(() => {
@@ -21,7 +20,7 @@ export default function Dashboard() {
         method: 'POST'
       })
       const defaults = await res.json();
-      initValues.current = defaults;
+      console.log(defaults)
       for (let fields in defaults) {
         if (defaults[fields] === null) {
           setInfoDialogOpen(true);
@@ -39,7 +38,6 @@ export default function Dashboard() {
         <>
           <UserInformationDialog
             open={infoDialogOpen}
-            userFields={initValues.current}
           />
           <UserProgressCard
             key={2}

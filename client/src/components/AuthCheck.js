@@ -31,7 +31,7 @@ export default function AuthCheck({ children }) {
 
     return (
         <>
-            {false ? (
+            {!userId ? (
                 <div className={page}>
                     <CircularProgress color="secondary" />
                 </div>

@@ -1,26 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Button,
     Dialog,
     DialogActions,
     DialogContent,
-    DialogContentText,
     DialogTitle,
     TextField
 } from '@material-ui/core';
 import { useStyles } from '../styles/UserInformationDialogStyles';
 import { authSteps } from '../utils/authSteps';
 
-export default function UserInformationDialog({ open }) {
+export default function UserInformationDialog({ open, userFields }) {
     const { content, root, logoutButton } = useStyles();
-    const { logout } = authSteps.route;
+    const { logout, session } = authSteps.route;
+    const [userRole, setUserRole] = useState(null)
 
     const handleLogout = async () => {
         const res = await fetch(logout, {
             method: 'POST'
         })
         window.location.reload()
-    }
+    };
+
+    useEffect(() => {
+        (async function getUserRole() {
+            const res = await fetch(session, {
+                method: 'POST'
+            })
+            const { role } = await res.json();
+            setUserRole(role)
+        })()
+    }, [])
 
     return (
         <div>

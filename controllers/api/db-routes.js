@@ -55,25 +55,23 @@ router.post("/check-user", (req, res) => {
 
     if (role === "seller") {
         connection.query("SELECT * FROM Users LEFT JOIN Cars USING (car_id) WHERE user_id = ?", [user_id], (err, result) => {
-            console.log(result);
+            const { firstName, lastName, middleName, street, city, state, zip_code, county, registration, title, transaction_id, price, year, odometer, make, model, body, vin, plate, title_number } = result[0]
             if (err) throw err;
-            else {
-                if (!result[0].firstName) {
-                    res.send({ error: "Need all info", });
-                } else {
-                    takeSecondPerson(result[0].transaction_id);
-                }
+            else if (!firstName || !lastName || !middleName || !street || !city || !state || !zip_code || !county || !registration || !title || !transaction_id || !price || !year || !odometer || !make || !model || !body || !vin || !plate || title_number) {
+                res.send({
+                    firstName, lastName, middleName, street, city, state, zip_code, county, registration, title, transaction_id, price, year, odometer, make, model, body, vin, plate, title_number
+                });
+            } else {
+                takeSecondPerson(result[0].transaction_id);
             };
         });
     } else if (role === "buyer") {
         connection.query("SELECT * FROM Users WHERE user_id = ?", [user_id], (err, result) => {
-            const { car_id, firstName, lastName, middleName, street, city, state, zip_code, govId, registration, title, billOfSale, groupId, transaction_id
-            } = result[0]
+            const { firstName, lastName, middleName, street, city, state, zip_code, county, transaction_id } = result[0]
             if (err) throw err;
-            else if (!car_id || !firstName || !lastName || !middleName || !street || !city || !state || !zip_code || !govId || !registration || !title || !billOfSale || !groupId || !transaction_id
-            ) {
+            else if (!firstName || !lastName || !middleName || !street || !city || !state || !zip_code || !county || !transaction_id) {
                 res.send({
-                    car_id, firstName, lastName, middleName, street, city, state, zip_code, govId, registration, title, billOfSale, groupId, transaction_id
+                    firstName, lastName, middleName, street, city, state, zip_code, county, transaction_id
                 });
             }
             else {
