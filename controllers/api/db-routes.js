@@ -51,47 +51,34 @@ router.post("/login", (req, res) => {
     });
 });
 
-router.post("/session", (req, res) => {
-    res.send(req.session);
-});
-
 router.post("/check-user", (req, res) => {
     const { user_id, role } = req.session;
 
     if (role === "seller") {
         connection.query("SELECT * FROM Users LEFT JOIN Cars USING (car_id) WHERE user_id = ?", [user_id], (err, result) => {
-            const { firstName, lastName, street, city, state, zip_code, county, transaction_id, price, year, odometer, make, model, body, vin, plate, title_number } = result[0];
+            const { firstName, lastName, street, city, state, zip, county, transactionId, price, year, odometer, make, model, body, vin, licenseNumber, titleNumber } = result[0];
             if (err) throw err;
-            else if (!firstName || !lastName || !street || !city || !state || !zip_code || !county || !transaction_id || !price || !year || !odometer || !make || !model || !body || !vin || !plate || title_number) {
+            else if (!firstName || !lastName || !street || !city || !state || !zip || !county || !transactionId || !price || !year || !odometer || !make || !model || !body || !vin || !licenseNumber || titleNumber) {
                 res.send({
                     message: "Some info missing"
                 });
             }
             else {
-                res.send({
-                    firstName, lastName, title_number
-                })
-            }
-            // else {
-            //     takeSecondPerson(result[0].transaction_id);
-            // };
+                takeSecondPerson(result[0].transaction_id);
+            };
         });
     } else if (role === "buyer") {
         connection.query("SELECT * FROM Users WHERE user_id = ?", [user_id], (err, result) => {
-            const { firstName, lastName, street, city, state, zip_code, county, transaction_id } = result[0];
+            const { firstName, lastName, street, city, state, zip, county, transactionId } = result[0];
             if (err) throw err;
-            else if (!firstName || !lastName || !street || !city || !state || !zip_code || !county || !transaction_id) {
+            else if (!firstName || !lastName || !street || !city || !state || !zip || !county || !transactionId) {
                 res.send({
                     message: "Some info missing"
                 });
-            } else {
-                res.send({
-                    firstName, lastName
-                })
             }
-            // else {
-            //     takeSecondPerson(result[0].transaction_id);
-            // }
+            else {
+                takeSecondPerson(result[0].transaction_id);
+            }
         });
     };
 
