@@ -30,7 +30,7 @@ router.post("/session", (req, res) => {
 
 router.get("/login", (req, res) => {
     //server gets the email and the password
-    const {emailInput, password} = req.body;
+    const {emailInput, passwordInput} = req.body;
 
     connection.query("SELECT * FROM Users WHERE email=?", [emailInput], (err, result) => {
         if (err) throw err;
@@ -39,7 +39,7 @@ router.get("/login", (req, res) => {
         } else {
             let { p_hash, user_id, role } = result[0];
 
-            bcrypt.compare(password, p_hash, (err, match) => {
+            bcrypt.compare(passwordInput, p_hash, (err, match) => {
                 if (match) {
                     res.send({ user_id, role });
                 } else {
