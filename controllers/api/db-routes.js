@@ -16,7 +16,9 @@ router.post("/signup/:role", async (req, res) => {
         (err, result) => {
             if (err) throw err;
             else {
-                res.send({ user_id, role });
+                req.session.user_id = user_id;
+                req.session.role = role;
+                res.send({ user_id });
             }
         }
     );
@@ -26,9 +28,9 @@ router.post("/session", (req, res) => {
     res.send(req.session);
 });
 
-router.post("/login", (req, res) => {
+router.get("/login", (req, res) => {
     //server gets the email and the password
-    const { emailInput, passwordInput } = req.body;
+    const {emailInput, passwordInput} = req.body;
 
     connection.query("SELECT * FROM Users WHERE email=?", [emailInput], (err, result) => {
         if (err) throw err;
@@ -107,7 +109,7 @@ router.post("/add-info", (req, res) => {
             } else if (result.length === 1) {
                 update_buyer();
             } else {
-                res.send({error: "This Transaction ID already hae buyer and seller"});
+                res.send({error: "This Transaction ID already have buyer and seller"});
             }
         })
 
@@ -169,21 +171,21 @@ router.post("/add-info", (req, res) => {
     };
 });
 
-router.get("/updateUrls", async (req, res) => {
-    const { bill_of_sale_url, title_url } = req.body;
-    const { user_id } = req.session;
-    connection.query("UPDATE Users SET billOfSale = ?, title = ? WHERE user_id = ?",
-        [bill_of_sale_url, title_url, user_id],
-        (err, result) => {
-            if (err) throw err;
-            else {
-                console.log("Info inserted");
-                res.send({ message: "Succses" });
-            };
-        });
+router.get("/updateUrls", async (req,res) => {
+    const {bill_of_sale_url, title_url} = req.body;
+    const {user_id} = req.session;
+    connection.query("UPDATE Users SET billOfSale = ?, title = ? WHERE user_id = ?", 
+    [bill_of_sale_url, title_url, user_id], 
+    (err, result) => {
+        if (err) throw err;
+        else {
+            console.log("Info inserted");
+            res.send({message: "Succses"});
+        };
+    });
 });
 
-router.post("/sessions", (req, res) => {
+router.post("/sessions", (req,res) => {
     res.send(req.session);
 })
 
