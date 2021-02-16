@@ -29,6 +29,7 @@ CREATE TABLE Users (
     city VARCHAR(35),
     state VARCHAR(5),
     zip_code VARCHAR(6),
+    county VARCHAR(20),
     govId VARCHAR(100),
     registration VARCHAR(100),
     title VARCHAR(100),

@@ -101,7 +101,7 @@ router.get("/check-user", (req, res) => {
 
 router.post("/add-info", (req, res) => {
     const { role, user_id } = req.session;
-    const { firstName, lastName, street, city, state, zip_code } = req.body;
+    const { firstName, lastName, street, city, state, zip_code, county } = req.body;
 
     if (role === "buyer") {
         const { transaction_id } = req.body;
@@ -118,8 +118,8 @@ router.post("/add-info", (req, res) => {
         })
 
         const update_buyer = () => {
-            connection.query("Update Users SET firstName = ?, lastName = ?, street = ?, city = ?, state = ?, zip_code = ?, transaction_id = ? WHERE user_id = ?",
-                [firstName, lastName, street, city, state, zip_code, transaction_id, user_id],
+            connection.query("Update Users SET firstName = ?, lastName = ?, street = ?, city = ?, state = ?, zip_code = ?, transaction_id = ?, county = ? WHERE user_id = ?",
+                [firstName, lastName, street, city, state, zip_code, transaction_id, county, user_id],
                 (err, result) => {
                     if (err) throw err;
                     else {
@@ -154,8 +154,8 @@ router.post("/add-info", (req, res) => {
             })
 
         const insert_seller = (car_id) => {
-            connection.query("Update Users SET firstName = ?, lastName = ?, street = ?, city = ?, state = ?, zip_code = ?, transaction_id = ?, car_id = ? WHERE user_id = ?",
-                [firstName, lastName, street, city, state, zip_code, transaction_id, car_id, user_id],
+            connection.query("Update Users SET firstName = ?, lastName = ?, street = ?, city = ?, state = ?, zip_code = ?, transaction_id = ?, car_id = ?, county = ? WHERE user_id = ?",
+                [firstName, lastName, street, city, state, zip_code, transaction_id, car_id, county, user_id],
                 (err, result) => {
                     if (err) throw err;
                     else {
