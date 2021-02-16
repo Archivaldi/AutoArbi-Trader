@@ -187,13 +187,14 @@ router.post("/hooks", async (req, res) => {
         const { data } = req.body;
         const decryptedRSAMessage = await decryptRSA(anvil.private_key, data)
         const info = await JSON.parse(decryptedRSAMessage);
+        console.log(info)
         const { eid } = info.documentGroup;
 
         connection.query("SELECT * FROM Users WHERE user_id = ?", [user_id], (err, result) => {
             if (err) throw err;
             else {
-                if (eid === result[0].groupId) {
-
+                //if (eid === result[0].groupId) {
+                if (eid){
                     async function main() {
                         try {
                             const { statusCode, response, data, errors } = await anvilClient.downloadDocuments(eid, {});
