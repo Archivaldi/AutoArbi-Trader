@@ -4,11 +4,8 @@ import Head from 'next/head';
 import { StylesProvider } from '@material-ui/styles';
 import { ThemeProvider as StyledComponentProvider } from 'styled-components';
 import { ThemeProvider as MaterialUiProvider } from '@material-ui/core/styles';
-
 import CssBaseline from '@material-ui/core/CssBaseline';
-
 import theme from '../themes/dark';
-
 export default class MyApp extends App {
   componentDidMount() {
     const jssStyles = document.querySelector('#jss-server-side');
@@ -16,14 +13,9 @@ export default class MyApp extends App {
       jssStyles.parentElement.removeChild(jssStyles);
     }
   }
-
-
-
   render() {
     const { Component, pageProps } = this.props;
-
     
-
     return (
       <>
         <Head>

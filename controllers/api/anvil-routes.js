@@ -4,6 +4,9 @@ const moment = require('moment');
 const cloudinary = require('cloudinary').v2;
 const keys = require('../../config/keys');
 const extract = require('extract-zip');
+const {anvil} = require("../../config/keys");
+const request = require('request');
+const { decryptRSA } = require('@anvilco/encryption');
 var fs = require('fs');
 const path = require('path');
 
@@ -30,7 +33,7 @@ router.get("/createEtchSigh", (req, res) => {
         } else {
             console.log(data.createEtchPacket)
             groupEid = data.createEtchPacket.documentGroup.eid;
-            console.log("GroupEid :", groupEid);
+            req.session.groupEid = "test";
         }
     }
 
@@ -146,6 +149,72 @@ router.get("/createEtchSigh", (req, res) => {
     run(main);
 });
 
+router.post("/hooks", async (req,res) => {
+
+    let bill_of_sale_url = "";
+    let title_url = "";
+
+    const {action} = req.body;
+    if (action === "etchPacketComplete"){
+        const {data} = req.body;
+        const decryptedRSAMessage = await decryptRSA(anvil.private_key, data)
+        const info = await JSON.parse(decryptedRSAMessage);
+        const {eid} = info.documentGroup;
+        //if (eid === req.session.group_id){
+        if (eid){
+
+            async function main() {
+                try {
+                    const { statusCode, response, data, errors } = await anvilClient.downloadDocuments(eid, {});
+                    if (statusCode === 200){
+                        fs.writeFileSync('output.zip', data, {encoding: null});
+                        await (extract(path.join(__dirname, "../../output.zip"), {dir: path.join(__dirname, `../../Unzip/${groupEid}`)}));
+                        const files = fs.readdirSync(path.join(__dirname, `../../Unzip/${groupEid}`));
+                        for (let i = 0; i < files.length; i++){
+                            let {secure_url} = await cloudinary.uploader.upload(path.join(__dirname, `../../Unzip/${groupEid}/${files[i]}`));
+                            if (i === 0){
+                                bill_of_sale_url = secure_url;
+                            } else {
+                                title_url = secure_url;
+                            }
+                        };
+
+                    } else {
+                        console.log(JSON.stringify(errors, null,2));
+                        res.send({statusCode: 200});
+                    }
+                } catch(error) {
+                    console.log(error);
+                    res.send({statusCode: 200});
+                }
+            }
+        
+            main()
+                .then(() => {
+                    const payloads = {
+                        url: "https://desolate-hollows-77552.herokuapp.com/updateUrls",
+                        json: {bill_of_sale_url, title_url},
+                    };
+                    request(payloads, (error, response, body) => {
+                        if (error) throw error;
+                        else {
+                            res.send({statusCode: 200});
+                        };
+                    });
+                })
+                .catch((err) => {
+                    console.log(err.stack || err.message);
+                    res.send({statusCode: 200});
+                    process.exit(1);
+                })
+        } else {
+            res.send({statusCode: 200});
+        }
+    } else {
+        res.send({statusCode: 200});
+    };
+});
+
 
 router.get("/download", (req, res) => {
 
@@ -161,7 +230,6 @@ router.get("/download", (req, res) => {
                     const {secure_url} = await cloudinary.uploader.upload(path.join(__dirname, `../../Unzip/${groupEid}/${files[i]}`));
                     console.log(secure_url);
                 }
-
             } else {
                 console.log(JSON.stringify(errors, null,2))
             }

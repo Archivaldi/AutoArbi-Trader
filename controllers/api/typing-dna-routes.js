@@ -23,8 +23,22 @@ router.post("/check-pattern", (req, res) => {
                 if (result.result === 1 && result.enrollment === 1 && result.messageCode === 1 && result.highConfidence === 1) {
                     res.send({ message: 'verified' });
                 } else {
+<<<<<<< HEAD
                     res.send({ message: 'not verified' });
                 }
+=======
+                    connection.query("SELECT * FROM Users WHERE user_id = ?",
+                        [user_id],
+                        (err, response) => {
+                            if (err) throw err;
+                            if (result.result === 1 && result.enrollment === 1 && result.messageCode === 1 && result.highConfidence === 1) {
+                                res.send({ message: 'verified' });
+                            } else {
+                                res.send({ message: 'not verified' });
+                            };
+                        });
+                };
+>>>>>>> server
             };
         });
 });
