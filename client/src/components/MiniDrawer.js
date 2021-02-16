@@ -49,7 +49,6 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
         const res = await fetch("/api/anvil/createEtchSigh", {
             method: 'POST'
         });
-        console.log(res);
     }
 
     const {
