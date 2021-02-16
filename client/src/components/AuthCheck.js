@@ -20,9 +20,7 @@ export default function AuthCheck({ children }) {
             const { user_id } = await res.json();
 
             if (!user_id) {
-                setTimeout(() => {
-                    window.location.replace('/')
-                }, 500)
+                window.location.replace('/')
             } else {
                 setUserId(user_id);
             }
