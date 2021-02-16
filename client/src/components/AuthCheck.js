@@ -7,7 +7,6 @@ export default function AuthCheck({ children }) {
     const { session } = authSteps.route;
     const { page } = useStyles();
     const [userId, setUserId] = useState(null);
-    const [userRole, setUserRole] = useState(null);
 
     useEffect(() => {
         (async function fetchUserData() {
@@ -18,20 +17,21 @@ export default function AuthCheck({ children }) {
                 },
                 method: "POST"
             })
-            const { user_id, role } = await res.json();
+            const { user_id } = await res.json();
 
-            if (!user_id || !role) {
-                window.location.href('/')
+            if (!user_id) {
+                setTimeout(() => {
+                    window.location.replace('/')
+                }, 500)
             } else {
-                setUserRole(role);
                 setUserId(user_id);
             }
         })()
-    }, [])
+    }, []);
 
     return (
         <>
-            {!userId || !userRole ? (
+            {!userId ? (
                 <div className={page}>
                     <CircularProgress color="secondary" />
                 </div>

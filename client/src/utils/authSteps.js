@@ -10,7 +10,10 @@ export const authSteps = {
     route: {
         signUp: '/api/db/signup',
         login: '/api/db/login',
+        logout: '/api/db/logout',
         session: '/api/db/session',
         verify: '/api/typing-dna/check-pattern',
     }
 }
+
+

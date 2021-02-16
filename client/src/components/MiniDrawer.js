@@ -22,10 +22,12 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import MailIcon from '@material-ui/icons/Mail';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import { authSteps } from '../utils/authSteps';
 
 export default function MiniDrawer({ children, classes, allDocsComplete }) {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
+    const { logout } = authSteps.route;
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -34,6 +36,13 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+
+    const handleLogout = async () => {
+        const res = await fetch(logout, {
+            method: 'POST'
+        })
+        window.location.reload()
+    }
 
     const {
         root,
@@ -127,7 +136,10 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
                         <ListItemText>Send In Forms</ListItemText>
                     </ListItem>
                     <Divider />
-                    <ListItem button={true}>
+                    <ListItem
+                        button={true}
+                        onClick={handleLogout}
+                    >
                         <ListItemIcon>
                             <ExitToAppIcon className={exitIcon} />
                         </ListItemIcon>
