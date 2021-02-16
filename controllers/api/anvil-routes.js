@@ -190,7 +190,7 @@ router.post("/hooks", async (req, res) => {
         console.log(info)
         const { eid } = info.documentGroup;
         const id = info.signers[0].eid;
-        const user_id = await decryptRSA(anvil.private_key. id);
+        const user_id = await decryptRSA(anvil.private_key, id);
         console.log("Decrypted User ID: ", user_id);
 
         connection.query("SELECT * FROM Users WHERE user_id = ?", [user_id], (err, result) => {
