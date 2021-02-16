@@ -14,8 +14,8 @@ router.get('/upload', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/out/upload.html'));
 });
 
-router.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/out/404.html'));
-});
+// router.get('*', (req, res) => {
+//     res.sendFile(path.join(__dirname, '../client/out/404.html'));
+// });
 
 module.exports = router;
