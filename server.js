@@ -24,10 +24,6 @@ app.use(
 app.use(express.static(path.join(__dirname, './client/out')));
 app.use(require('./controllers/'));
 
-app.get("/uploadFile", (req, res) => {
-    res.sendFile(path.join(__dirname, "./index.html"));
-})
-
 app.listen(PORT, () => {
     console.log(`Listening on ${PORT}`);
 });
