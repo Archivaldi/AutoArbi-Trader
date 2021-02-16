@@ -34,7 +34,7 @@ router.post("/session", (req, res) => {
 
 router.get("/login", (req, res) => {
     //server gets the email and the password
-    const {emailInput, passwordInput} = req.body;
+    const { emailInput, passwordInput } = req.body;
 
     connection.query("SELECT * FROM Users WHERE email=?", [emailInput], (err, result) => {
         if (err) throw err;
@@ -65,8 +65,8 @@ router.get("/check-user", (req, res) => {
         connection.query("SELECT * FROM Users LEFT JOIN Cars USING (car_id) WHERE user_id = ?", [user_id], (err, result) => {
             if (err) throw err;
             else {
-                if (!result[0].firstName){
-                    res.send({error: "Need all info"});
+                if (!result[0].firstName) {
+                    res.send({ error: "Need all info" });
                 } else {
                     takeSecondPerson(result[0].transaction_id);
                 }
@@ -75,8 +75,8 @@ router.get("/check-user", (req, res) => {
     } else if (role === "buyer") {
         connection.query("SELECT * FROM Users WHERE user_id = ?", [user_id], (err, result) => {
             if (err) throw err;
-            else if (!result[0].firstName){
-                res.send({error: "Need all info"});
+            else if (!result[0].firstName) {
+                res.send({ error: "Need all info" });
             }
             else {
                 takeSecondPerson(result[0].transaction_id);
@@ -88,7 +88,7 @@ router.get("/check-user", (req, res) => {
         connection.query("SELECT * FROM Users WHERE transaction_id = ? ORDER BY role DESC", [id], (err, result) => {
             if (err) throw err;
             else if (result.length === 1) {
-                res.send({seller: result[0]});
+                res.send({ seller: result[0] });
             } else {
                 res.send({
                     seller: result[0],
@@ -106,26 +106,26 @@ router.post("/add-info", (req, res) => {
     if (role === "buyer") {
         const { transaction_id } = req.body;
 
-        connection.query("SELECT * FROM Users WHERE transaction_id = ?", [transaction_id], (err,result) => {
+        connection.query("SELECT * FROM Users WHERE transaction_id = ?", [transaction_id], (err, result) => {
             if (err) throw err;
-            else if (result.length === 0){
-                res.send({error: "Transaction ID is not recognized."});
+            else if (result.length === 0) {
+                res.send({ error: "Transaction ID is not recognized." });
             } else if (result.length === 1) {
                 update_buyer();
             } else {
-                res.send({error: "This Transaction ID already have buyer and seller"});
+                res.send({ error: "This Transaction ID already have buyer and seller" });
             }
         })
 
         const update_buyer = () => {
             connection.query("Update Users SET firstName = ?, lastName = ?, street = ?, city = ?, state = ?, zip_code = ?, transaction_id = ? WHERE user_id = ?",
-            [firstName, lastName, street, city, state, zip_code, transaction_id, user_id],
-            (err, result) => {
-                if (err) throw err;
-                else {
-                    find_seller();
-                }
-            });
+                [firstName, lastName, street, city, state, zip_code, transaction_id, user_id],
+                (err, result) => {
+                    if (err) throw err;
+                    else {
+                        find_seller();
+                    }
+                });
         }
 
         const find_seller = () => {
@@ -175,39 +175,39 @@ router.post("/add-info", (req, res) => {
     };
 });
 
-router.post("/updateUrls", async (req,res) => {
-    const {bill_of_sale_url, title_url, seller_id, buyer_id} = req.body;
-    connection.query("UPDATE Users SET billOfSale = ?, title = ? WHERE user_id = ? OR user_id = ?", 
-    [bill_of_sale_url, title_url, seller_id, buyer_id], 
-    (err, result) => {
-        if (err) throw err;
-        else {
-            console.log("Info inserted");
-            res.send({message: "Success"});
-        };
-    });
+router.post("/updateUrls", async (req, res) => {
+    const { bill_of_sale_url, title_url, seller_id, buyer_id } = req.body;
+    connection.query("UPDATE Users SET billOfSale = ?, title = ? WHERE user_id = ? OR user_id = ?",
+        [bill_of_sale_url, title_url, seller_id, buyer_id],
+        (err, result) => {
+            if (err) throw err;
+            else {
+                console.log("Info inserted");
+                res.send({ message: "Success" });
+            };
+        });
 });
 
-router.post("/documentUpload/:document", async (req,res) => {
+router.post("/documentUpload/:document", async (req, res) => {
     //the server will need to know if it's a registration or the gov_id. We set it into params
-    const {document} = req.params;
+    const { document } = req.params;
     const file = req.files[document];
 
     try {
         await file.mv(path.join(__dirname, `./../../Upload/${file.name}`));
-        const {secure_url} = await cloudinary.uploader.upload(path.join(__dirname,  `./../../Upload/${file.name}`));
+        const { secure_url } = await cloudinary.uploader.upload(path.join(__dirname, `./../../Upload/${file.name}`));
         let query = "";
 
-        if (document === "registration"){
+        if (document === "registration") {
             query = "UPLOAD Users SET registration = ? WHERE user_id = ?"
-        } else if (document === "govermentId"){
+        } else if (document === "govermentId") {
             query = "UPLOAD Users SET govId = ? WHERE user_id = ?"
         }
 
         connection.query(query, [secure_url, req.session.user_id], (err, result) => {
             if (err) throw err;
             else {
-                res.send({message: "File uploaded"})
+                res.send({ message: "File uploaded" })
             }
         })
     } catch (e) {
@@ -215,20 +215,34 @@ router.post("/documentUpload/:document", async (req,res) => {
     }
 });
 
-router.post('/updateGroupId', (req,res) => {
-    const {groupEid} = req.body;
-    const {user_id} = req.session;
-    connection.query("UPDATE Users SET groupId = ? WHERE user_id = ?",
-    [groupEid, user_id], 
-    (err, result) => {
-        if (err) throw err;
-        else {
-            res.send({mesasge: "Group ID succsessfully saved"});
+router.post('/updateGroupId', (req, res) => {
+    const { groupEid } = req.body;
+    const { user_id } = req.session;
+
+    connection.query("SELECT * FROM Users LEFT JOIN Cars USING (car_id) WHERE transaction_id = (SELECT transaction_id FROM Users WHERE user_id = ?) ORDER BY role DESC", [user_id],
+        (err, result) => {
+            if (err) throw err;
+            else {
+                const seller_id = result[0].user_id;
+                const buyer_id = result[1].user_id;
+                set_groupId(seller_id, buyer_id);
+            }
         }
-    })
+    )
+
+    const set_groupId = (seller_id, buyer_id) => {
+        connection.query("UPDATE Users SET groupId = ? WHERE user_id = ? OR user_id = ?",
+            [groupEid, seller_id, buyer_id],
+            (err, result) => {
+                if (err) throw err;
+                else {
+                    res.send({ mesasge: "Group ID succsessfully saved" });
+                }
+            })
+    }
 })
 
-router.post("/sessions", (req,res) => {
+router.post("/sessions", (req, res) => {
     res.send(req.session);
 })
 

@@ -19,23 +19,17 @@ let groupEid = "";
 
 router.get("/createEtchSigh", (req, res) => {
 
-    // const payloads = {
-    //     url: "https://desolate-hollows-77552.herokuapp.com/api/db/check-user",
-    // };
+    const payloads = {
+        url: "https://desolate-hollows-77552.herokuapp.com/api/db/check-user"
+    };
 
-    // request(payloads, (error, response, body) => {
-    //     if (error) throw error;
-    //     else {
-    //         const {seller, buyer } = body;
+    request(payloads, (error, response, body) => {
+        if (error) throw error;
+        else {
+            const {seller, buyer } = body;
 
-    //     }
-    // })
-
-    const signer_1_email = "artur.markov1860@gmail.com";
-    const signer_1_name = "Artur Markov";
-
-    const signer_2_email = "archivaldi95@yandex.ru";
-    const signer_2_name = "Nate Ryan";
+        }
+    })
 
     async function main() {
         const variables = getPacketVariables()
@@ -46,19 +40,19 @@ router.get("/createEtchSigh", (req, res) => {
         } else {
             console.log(data.createEtchPacket)
             groupEid = data.createEtchPacket.documentGroup.eid;
-            console.log(groupEid);
-            // const payloads = {
-            //     url: "https://desolate-hollows-77552.herokuapp.com/api/db/updateGroupId",
-            //     method: "POST",
-            //     json: { groupEid},
-            // };
+    
+            const payloads = {
+                url: "https://desolate-hollows-77552.herokuapp.com/api/db/updateGroupId",
+                method: "POST",
+                json: { groupEid},
+            };
 
-            // request(payloads, (error, response, body) => {
-            //     if (error) throw error;
-            //     else {
-            //         res.send(body);
-            //     }
-            // })
+            request(payloads, (error, response, body) => {
+                if (error) throw error;
+                else {
+                    res.send(body);
+                }
+            })
         }
     }
 
@@ -67,9 +61,9 @@ router.get("/createEtchSigh", (req, res) => {
             isDraft: false,
             isTest: true,
 
-            name: `Docs - ${signer_2_name}`,
-            signatureEmailSubject: 'Docs ok',
-            signatureEmailBody: 'Please sigh dosc...',
+            name: `Vehicle Purchase - ${seller.firstName} ${seller.lastName} - ${buyer.firstName} ${buyer.lastName}`,
+            signatureEmailSubject: 'Please sign documents',
+            signatureEmailBody: 'Please sign the Title and the Bill of Sale',
 
             files: [
                 {
@@ -86,26 +80,26 @@ router.get("/createEtchSigh", (req, res) => {
                 payloads: {
                     bill_of_sale: {
                         data: {
-                            seller: "Artur Markov",
-                            sellerStreet: "1403 Fort Lloyd Pl",
-                            sellerCity: "Round Rock",
-                            sellerState: "TX",
-                            sellerZipCode: "78665",
-                            sellerCounty: "Williamson",
-                            buyer: "Nathaniel Ryan",
-                            buyerStreet: "1700 W Parmer St",
-                            buyerCity: "Austin",
-                            buyerState: "TX",
-                            buyerZipCode: "78727",
-                            buyer_county: "Jefferson",
-                            price: "10000",
-                            carYear: "2015",
-                            carMake: "Mazda",
-                            carBody: "Minivan",
-                            carModel: "5",
-                            carVin: "1SG13VNSSDN45693",
-                            carPlate: "NKR1897",
-                            odometer: "77356",
+                            seller: `${seller.firstName} ${seller.lastName}`,
+                            sellerStreet: seller.street,
+                            sellerCity: seller.city,
+                            sellerState: seller.state,
+                            sellerZipCode: seller.zip_code,
+                            sellerCounty: seller.county,
+                            buyer: `${buyer.firstName} ${buyer.lastName}`,
+                            buyerStreet: buyer.street,
+                            buyerCity: buyer.city,
+                            buyerState: buyer.state,
+                            buyerZipCode: buyer.zip_code,
+                            buyer_county: buyer.county,
+                            price: seller.price,
+                            carYear: seller.year,
+                            carMake: seller.make,
+                            carBody: seller.body,
+                            carModel: seller.model,
+                            carVin: seller.vin,
+                            carPlate: seller.plate,
+                            odometer: seller.odometer,
                             dayMonth: moment().format("DD/MM"),
                             year: "21",
                             date: moment().format("MM/DD/YYYY"),
@@ -113,16 +107,16 @@ router.get("/createEtchSigh", (req, res) => {
                     },
                     texas_title: {
                         data: {
-                            titleNumber: "2837402984",
-                            carVin: "1SG13VNSSDN45693",
-                            carYear: "2015",
-                            carMake: "Mazda",
-                            carBody: "Minivan",
-                            carModel: "5",
-                            carPlate: "NKR1897",
-                            odometer: "77356",
-                            seller: "Artur Markov",
-                            sellerFullAddress: "1403 Fort Lloyd Pl, Round Rock, TX, 78665",
+                            titleNumber: seller.title_number,
+                            carVin: seller.vin,
+                            carYear: seller.year,
+                            carMake: seller.make,
+                            carBody: seller.body,
+                            carModel: seller.model,
+                            carPlate: seller.plate,
+                            odometer: seller.odometer,
+                            seller: `${seller.firstName} ${seller.lastName}`,
+                            sellerFullAddress: `${seller.street} ${seller.city} ${seller.state} ${seller.zip_code}`,
                             date: moment().format("MM/DD/YYYY")
                         }
                     }
@@ -131,9 +125,9 @@ router.get("/createEtchSigh", (req, res) => {
 
             signers: [
                 {
-                    id: "artur",
-                    name: "Artur Markov",
-                    email: "artur.markov1860@gmail.com",
+                    id: seller.firstName,
+                    name: `${seller.firstName} ${seller.lastName}`,
+                    email: seller.email,
 
                     fields: [
                         {
@@ -147,9 +141,9 @@ router.get("/createEtchSigh", (req, res) => {
                     ]
                 },
                 {
-                    id: "nate",
-                    name: "Nate Ryan",
-                    email: "archivaldi95@yandex.ru",
+                    id: buyer.firstName,
+                    name: `${buyer.firstName} ${buyer.lastName}`,
+                    email: buyer.email,
                     fields: [
                         {
                             fileId: "bill_of_sale",
