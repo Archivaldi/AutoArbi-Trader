@@ -56,11 +56,12 @@ router.post("/check-user", (req, res) => {
 
     if (role === "seller") {
         connection.query("SELECT * FROM Users LEFT JOIN Cars USING (car_id) WHERE user_id = ?", [user_id], (err, result) => {
-            const { firstName, lastName, street, city, state, zip, county, transactionId, price, year, odometer, make, model, body, vin, licenseNumber, titleNumber } = result[0];
+            const { firstName, lastName, street, city, state, zip_code, county, transaction_id, price, year, odometer, make, model, body, vin, plate, title_number } = result[0];
             if (err) throw err;
-            else if (!firstName || !lastName || !street || !city || !state || !zip || !county || !transactionId || !price || !year || !odometer || !make || !model || !body || !vin || !licenseNumber || titleNumber) {
+            else if (!firstName || !lastName || !street || !city || !state || !zip_code || !county || !transaction_id || !price || !year || !odometer || !make || !model || !body || !vin || !plate || !title_number) {
                 res.send({
-                    message: "Some info missing"
+                    message: "Some info missing",
+                    hello: "hello"
                 });
             }
             else {
@@ -112,7 +113,6 @@ router.post("/add-info", (req, res) => {
                 update_buyer();
             } else {
                 res.send({ error: "This Transaction ID already hae buyer and seller" });
-
             }
         })
 
@@ -159,6 +159,7 @@ router.post("/add-info", (req, res) => {
                 (err, result) => {
                     if (err) throw err;
                     else {
+
                         find_seller();
                     };
                 });
@@ -168,7 +169,8 @@ router.post("/add-info", (req, res) => {
             connection.query("SELECT * FROM Users WHERE user_id = ?", [user_id], (err, result) => {
                 if (err) throw err;
                 else {
-                    res.send(result);
+                    const uid = result[0].user_id
+                    res.send({ user_id: uid });
                 }
             })
         }

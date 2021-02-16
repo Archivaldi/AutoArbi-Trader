@@ -5,7 +5,7 @@ export const authSteps = {
         secondAuthLogin: "🥳 Welcome Back, we are happy to have you! May I get your email & password?"
     },
     message: [
-        "I am authenticated, by the way I type.",
+        "I am authenticated by the way I type.",
     ],
     route: {
         signUp: '/api/db/signup',

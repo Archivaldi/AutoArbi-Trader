@@ -97,6 +97,12 @@ const materialUIStyles = (theme, page) => {
                 content: {
                     ...globalStyles.content,
                     gridTemplateRows: '5vh 38vh 38vh'
+                },
+                loading: {
+                    display: 'flex',
+                    height: '100vh',
+                    justifyContent: 'center',
+                    alignItems: 'center',
                 }
             }
         }

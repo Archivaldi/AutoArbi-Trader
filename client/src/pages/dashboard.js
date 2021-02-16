@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { CircularProgress, Snackbar } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 import { appRoute } from '../utils/appRoute';
 import AuthCheck from '../components/AuthCheck';
 import MiniDrawer from '../components/MiniDrawer';
@@ -13,6 +15,8 @@ export default function Dashboard() {
   const { buyer, seller } = dummyData;
   const { userInfo } = appRoute;
   const [dbUserInfo, setDbUserInfo] = useState(null);
+  const [transactionID, setTransactionID] = useState('No Id');
+  const [displayTransaction, setDisplayTransaction] = useState(false);
 
   useEffect(() => {
     (async function getUserInformation() {
@@ -20,23 +24,34 @@ export default function Dashboard() {
         method: 'POST'
       })
       const serverUserInfo = await resTwo.json();
-      console.log(serverUserInfo);
       setDbUserInfo(serverUserInfo);
+      if (serverUserInfo.seller.transaction_id) {
+        setTransactionID(`Your Transaction ID: ${serverUserInfo.seller.transaction_id}`);
+        setDisplayTransaction(true)
+      }
     })()
   }, []);
 
   return (
     <AuthCheck>
       {dbUserInfo === null ? (
-        <p>Loading</p>
+        <div className={classes.loading}>
+          <CircularProgress color="secondary" />
+        </div>
       ) : (
           <MiniDrawer
             allDocsComplete={checkForAllDocumentComplete(buyer, seller)}
             classes={classes}
           >
             <UserInformationDialog />
+            <Snackbar open={displayTransaction}>
+              <Alert severity="info">
+                {transactionID}
+              </Alert>
+            </Snackbar>
             <UserProgressCard
               key={2}
+              userData={dbUserInfo.seller}
               data={seller}
             />
             <UserProgressCard
