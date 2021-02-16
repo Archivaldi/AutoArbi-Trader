@@ -4,11 +4,12 @@ const moment = require('moment');
 const cloudinary = require('cloudinary').v2;
 const keys = require('../../config/keys');
 const extract = require('extract-zip');
-const {anvil} = require("../../config/keys");
+const { anvil } = require("../../config/keys");
 const request = require('request');
 const { decryptRSA } = require('@anvilco/encryption');
 var fs = require('fs');
 const path = require('path');
+const connection = require("../../config/db");
 
 const anvilClient = new Anvil({ apiKey: keys.anvil.apiKey });
 cloudinary.config({ cloud_name: keys.cloudinary.cloud_name, api_key: keys.cloudinary.apikey, api_secret: keys.cloudinary.secret });
@@ -18,11 +19,17 @@ let groupEid = "";
 
 router.get("/createEtchSigh", (req, res) => {
 
-    const signer_1_email = "artur.markov1860@gmail.com";
-    const signer_1_name = "Artur Markov";
+    const payloads = {
+        url: "https://desolate-hollows-77552.herokuapp.com/api/db/check-user"
+    };
 
-    const signer_2_email = "archivaldi95@yandex.ru";
-    const signer_2_name = "Nate Ryan";
+    request(payloads, (error, response, body) => {
+        if (error) throw error;
+        else {
+            const {seller, buyer } = body;
+
+        }
+    })
 
     async function main() {
         const variables = getPacketVariables()
@@ -33,7 +40,19 @@ router.get("/createEtchSigh", (req, res) => {
         } else {
             console.log(data.createEtchPacket)
             groupEid = data.createEtchPacket.documentGroup.eid;
-            req.session.groupEid = "test";
+    
+            const payloads = {
+                url: "https://desolate-hollows-77552.herokuapp.com/api/db/updateGroupId",
+                method: "POST",
+                json: { groupEid},
+            };
+
+            request(payloads, (error, response, body) => {
+                if (error) throw error;
+                else {
+                    res.send(body);
+                }
+            })
         }
     }
 
@@ -42,9 +61,9 @@ router.get("/createEtchSigh", (req, res) => {
             isDraft: false,
             isTest: true,
 
-            name: `Docs - ${signer_2_name}`,
-            signatureEmailSubject: 'Docs ok',
-            signatureEmailBody: 'Please sigh dosc...',
+            name: `Vehicle Purchase - ${seller.firstName} ${seller.lastName} - ${buyer.firstName} ${buyer.lastName}`,
+            signatureEmailSubject: 'Please sign documents',
+            signatureEmailBody: 'Please sign the Title and the Bill of Sale',
 
             files: [
                 {
@@ -61,26 +80,26 @@ router.get("/createEtchSigh", (req, res) => {
                 payloads: {
                     bill_of_sale: {
                         data: {
-                            seller: "Artur Markov",
-                            sellerStreet: "1403 Fort Lloyd Pl",
-                            sellerCity: "Round Rock",
-                            sellerState: "TX",
-                            sellerZipCode: "78665",
-                            sellerCounty: "Williamson",
-                            buyer: "Nathaniel Ryan",
-                            buyerStreet: "1700 W Parmer St",
-                            buyerCity: "Austin",
-                            buyerState: "TX",
-                            buyerZipCode: "78727",
-                            buyer_county: "Jefferson",
-                            price: "10000",
-                            carYear: "2015",
-                            carMake: "Mazda",
-                            carBody: "Minivan",
-                            carModel: "5",
-                            carVin: "1SG13VNSSDN45693",
-                            carPlate: "NKR1897",
-                            odometer: "77356",
+                            seller: `${seller.firstName} ${seller.lastName}`,
+                            sellerStreet: seller.street,
+                            sellerCity: seller.city,
+                            sellerState: seller.state,
+                            sellerZipCode: seller.zip_code,
+                            sellerCounty: seller.county,
+                            buyer: `${buyer.firstName} ${buyer.lastName}`,
+                            buyerStreet: buyer.street,
+                            buyerCity: buyer.city,
+                            buyerState: buyer.state,
+                            buyerZipCode: buyer.zip_code,
+                            buyer_county: buyer.county,
+                            price: seller.price,
+                            carYear: seller.year,
+                            carMake: seller.make,
+                            carBody: seller.body,
+                            carModel: seller.model,
+                            carVin: seller.vin,
+                            carPlate: seller.plate,
+                            odometer: seller.odometer,
                             dayMonth: moment().format("DD/MM"),
                             year: "21",
                             date: moment().format("MM/DD/YYYY"),
@@ -88,15 +107,16 @@ router.get("/createEtchSigh", (req, res) => {
                     },
                     texas_title: {
                         data: {
-                            carVin: "1SG13VNSSDN45693",
-                            carYear: "2015",
-                            carMake: "Mazda",
-                            carBody: "Minivan",
-                            carModel: "5",
-                            carPlate: "NKR1897",
-                            odometer: "77356",
-                            seller: "Artur Markov",
-                            sellerFullAddress: "1403 Fort Lloyd Pl, Round Rock, TX, 78665",
+                            titleNumber: seller.title_number,
+                            carVin: seller.vin,
+                            carYear: seller.year,
+                            carMake: seller.make,
+                            carBody: seller.body,
+                            carModel: seller.model,
+                            carPlate: seller.plate,
+                            odometer: seller.odometer,
+                            seller: `${seller.firstName} ${seller.lastName}`,
+                            sellerFullAddress: `${seller.street} ${seller.city} ${seller.state} ${seller.zip_code}`,
                             date: moment().format("MM/DD/YYYY")
                         }
                     }
@@ -105,9 +125,9 @@ router.get("/createEtchSigh", (req, res) => {
 
             signers: [
                 {
-                    id: "artur",
-                    name: "Artur Markov",
-                    email: "artur.markov1860@gmail.com",
+                    id: seller.firstName,
+                    name: `${seller.firstName} ${seller.lastName}`,
+                    email: seller.email,
 
                     fields: [
                         {
@@ -121,9 +141,9 @@ router.get("/createEtchSigh", (req, res) => {
                     ]
                 },
                 {
-                    id: "nate",
-                    name: "Nate Ryan",
-                    email: "archivaldi95@yandex.ru",
+                    id: buyer.firstName,
+                    name: `${buyer.firstName} ${buyer.lastName}`,
+                    email: buyer.email,
                     fields: [
                         {
                             fileId: "bill_of_sale",
@@ -149,69 +169,70 @@ router.get("/createEtchSigh", (req, res) => {
     run(main);
 });
 
-router.post("/hooks", async (req,res) => {
+router.post("/hooks", async (req, res) => {
 
-    let bill_of_sale_url = "";
-    let title_url = "";
-
-    const {action} = req.body;
-    if (action === "etchPacketComplete"){
-        const {data} = req.body;
+    const { action } = req.body;
+    if (action === "etchPacketComplete") {
+        let bill_of_sale_url = "";
+        let title_url = "";
+        const { data } = req.body;
         const decryptedRSAMessage = await decryptRSA(anvil.private_key, data)
         const info = await JSON.parse(decryptedRSAMessage);
-        const {eid} = info.documentGroup;
-        //if (eid === req.session.group_id){
-        if (eid){
+        const { eid } = info.documentGroup;
+        const seller_email = info.signers[0].email;
 
-            async function main() {
-                try {
-                    const { statusCode, response, data, errors } = await anvilClient.downloadDocuments(eid, {});
-                    if (statusCode === 200){
-                        fs.writeFileSync('output.zip', data, {encoding: null});
-                        await (extract(path.join(__dirname, "../../output.zip"), {dir: path.join(__dirname, `../../Unzip/${groupEid}`)}));
-                        const files = fs.readdirSync(path.join(__dirname, `../../Unzip/${groupEid}`));
-                        for (let i = 0; i < files.length; i++){
-                            let {secure_url} = await cloudinary.uploader.upload(path.join(__dirname, `../../Unzip/${groupEid}/${files[i]}`));
-                            if (i === 0){
-                                bill_of_sale_url = secure_url;
-                            } else {
-                                title_url = secure_url;
-                            }
-                        };
+        connection.query("SELECT * FROM USERS WHERE transaction_id = (SELECT transaction_id FROM Users where email = ?) ORDER BY role DESC", [seller_email], (err, result) => {
+            if (err) throw err;
+            else {
+                async function main() {
+                    try {
+                        const { statusCode, response, data, errors } = await anvilClient.downloadDocuments(eid, {});
+                        if (statusCode === 200) {
+                            fs.writeFileSync('output.zip', data, { encoding: null });
+                            await (extract(path.join(__dirname, "../../output.zip"), { dir: path.join(__dirname, `../../Unzip/${groupEid}`) }));
+                            const files = fs.readdirSync(path.join(__dirname, `../../Unzip/${groupEid}`));
+                            for (let i = 0; i < files.length; i++) {
+                                let { secure_url } = await cloudinary.uploader.upload(path.join(__dirname, `../../Unzip/${groupEid}/${files[i]}`));
+                                if (i === 0) {
+                                    bill_of_sale_url = secure_url;
+                                } else {
+                                    title_url = secure_url;
+                                }
+                            };
 
-                    } else {
-                        console.log(JSON.stringify(errors, null,2));
-                        res.send({statusCode: 200});
+                        } else {
+                            console.log(JSON.stringify(errors, null, 2));
+                            res.send({ statusCode: 200 });
+                        }
+                    } catch (error) {
+                        console.log(error);
+                        res.send({ statusCode: 200 });
                     }
-                } catch(error) {
-                    console.log(error);
-                    res.send({statusCode: 200});
                 }
-            }
-        
-            main()
-                .then(() => {
-                    const payloads = {
-                        url: "https://desolate-hollows-77552.herokuapp.com/updateUrls",
-                        json: {bill_of_sale_url, title_url},
-                    };
-                    request(payloads, (error, response, body) => {
-                        if (error) throw error;
-                        else {
-                            res.send({statusCode: 200});
+
+                main()
+                    .then(() => {
+                        const payloads = {
+                            url: "https://desolate-hollows-77552.herokuapp.com/api/db/updateUrls",
+                            method: "POST",
+                            json: { bill_of_sale_url, title_url, seller_id: result[0].user_id, buyer_id: result[1].user_id },
                         };
-                    });
-                })
-                .catch((err) => {
-                    console.log(err.stack || err.message);
-                    res.send({statusCode: 200});
-                    process.exit(1);
-                })
-        } else {
-            res.send({statusCode: 200});
-        }
+                        request(payloads, (error, response, body) => {
+                            if (error) throw error;
+                            else {
+                                res.send({ statusCode: 200 });
+                            };
+                        });
+                    })
+                    .catch((err) => {
+                        console.log(err.stack || err.message);
+                        res.send({ statusCode: 200 });
+                        process.exit(1);
+                    })
+            }
+        })
     } else {
-        res.send({statusCode: 200});
+        res.send({ statusCode: 200 });
     };
 });
 
@@ -221,19 +242,19 @@ router.get("/download", (req, res) => {
     async function main() {
         try {
             const { statusCode, response, data, errors } = await anvilClient.downloadDocuments(groupEid, {});
-            if (statusCode === 200){
-                fs.writeFileSync('output.zip', data, {encoding: null});
-                await (extract(path.join(__dirname, "../../output.zip"), {dir: path.join(__dirname, `../../Unzip/${groupEid}`)}));
+            if (statusCode === 200) {
+                fs.writeFileSync('output.zip', data, { encoding: null });
+                await (extract(path.join(__dirname, "../../output.zip"), { dir: path.join(__dirname, `../../Unzip/${groupEid}`) }));
                 const files = fs.readdirSync(path.join(__dirname, `../../Unzip/${groupEid}`));
                 console.log(files);
-                for (let i = 0; i < files.length; i++){
-                    const {secure_url} = await cloudinary.uploader.upload(path.join(__dirname, `../../Unzip/${groupEid}/${files[i]}`));
+                for (let i = 0; i < files.length; i++) {
+                    const { secure_url } = await cloudinary.uploader.upload(path.join(__dirname, `../../Unzip/${groupEid}/${files[i]}`));
                     console.log(secure_url);
                 }
             } else {
-                console.log(JSON.stringify(errors, null,2))
+                console.log(JSON.stringify(errors, null, 2))
             }
-        } catch(error) {
+        } catch (error) {
             console.log(error);
         }
     }
