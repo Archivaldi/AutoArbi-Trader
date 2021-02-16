@@ -3,6 +3,10 @@ const bcrypt = require('bcrypt');
 const { v4: uuidv4 } = require("uuid");
 const randomstring = require('randomstring');
 const connection = require('../../config/db');
+const cloudinary = require('cloudinary').v2;
+const keys = require('../../config/keys');
+const path = require('path');
+cloudinary.config({ cloud_name: keys.cloudinary.cloud_name, api_key: keys.cloudinary.apikey, api_secret: keys.cloudinary.secret });
 
 router.post("/signup/:role", async (req, res) => {
     const { role } = req.params;
@@ -184,6 +188,33 @@ router.get("/updateUrls", async (req,res) => {
         };
     });
 });
+
+router.post("/documentUpload/:document", async (req,res) => {
+    //the server will need to know if it's a registration or the gov_id. We set it into params
+    const {document} = req.params;
+    const file = req.files[document];
+
+    try {
+        await file.mv(path.join(__dirname, `./../../Upload/${file.name}`));
+        const {secure_url} = await cloudinary.uploader.upload(path.join(__dirname,  `./../../Upload/${file.name}`));
+        let query = "";
+        
+        if (document === "registration"){
+            query = "UPLOAD Users SET registration = ? WHERE user_id = ?"
+        } else if (document === "goverment_id"){
+            query = "UPLOAD Users SET govId = ? WHERE user_id = ?"
+        }
+
+        connection.query(query, [secure_url, req.session.user_id], (err, result) => {
+            if (err) throw err;
+            else {
+                res.send({message: "File uploaded"})
+            }
+        })
+    } catch (e) {
+        console.log(e)
+    }
+})
 
 router.post("/sessions", (req,res) => {
     res.send(req.session);

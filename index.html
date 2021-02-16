@@ -10,11 +10,10 @@
 
 <body>
     <h1>Welcome to 4wheelz</h1>
-    <button> <a href="/login">Login</a> </button>
-    <button> <a href="/sighup">Sigh Up</a> </button>
-    <button><a href="/check_pattern">Check pattern</a></button>
-    <button><a href="/fill_form">Test bill_of_sale</a></button>
-    <button><a href="/createEtchSigh">Create Etch Sign</a></button>
+    <form action="/api/db/documentUpload/registration" method="POST" encType="multipart/form-data">
+        <input name="registration" type="file">
+        <button>Submit</button>
+    </form>
     
 </body>
 
