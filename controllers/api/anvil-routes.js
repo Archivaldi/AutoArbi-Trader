@@ -183,12 +183,15 @@ router.post("/hooks", async (req, res) => {
     const { action } = req.body;
     if (action === "etchPacketComplete") {
 
-        const { user_id } = req.session;
+        //const { user_id } = req.session;
         const { data } = req.body;
         const decryptedRSAMessage = await decryptRSA(anvil.private_key, data)
         const info = await JSON.parse(decryptedRSAMessage);
         console.log(info)
         const { eid } = info.documentGroup;
+        const id = info.signers[0].eid;
+        const user_id = await decryptRSA(anvil.private_key. id);
+        console.log("Decrypted User ID: ", user_id);
 
         connection.query("SELECT * FROM Users WHERE user_id = ?", [user_id], (err, result) => {
             if (err) throw err;
