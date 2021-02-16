@@ -44,6 +44,14 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
         window.location.reload()
     }
 
+    const generateDeal = async () => {
+        console.log("Hit the button");
+        const res = await fetch("/api/anvil/createEtchSigh", {
+            method: 'POST'
+        });
+        console.log(res);
+    }
+
     const {
         root,
         appBar,
@@ -127,6 +135,7 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
                     <ListItem
                         button={true}
                         disabled={!allDocsComplete}
+                        onClick={generateDeal}
                     >
                         <ListItemIcon>
                             <MailIcon

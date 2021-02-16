@@ -72,7 +72,7 @@ router.post("/check-user", (req, res) => {
         });
     } else if (role === "buyer") {
         connection.query("SELECT * FROM Users WHERE user_id = ?", [user_id], (err, result) => {
-            const { firstName, lastName, street, city, state, zip_code, county, transaction_id } = result[0]
+            const { firstName, lastName, street, city, state, zip_code, county, transaction_id } = result[0];
             if (err) throw err;
             else if (!firstName || !lastName || !street || !city || !state || !zip_code || !county || !transaction_id) {
                 res.send({
@@ -136,6 +136,7 @@ router.post("/add-info", (req, res) => {
             connection.query("SELECT * FROM Users WHERE transaction_id = ? ORDER BY role DESC", [transaction_id], (err, result) => {
                 if (err) throw err;
                 else {
+
                     res.send({
                         seller: result[0],
                         buyer: result[1]
@@ -245,33 +246,6 @@ router.post("/documentUpload/:document", async (req, res) => {
         console.log(e)
     }
 });
-
-router.post('/updateGroupId', (req, res) => {
-    const { groupEid } = req.body;
-    const { user_id } = req.session;
-
-    connection.query("SELECT * FROM Users LEFT JOIN Cars USING (car_id) WHERE transaction_id = (SELECT transaction_id FROM Users WHERE user_id = ?) ORDER BY role DESC", [user_id],
-        (err, result) => {
-            if (err) throw err;
-            else {
-                const seller_id = result[0].user_id;
-                const buyer_id = result[1].user_id;
-                set_groupId(seller_id, buyer_id);
-            }
-        }
-    )
-
-    const set_groupId = (seller_id, buyer_id) => {
-        connection.query("UPDATE Users SET groupId = ? WHERE user_id = ? OR user_id = ?",
-            [groupEid, seller_id, buyer_id],
-            (err, result) => {
-                if (err) throw err;
-                else {
-                    res.send({ mesasge: "Group ID succsessfully saved" });
-                }
-            })
-    }
-})
 
 router.post("/session", (req, res) => {
     res.send(req.session);

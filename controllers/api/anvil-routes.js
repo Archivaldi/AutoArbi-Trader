@@ -14,22 +14,32 @@ const connection = require("../../config/db");
 const anvilClient = new Anvil({ apiKey: keys.anvil.apiKey });
 cloudinary.config({ cloud_name: keys.cloudinary.cloud_name, api_key: keys.cloudinary.apikey, api_secret: keys.cloudinary.secret });
 
-let groupEid = "";
+router.post("/createEtchSigh", (req, res) => {
+    const {user_id} = req.session;
+    let seller = {};
+    let buyer = {};
 
 
-router.get("/createEtchSigh", (req, res) => {
-
-    const payloads = {
-        url: "https://desolate-hollows-77552.herokuapp.com/api/db/check-user"
-    };
-
-    request(payloads, (error, response, body) => {
-        if (error) throw error;
+    connection.query("SELECT * FROM Users LEFT JOIN Cars USING (car_id) WHERE transaction_id = (SELECT transaction_id FROM users WHERE user_id = ?) ORDER BY role DESC", [user_id], (err, result) => {
+        if (err) throw err;
         else {
-            const {seller, buyer } = body;
+            seller = result[0];
+            buyer = result[1];
+            console.log(seller, buyer)
+            run(main);
+        };
+    });
 
-        }
-    })
+    const insertGroupId = (id) => {
+        connection.query("UPDATE Users SET groupId = ? WHERE user_id = ? OR user_id = ?", 
+        [id, seller.user_id, buyer.user_id],
+        (err, result) => {
+            if (err) throw err;
+            else {
+                console.log("Group ID inserted");
+            }
+        })
+    }
 
     async function main() {
         const variables = getPacketVariables()
@@ -39,20 +49,8 @@ router.get("/createEtchSigh", (req, res) => {
             console.log('Error', errors)
         } else {
             console.log(data.createEtchPacket)
-            groupEid = data.createEtchPacket.documentGroup.eid;
-    
-            const payloads = {
-                url: "https://desolate-hollows-77552.herokuapp.com/api/db/updateGroupId",
-                method: "POST",
-                json: { groupEid},
-            };
-
-            request(payloads, (error, response, body) => {
-                if (error) throw error;
-                else {
-                    res.send(body);
-                }
-            })
+            let groupEid = data.createEtchPacket.documentGroup.eid;
+            insertGroupId(groupEid);
         }
     }
 
@@ -135,6 +133,10 @@ router.get("/createEtchSigh", (req, res) => {
                             fieldId: 'sellerSign'
                         },
                         {
+                            fileId: 'texas_title',
+                            fieldId: 'sellerSign1'
+                        },
+                        {
                             fileId: "texas_title",
                             fieldId: "sellerSign"
                         }
@@ -158,15 +160,12 @@ router.get("/createEtchSigh", (req, res) => {
 
     function run(fn) {
         fn().then(() => {
-            //process.exit(0);
             res.send({ message: "Succsess!" })
         }).catch((err) => {
             console.log(err.stack || err.message)
             process.exit(1)
-        })
-    }
-
-    run(main);
+        });
+    };
 });
 
 router.post("/hooks", async (req, res) => {
