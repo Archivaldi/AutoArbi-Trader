@@ -27,7 +27,7 @@ router.get("/createEtchSigh", (req, res) => {
     //     if (error) throw error;
     //     else {
     //         const {seller, buyer } = body;
-            
+
     //     }
     // })
 
@@ -177,75 +177,64 @@ router.get("/createEtchSigh", (req, res) => {
 
 router.post("/hooks", async (req, res) => {
 
-    let bill_of_sale_url = "";
-    let title_url = "";
-
     const { action } = req.body;
     if (action === "etchPacketComplete") {
-
-        //const { user_id } = req.session;
+        let bill_of_sale_url = "";
+        let title_url = "";
         const { data } = req.body;
         const decryptedRSAMessage = await decryptRSA(anvil.private_key, data)
         const info = await JSON.parse(decryptedRSAMessage);
-        console.log(info)
         const { eid } = info.documentGroup;
-        const id = info.signers[0].eid;
-        const user_id = await decryptRSA(anvil.private_key, id);
-        console.log("Decrypted User ID: ", user_id);
+        const seller_email = info.signers[0].email;
 
-        connection.query("SELECT * FROM Users WHERE user_id = ?", [user_id], (err, result) => {
+        connection.query("SELECT * FROM USERS WHERE transaction_id = (SELECT transaction_id FROM Users where email = ?) ORDER BY role DESC", [seller_email], (err, result) => {
             if (err) throw err;
             else {
-                //if (eid === result[0].groupId) {
-                if (eid){
-                    async function main() {
-                        try {
-                            const { statusCode, response, data, errors } = await anvilClient.downloadDocuments(eid, {});
-                            if (statusCode === 200) {
-                                fs.writeFileSync('output.zip', data, { encoding: null });
-                                await (extract(path.join(__dirname, "../../output.zip"), { dir: path.join(__dirname, `../../Unzip/${groupEid}`) }));
-                                const files = fs.readdirSync(path.join(__dirname, `../../Unzip/${groupEid}`));
-                                for (let i = 0; i < files.length; i++) {
-                                    let { secure_url } = await cloudinary.uploader.upload(path.join(__dirname, `../../Unzip/${groupEid}/${files[i]}`));
-                                    if (i === 0) {
-                                        bill_of_sale_url = secure_url;
-                                    } else {
-                                        title_url = secure_url;
-                                    }
-                                };
+                async function main() {
+                    try {
+                        const { statusCode, response, data, errors } = await anvilClient.downloadDocuments(eid, {});
+                        if (statusCode === 200) {
+                            fs.writeFileSync('output.zip', data, { encoding: null });
+                            await (extract(path.join(__dirname, "../../output.zip"), { dir: path.join(__dirname, `../../Unzip/${groupEid}`) }));
+                            const files = fs.readdirSync(path.join(__dirname, `../../Unzip/${groupEid}`));
+                            for (let i = 0; i < files.length; i++) {
+                                let { secure_url } = await cloudinary.uploader.upload(path.join(__dirname, `../../Unzip/${groupEid}/${files[i]}`));
+                                if (i === 0) {
+                                    bill_of_sale_url = secure_url;
+                                } else {
+                                    title_url = secure_url;
+                                }
+                            };
 
-                            } else {
-                                console.log(JSON.stringify(errors, null, 2));
-                                res.send({ statusCode: 200 });
-                            }
-                        } catch (error) {
-                            console.log(error);
+                        } else {
+                            console.log(JSON.stringify(errors, null, 2));
                             res.send({ statusCode: 200 });
                         }
+                    } catch (error) {
+                        console.log(error);
+                        res.send({ statusCode: 200 });
                     }
-
-                    main()
-                        .then(() => {
-                            const payloads = {
-                                url: "https://desolate-hollows-77552.herokuapp.com/api/db/updateUrls",
-                                method: "POST",
-                                json: { bill_of_sale_url, title_url },
-                            };
-                            request(payloads, (error, response, body) => {
-                                if (error) throw error;
-                                else {
-                                    res.send({ statusCode: 200 });
-                                };
-                            });
-                        })
-                        .catch((err) => {
-                            console.log(err.stack || err.message);
-                            res.send({ statusCode: 200 });
-                            process.exit(1);
-                        })
-                } else {
-                    res.send({ statusCode: 200 });
                 }
+
+                main()
+                    .then(() => {
+                        const payloads = {
+                            url: "https://desolate-hollows-77552.herokuapp.com/api/db/updateUrls",
+                            method: "POST",
+                            json: { bill_of_sale_url, title_url, seller_id: result[0].user_id, buyer_id: result[1].user_id },
+                        };
+                        request(payloads, (error, response, body) => {
+                            if (error) throw error;
+                            else {
+                                res.send({ statusCode: 200 });
+                            };
+                        });
+                    })
+                    .catch((err) => {
+                        console.log(err.stack || err.message);
+                        res.send({ statusCode: 200 });
+                        process.exit(1);
+                    })
             }
         })
     } else {

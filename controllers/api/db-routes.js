@@ -176,10 +176,9 @@ router.post("/add-info", (req, res) => {
 });
 
 router.post("/updateUrls", async (req,res) => {
-    const {bill_of_sale_url, title_url} = req.body;
-    const {user_id} = req.session;
-    connection.query("UPDATE Users SET billOfSale = ?, title = ? WHERE user_id = ?", 
-    [bill_of_sale_url, title_url, user_id], 
+    const {bill_of_sale_url, title_url, seller_id, buyer_id} = req.body;
+    connection.query("UPDATE Users SET billOfSale = ?, title = ? WHERE user_id = ? OR user_id = ?", 
+    [bill_of_sale_url, title_url, seller_id, buyer_id], 
     (err, result) => {
         if (err) throw err;
         else {
