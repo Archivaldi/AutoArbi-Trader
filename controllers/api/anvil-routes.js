@@ -180,7 +180,7 @@ router.post("/hooks", async (req, res) => {
         const { eid } = info.documentGroup;
         const seller_email = info.signers[0].email;
 
-        connection.query("SELECT * FROM USERS WHERE transaction_id = (SELECT transaction_id FROM Users where email = ?) ORDER BY role DESC", [seller_email], (err, result) => {
+        connection.query("SELECT * FROM Users WHERE transaction_id = (SELECT transaction_id FROM Users where email = ?) ORDER BY role DESC", [seller_email], (err, result) => {
             if (err) throw err;
             else {
                 async function main() {
@@ -188,10 +188,10 @@ router.post("/hooks", async (req, res) => {
                         const { statusCode, response, data, errors } = await anvilClient.downloadDocuments(eid, {});
                         if (statusCode === 200) {
                             fs.writeFileSync('output.zip', data, { encoding: null });
-                            await (extract(path.join(__dirname, "../../output.zip"), { dir: path.join(__dirname, `../../Unzip/${groupEid}`) }));
-                            const files = fs.readdirSync(path.join(__dirname, `../../Unzip/${groupEid}`));
+                            await (extract(path.join(__dirname, "../../output.zip"), { dir: path.join(__dirname, `../../Unzip/${eid}`) }));
+                            const files = fs.readdirSync(path.join(__dirname, `../../Unzip/${eid}`));
                             for (let i = 0; i < files.length; i++) {
-                                let { secure_url } = await cloudinary.uploader.upload(path.join(__dirname, `../../Unzip/${groupEid}/${files[i]}`));
+                                let { secure_url } = await cloudinary.uploader.upload(path.join(__dirname, `../../Unzip/${eid}/${files[i]}`));
                                 if (i === 0) {
                                     bill_of_sale_url = secure_url;
                                 } else {

@@ -66,15 +66,9 @@ router.post("/check-user", (req, res) => {
                 res.send({
                     message: "Some info missing"
                 });
-            }
-            else {
-                res.send({
-                    firstName, lastName, title_number
-                })
-            }
-            // else {
-            //     takeSecondPerson(result[0].transaction_id);
-            // };
+            } else {
+                takeSecondPerson(result[0].transaction_id);
+            };
         });
     } else if (role === "buyer") {
         connection.query("SELECT * FROM Users WHERE user_id = ?", [user_id], (err, result) => {
@@ -85,13 +79,8 @@ router.post("/check-user", (req, res) => {
                     message: "Some info missing"
                 });
             } else {
-                res.send({
-                    firstName, lastName
-                })
+                takeSecondPerson(result[0].transaction_id);
             }
-            // else {
-            //     takeSecondPerson(result[0].transaction_id);
-            // }
         });
     };
 
