@@ -60,8 +60,8 @@ router.post("/createEtchSigh", (req, res) => {
             isTest: true,
 
             name: `Vehicle Purchase - ${seller.firstName} ${seller.lastName} - ${buyer.firstName} ${buyer.lastName}`,
-            signatureEmailSubject: 'Please sign documents',
-            signatureEmailBody: 'Please sign the Title and the Bill of Sale',
+            signatureEmailSubject: 'Vehicle Purchase',
+            signatureEmailBody: 'Please sign the Vehile Title and the Bill of Sale',
 
             files: [
                 {
