@@ -64,7 +64,7 @@ router.post("/check-user", (req, res) => {
             if (err) throw err;
             else if (!firstName || !lastName || !street || !city || !state || !zip_code || !county || !transaction_id || !price || !year || !odometer || !make || !model || !body || !vin || !plate || title_number) {
                 res.send({
-                    firstName, lastName, street, city, state, zip_code, county, transaction_id, price, year, odometer, make, model, body, vin, plate, title_number
+                    message: "Some info missing"
                 });
             } else {
                 takeSecondPerson(result[0].transaction_id);
@@ -78,7 +78,6 @@ router.post("/check-user", (req, res) => {
                 res.send({
                     message: "Some info missing"
                 });
-
             }
             else {
                 takeSecondPerson(result[0].transaction_id);
