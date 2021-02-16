@@ -62,8 +62,10 @@ const materialUIStyles = (theme, page) => {
         content: {
             flexGrow: 1,
             padding: theme.spacing(3),
-            display: 'grid',
-            gap: '1.5rem'
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100vh',
+            justifyContent: 'flex-start'
         },
         logo: {
             maxWidth: 50,
