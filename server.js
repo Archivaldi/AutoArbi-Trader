@@ -3,10 +3,8 @@ var app = express();
 const path = require('path');
 const bodyParser = require("body-parser");
 const session = require('cookie-session');
-const cookieParser = require('cookie-parser');
 const { secret: { secret } } = require('./config/keys');
 const PORT = process.env.PORT || 8080;
-const connection = require("./config/db");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

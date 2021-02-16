@@ -22,7 +22,6 @@ router.post("/check-pattern", (req, res) => {
             } else {
                 if (result.result === 1 && result.enrollment === 1 && result.messageCode === 1 && result.highConfidence === 1) {
                     req.session.user_id = user_id;
-                    req.session.role = role;
                     res.send({ message: 'verified' });
                 }
                 else {

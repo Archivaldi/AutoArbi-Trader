@@ -16,14 +16,11 @@ router.post("/signup/:role", async (req, res) => {
         (err, result) => {
             if (err) throw err;
             else {
+                req.session.role = role;
                 res.send({ user_id, role });
             }
         }
     );
-});
-
-router.post("/session", (req, res) => {
-    res.send(req.session);
 });
 
 router.post("/login", (req, res) => {
@@ -39,6 +36,7 @@ router.post("/login", (req, res) => {
 
             bcrypt.compare(passwordInput, p_hash, (err, match) => {
                 if (match) {
+                    req.session.role = role;
                     res.send({ user_id, role });
                 } else {
                     res.send({ error: "Invalid Password. Please try again." })
@@ -52,15 +50,15 @@ router.post("/session", (req, res) => {
     res.send(req.session);
 });
 
-router.get("/check-user", (req, res) => {
+router.post("/check-user", (req, res) => {
     const { user_id, role } = req.session;
 
     if (role === "seller") {
         connection.query("SELECT * FROM Users LEFT JOIN Cars USING (car_id) WHERE user_id = ?", [user_id], (err, result) => {
             if (err) throw err;
             else {
-                if (!result[0].firstName){
-                    res.send({error: "Need all info"});
+                if (!result[0].firstName) {
+                    res.send({ error: "Need all info" });
                 } else {
                     takeSecondPerson(result[0].transaction_id);
                 }
@@ -69,8 +67,8 @@ router.get("/check-user", (req, res) => {
     } else if (role === "buyer") {
         connection.query("SELECT * FROM Users WHERE user_id = ?", [user_id], (err, result) => {
             if (err) throw err;
-            else if (!result[0].firstName){
-                res.send({error: "Need all info"});
+            else if (!result[0].firstName) {
+                res.send({ error: "Need all info" });
             }
             else {
                 takeSecondPerson(result[0].transaction_id);
@@ -82,7 +80,7 @@ router.get("/check-user", (req, res) => {
         connection.query("SELECT * FROM Users WHERE transaction_id = ? ORDER BY role DESC", [id], (err, result) => {
             if (err) throw err;
             else if (result.length === 1) {
-                res.send({seller: result[0]});
+                res.send({ seller: result[0] });
             } else {
                 res.send({
                     seller: result[0],
@@ -100,26 +98,26 @@ router.post("/add-info", (req, res) => {
     if (role === "buyer") {
         const { transaction_id } = req.body;
 
-        connection.query("SELECT * FROM Users WHERE transaction_id = ?", [transaction_id], (err,result) => {
+        connection.query("SELECT * FROM Users WHERE transaction_id = ?", [transaction_id], (err, result) => {
             if (err) throw err;
-            else if (result.length === 0){
-                res.send({error: "Transaction ID is not recognized."});
+            else if (result.length === 0) {
+                res.send({ error: "Transaction ID is not recognized." });
             } else if (result.length === 1) {
                 update_buyer();
             } else {
-                res.send({error: "This Transaction ID already hae buyer and seller"});
+                res.send({ error: "This Transaction ID already hae buyer and seller" });
             }
         })
 
         const update_buyer = () => {
             connection.query("Update Users SET firstName = ?, lastName = ?, street = ?, city = ?, state = ?, zip_code = ?, transaction_id = ? WHERE user_id = ?",
-            [firstName, lastName, street, city, state, zip_code, transaction_id, user_id],
-            (err, result) => {
-                if (err) throw err;
-                else {
-                    find_seller();
-                }
-            });
+                [firstName, lastName, street, city, state, zip_code, transaction_id, user_id],
+                (err, result) => {
+                    if (err) throw err;
+                    else {
+                        find_seller();
+                    }
+                });
         }
 
         const find_seller = () => {
@@ -183,9 +181,10 @@ router.get("/updateUrls", async (req, res) => {
         });
 });
 
-router.post("/sessions", (req, res) => {
+
+router.post("/session", (req, res) => {
     res.send(req.session);
-})
+});
 
 router.post("/logout", (req, res) => {
     req.session = null;

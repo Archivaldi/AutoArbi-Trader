@@ -129,7 +129,6 @@ export default function LoginCard({ useStyles }) {
         <>
             <UserAuthDialog
                 user_id={userID.current}
-                role={userRole}
                 open={authDialogOpen}
                 setAuthDialogOpen={setAuthDialogOpen}
                 handleGoBackReset={handleGoBackReset}

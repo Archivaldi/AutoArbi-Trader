@@ -15,5 +15,3 @@ export const authSteps = {
         verify: '/api/typing-dna/check-pattern',
     }
 }
-
-
