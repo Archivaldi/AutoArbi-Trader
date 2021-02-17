@@ -47,7 +47,7 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
         const res = await fetch(logout, {
             method: 'POST'
         })
-        window.location.reload()
+        window.location.reload();
     }
 
     const generateDeal = async () => {
@@ -111,6 +111,7 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
             })
         })()
     }, [usersDocs])
+
 
     const {
         root,

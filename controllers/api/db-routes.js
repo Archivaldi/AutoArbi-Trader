@@ -56,9 +56,9 @@ router.post("/check-user", (req, res) => {
 
     if (role === "seller") {
         connection.query("SELECT * FROM Users LEFT JOIN Cars USING (car_id) WHERE user_id = ?", [user_id], (err, result) => {
-            const { firstName, lastName, street, city, state, zip_code, county, transaction_id, price, year, odometer, make, model, body, vin, plate, title_number } = result[0];
+            const { firstName, lastName, street, city, state, zip_code, county, transaction_id, price, year, odometer, make, model, body, vin, plate, title_number, regDate, regNumber } = result[0];
             if (err) throw err;
-            else if (!firstName || !lastName || !street || !city || !state || !zip_code || !county || !transaction_id || !price || !year || !odometer || !make || !model || !body || !vin || !plate || !title_number) {
+            else if (!firstName || !lastName || !street || !city || !state || !zip_code || !county || !transaction_id || !price || !year || !odometer || !make || !model || !body || !vin || !plate || !title_number || !regDate || !regNumber) {
                 res.send({
                     message: "Some info missing"
                 });
@@ -139,7 +139,7 @@ router.post("/add-info", (req, res) => {
             });
         };
     } else if (role === "seller") {
-        const { price, year, odometer, make, model, body, vin, titleNumber, licenseNumber } = req.body;
+        const { price, year, odometer, make, model, body, vin, titleNumber, licenseNumber, regDate, regNumber } = req.body;
         const transaction_id = randomstring.generate(6);
         connection.query("INSERT INTO Cars(price, year, odometer, make, model, body, vin, plate, title_number) VALUES (?,?,?,?,?,?,?,?,?)",
             [price, year, odometer, make, model, body, vin, licenseNumber, titleNumber],
@@ -152,8 +152,8 @@ router.post("/add-info", (req, res) => {
             })
 
         const insert_seller = (car_id) => {
-            connection.query("Update Users SET firstName = ?, lastName = ?, street = ?, city = ?, state = ?, zip_code = ?, transaction_id = ?, car_id = ?, county = ? WHERE user_id = ?",
-                [firstName, lastName, street, city, state, zip, transaction_id, car_id, county, user_id],
+            connection.query("Update Users SET firstName = ?, lastName = ?, street = ?, city = ?, state = ?, zip_code = ?, transaction_id = ?, car_id = ?, county = ?, regDate = ?, regNumber = ?, WHERE user_id = ?",
+                [firstName, lastName, street, city, state, zip, transaction_id, car_id, county, regDate, regNumber, user_id],
                 (err, result) => {
                     if (err) throw err;
                     else {
@@ -175,16 +175,28 @@ router.post("/add-info", (req, res) => {
 });
 
 router.post("/updateUrls", async (req, res) => {
-    const { bill_of_sale_url, title_url, seller_id, buyer_id } = req.body;
-    connection.query("UPDATE Users SET billOfSale = ?, title = ? WHERE user_id = ? OR user_id = ?",
-        [bill_of_sale_url, title_url, seller_id, buyer_id],
+    const { seller_bill_of_sale_url,buyer_bill_of_sale_url, seller_title_url, buyer_title_url, seller_registration_url, buyer_registration_url, seller_id, buyer_id } = req.body;
+    connection.query("UPDATE Users SET billOfSale = ?, title = ?, registration = ? WHERE user_id = ?",
+        [seller_bill_of_sale_url, seller_title_url, seller_registration_url, seller_id],
         (err, result) => {
             if (err) throw err;
             else {
-                console.log("Info inserted");
-                res.send({ message: "Success" });
+                update_user(buyer_bill_of_sale_url, buyer_title_url, buyer_registration_url, buyer_id);
             };
         });
+
+        const update_user = (billOfSale, title, regUrl, id) => {
+            connection.query("UPDATE Users SET billOfSale = ?, title = ?, registration = ? WHERE user_id = ?", 
+            [billOfSale, title, regUrl, id],
+            (err, result) => {
+                if (err) throw err;
+                else {
+                    console.log("Info inserted");
+                    res.send({ message: "Success" });
+                }
+            }
+            )
+        }
 });
 
 router.post("/documentUpload/:document", async (req, res) => {
