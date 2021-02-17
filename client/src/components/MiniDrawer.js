@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import Link from 'next/link';
 import {
@@ -23,12 +23,17 @@ import MailIcon from '@material-ui/icons/Mail';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { authSteps } from '../utils/authSteps';
+import { appRoute } from '../utils/appRoute';
 
 export default function MiniDrawer({ children, classes, allDocsComplete }) {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
     const { logout } = authSteps.route;
-    const [images, setImages] = useState([]);
+    const { userInfo } = appRoute;
+    const [usersDocs, setUsersDocs] = useState([]);
+    const [buttonDisplayed, setButtonDisplayed] = useState(true);
+    const [buttonDisabled, setButtonDisabled] = useState(true);
+    const [apiCall, setApiCall] = useState(false);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -46,32 +51,66 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
     }
 
     const generateDeal = async () => {
+        apiCall(true)
         const res = await fetch("/api/anvil/createEtchSigh", {
             method: 'POST'
         });
+        const { message } = await res.json();
+        if (message) {
+            window.location.reload();
+        }
     };
 
-    const takeImgInfo = async () => {
-        console.log("Hit the button");
-        const res = await fetch("/api/db/userInfo", {
-            method: 'POST'
-        });
-        const info = await res.json();
-        const { govId, registration, title, billOfSale } = info;
-        setImages(images => [...images, govId, registration, title, billOfSale]);
-    };
+    useEffect(() => {
+        (async function getUserInformation() {
+            const resTwo = await fetch(userInfo, {
+                method: 'POST'
+            })
+            const userInform = await resTwo.json();
+            setUsersDocs(userInform)
+        })()
+    }, []);
 
-    // useEffect(() => {
-    //     (async function getUserInformation() {
-    //         const resTwo = await fetch(userInfo, {
-    //             method: 'POST'
-    //         })
-    //         const userInform = await resTwo.json();
-    //         console.log(userInform)
-    //     })()
-    // }, []);
-
-
+    useEffect(() => {
+        (async function buildArr() {
+            let completeArr = [];
+            let output = false;
+            if (usersDocs.buyer && usersDocs.seller) {
+                for (const property in usersDocs.buyer) {
+                    if (property === 'groupID') {
+                        usersDocs.seller[property] !== null && setButtonDisplayed(false)
+                    }
+                    if (
+                        property === 'govId' ||
+                        property === 'title' ||
+                        property === 'billOfSale' ||
+                        property === 'registration'
+                    ) {
+                        let completed = usersDocs.seller[property] !== null;
+                        completeArr.push(completed)
+                    }
+                }
+                for (const property in usersDocs.seller) {
+                    if (property === 'groupID') {
+                        usersDocs.seller[property] !== null && setButtonDisplayed(false)
+                    }
+                    if (
+                        property === 'govId' ||
+                        property === 'title' ||
+                        property === 'billOfSale' ||
+                        property === 'registration' ||
+                        property === 'groupID'
+                    ) {
+                        let completed = usersDocs.seller[property] !== null;
+                        completeArr.push(completed)
+                    }
+                }
+            }
+            completeArr.forEach(item => {
+                item && setButtonDisabled(true)
+            })
+        })()
+    }, [usersDocs])
 
     const {
         root,
@@ -146,25 +185,25 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
                         </ListItem>
                     </Link>
                     <Link href="/upload">
-                        <ListItem button={true} onClick={takeImgInfo}>
+                        <ListItem button={true}>
                             <ListItemIcon>
                                 <CloudUploadIcon />
                             </ListItemIcon>
                             <ListItemText>Upload Documents</ListItemText>
                         </ListItem>
                     </Link>
-                    <ListItem
-                        button={true}
-                        disabled={!allDocsComplete}
-                        onClick={generateDeal}
-                    >
-                        <ListItemIcon>
-                            <MailIcon
-                                color={allDocsComplete ? "secondary" : "primary"}
-                            />
-                        </ListItemIcon>
-                        <ListItemText>Send In Forms</ListItemText>
-                    </ListItem>
+                    {buttonDisplayed && (
+                        <ListItem
+                            button={true}
+                            disabled={apiCall || buttonDisabled}
+                            onClick={generateDeal}
+                        >
+                            <ListItemIcon>
+                                <MailIcon color={buttonDisabled ? "primary" : "secondary"} />
+                            </ListItemIcon>
+                            <ListItemText>Send In Forms</ListItemText>
+                        </ListItem>
+                    )}
                     <Divider />
                     <ListItem
                         button={true}
@@ -181,6 +220,6 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
                 <div className={toolbar} />
                 {children}
             </main>
-        </div>
+        </div >
     );
 }
