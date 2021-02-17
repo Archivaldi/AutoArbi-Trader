@@ -60,8 +60,7 @@ router.post("/check-user", (req, res) => {
             if (err) throw err;
             else if (!firstName || !lastName || !street || !city || !state || !zip_code || !county || !transaction_id || !price || !year || !odometer || !make || !model || !body || !vin || !plate || !title_number) {
                 res.send({
-                    message: "Some info missing",
-                    hello: "hello"
+                    message: "Some info missing"
                 });
             }
             else {
@@ -90,10 +89,10 @@ router.post("/check-user", (req, res) => {
                 res.send({ seller: result[0] });
             } else {
                 const buyer = result[1];
-                const {firsName, lastName, street, city, state, county, role, zip_code, govId, transaction_id} = buyer;
+                const { firstName, lastName, street, city, state, county, role, zip_code, govId, transaction_id, billOfSale } = buyer;
                 res.send({
                     seller: result[0],
-                    buyer: {firsName, lastName, street, city, state, county, role, zip_code, govId, transaction_id}
+                    buyer: { firstName, lastName, street, city, state, county, role, zip_code, govId, transaction_id, billOfSale }
                 });
             };
         });
@@ -110,11 +109,11 @@ router.post("/add-info", (req, res) => {
         connection.query("SELECT * FROM Users WHERE transaction_id = ?", [transactionId], (err, result) => {
             if (err) throw err;
             else if (result.length === 0) {
-                res.send({ error: "Transaction ID is not recognized." });
+                res.send({ error: "Transaction ID not recognized!" });
             } else if (result.length === 1) {
                 update_buyer();
             } else {
-                res.send({ error: "This Transaction ID already hae buyer and seller" });
+                res.send({ error: "Transaction already claimed!" });
             }
         })
 
@@ -134,13 +133,8 @@ router.post("/add-info", (req, res) => {
             connection.query("SELECT * FROM Users WHERE transaction_id = ? ORDER BY role DESC", [transactionId], (err, result) => {
                 if (err) throw err;
                 else {
-
-                    const buyer = result[1];
-                    const {firsName, lastName, street, city, state, county, role, zip_code, govId, transaction_id, billOfSale} = buyer;
-                    res.send({
-                        seller: result[0],
-                        buyer: {firsName, lastName, street, city, state, county, role, zip_code, govId, transaction_id}
-                    });
+                    const uid = result[0].user_id
+                    res.send({ user_id: uid });
                 };
             });
         };
@@ -163,7 +157,6 @@ router.post("/add-info", (req, res) => {
                 (err, result) => {
                     if (err) throw err;
                     else {
-
                         find_seller();
                     };
                 });
@@ -234,7 +227,7 @@ router.post("/documentUpload/:document", async (req, res) => {
 
         if (document === "registration") {
             query = "UPLOAD Users SET registration = ? WHERE user_id = ?"
-        } 
+        }
         else if (document === "govermentId") {
             query = "UPLOAD Users SET govId = ? WHERE user_id = ?"
         }
@@ -250,8 +243,8 @@ router.post("/documentUpload/:document", async (req, res) => {
     }
 });
 
-router.post("/userInfo", (req,res) => {
-    const {user_id} = req.session;
+router.post("/userInfo", (req, res) => {
+    const { user_id } = req.session;
     connection.query("SELECT * FROM Users WHERE user_id = ?", [user_id], (err, result) => {
         if (err) throw err;
         else {

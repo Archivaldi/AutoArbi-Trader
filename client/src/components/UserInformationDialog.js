@@ -123,18 +123,21 @@ export default function UserInformationDialog() {
                     licenseNumber
                 })
             })
-            const { user_id } = await res.json();
+            const message = await res.json();
 
-            if (user_id) {
+            console.log(message)
+
+            if (message.user_id) {
                 handleSuccessCall()
             } else {
-                setErrorMessage('An error occurred, please resubmit')
+                setErrorMessage(message.error)
                 if (errorDisplayed === false) {
                     setErrorDisplayed(true)
                     setTimeout(() => {
                         setErrorDisplayed(false)
                     }, 3000)
                 }
+                setApiCall(false);
             }
         }
     }

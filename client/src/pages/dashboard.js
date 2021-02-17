@@ -24,7 +24,6 @@ export default function Dashboard() {
         method: 'POST'
       })
       const serverUserInfo = await resTwo.json();
-      console.log(serverUserInfo);
       setDbUserInfo(serverUserInfo);
       if (serverUserInfo.seller.transaction_id) {
         setTransactionID(`Your Transaction ID: ${serverUserInfo.seller.transaction_id}`);
@@ -32,6 +31,8 @@ export default function Dashboard() {
       }
     })()
   }, []);
+
+  console.log(dbUserInfo)
 
   return (
     <AuthCheck>
@@ -50,14 +51,23 @@ export default function Dashboard() {
                 {transactionID}
               </Alert>
             </Snackbar>
-            <UserProgressCard
-              key={2}
-              userData={dbUserInfo.seller}
-            />
-            <UserProgressCard
-              key={1}
-              userData={dbUserInfo.buyer}
-            />
+            {dbUserInfo && (
+              <>
+                {dbUserInfo.seller && (
+                  <UserProgressCard
+                    key={2}
+                    userData={dbUserInfo.seller}
+                  />
+                )}
+                {dbUserInfo.buyer && (
+                  <UserProgressCard
+                    key={1}
+                    userData={dbUserInfo.buyer}
+                  />
+                )}
+              </>
+            )
+            }
           </MiniDrawer>
         )}
     </AuthCheck>
