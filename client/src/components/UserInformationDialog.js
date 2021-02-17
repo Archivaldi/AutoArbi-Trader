@@ -32,16 +32,16 @@ export default function UserInformationDialog() {
         city: 'Austin',
         street: '12300 Patron',
         zip: '78758',
-        transactionId: '6nPP2i',
-        price: '',
-        vin: '',
-        year: '',
-        make: '',
-        model: '',
-        body: '',
-        odometer: '',
-        titleNumber: '',
-        licenseNumber: ''
+        transactionId: '',
+        price: '12000',
+        vin: 'heyhey',
+        year: '1975',
+        make: 'volks',
+        model: 'beetle',
+        body: 'standard',
+        odometer: '100000',
+        titleNumber: '15-1700',
+        licenseNumber: 'eat@$$'
     })
 
     const {
@@ -97,7 +97,7 @@ export default function UserInformationDialog() {
             }
         } else {
             setApiCall(true);
-            const res = fetch(addUserInfo, {
+            const res = await fetch(addUserInfo, {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
@@ -123,8 +123,19 @@ export default function UserInformationDialog() {
                     licenseNumber
                 })
             })
-            const message = await res.json()
-            console.log(message)
+            const { user_id } = await res.json();
+
+            if (user_id) {
+                handleSuccessCall()
+            } else {
+                setErrorMessage('An error occurred, please resubmit')
+                if (errorDisplayed === false) {
+                    setErrorDisplayed(true)
+                    setTimeout(() => {
+                        setErrorDisplayed(false)
+                    }, 3000)
+                }
+            }
         }
     }
 

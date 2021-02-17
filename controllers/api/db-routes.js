@@ -51,10 +51,6 @@ router.post("/login", (req, res) => {
     });
 });
 
-router.post("/session", (req, res) => {
-    res.send(req.session);
-});
-
 router.post("/check-user", (req, res) => {
     const { user_id, role } = req.session;
 
@@ -62,23 +58,26 @@ router.post("/check-user", (req, res) => {
         connection.query("SELECT * FROM Users LEFT JOIN Cars USING (car_id) WHERE user_id = ?", [user_id], (err, result) => {
             const { firstName, lastName, street, city, state, zip_code, county, transaction_id, price, year, odometer, make, model, body, vin, plate, title_number } = result[0];
             if (err) throw err;
-            else if (!firstName || !lastName || !street || !city || !state || !zip_code || !county || !transaction_id || !price || !year || !odometer || !make || !model || !body || !vin || !plate || title_number) {
+            else if (!firstName || !lastName || !street || !city || !state || !zip_code || !county || !transaction_id || !price || !year || !odometer || !make || !model || !body || !vin || !plate || !title_number) {
                 res.send({
-                    message: "Some info missing"
+                    message: "Some info missing",
+                    hello: "hello"
                 });
-            } else {
+            }
+            else {
                 takeSecondPerson(result[0].transaction_id);
             };
         });
     } else if (role === "buyer") {
         connection.query("SELECT * FROM Users WHERE user_id = ?", [user_id], (err, result) => {
-            const { firstName, lastName, street, city, state, zip_code, county, transaction_id } = result[0];
+            const { firstName, lastName, street, city, state, zip, county, transactionId } = result[0];
             if (err) throw err;
-            else if (!firstName || !lastName || !street || !city || !state || !zip_code || !county || !transaction_id) {
+            else if (!firstName || !lastName || !street || !city || !state || !zip || !county || !transactionId) {
                 res.send({
                     message: "Some info missing"
                 });
-            } else {
+            }
+            else {
                 takeSecondPerson(result[0].transaction_id);
             }
         });
@@ -114,7 +113,6 @@ router.post("/add-info", (req, res) => {
                 update_buyer();
             } else {
                 res.send({ error: "This Transaction ID already hae buyer and seller" });
-
             }
         })
 
@@ -161,6 +159,7 @@ router.post("/add-info", (req, res) => {
                 (err, result) => {
                     if (err) throw err;
                     else {
+
                         find_seller();
                     };
                 });
@@ -170,7 +169,8 @@ router.post("/add-info", (req, res) => {
             connection.query("SELECT * FROM Users WHERE user_id = ?", [user_id], (err, result) => {
                 if (err) throw err;
                 else {
-                    res.send(result);
+                    const uid = result[0].user_id
+                    res.send({ user_id: uid });
                 }
             })
         }
