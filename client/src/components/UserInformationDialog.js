@@ -25,23 +25,25 @@ export default function UserInformationDialog() {
     const [errorDisplayed, setErrorDisplayed] = useState(false);
     const [errorMessage, setErrorMessage] = useState('Error!');
     const { values, updateValue } = useForm({
-        firstName: 'Nate',
-        lastName: 'Ryan',
-        state: 'TX',
-        county: 'Williamson',
-        city: 'Austin',
-        street: '12300 Patron',
-        zip: '78758',
+        firstName: '',
+        lastName: '',
+        state: '',
+        county: '',
+        city: '',
+        street: '',
+        zip: '',
         transactionId: '',
-        price: '12000',
-        vin: 'heyhey',
-        year: '1975',
-        make: 'volks',
-        model: 'beetle',
-        body: 'standard',
-        odometer: '100000',
-        titleNumber: '15-1700',
-        licenseNumber: 'eat@$$'
+        price: '',
+        vin: '',
+        year: '',
+        make: '',
+        model: '',
+        body: '',
+        odometer: '',
+        titleNumber: '',
+        regDate: '',
+        regNumber: '',
+        licenseNumber: ''
     })
 
     const {
@@ -61,6 +63,8 @@ export default function UserInformationDialog() {
         body,
         odometer,
         titleNumber,
+        regDate,
+        regNumber,
         licenseNumber
     } = values;
 
@@ -120,6 +124,8 @@ export default function UserInformationDialog() {
                     body,
                     odometer,
                     titleNumber,
+                    regDate,
+                    regNumber,
                     licenseNumber
                 })
             })
@@ -204,6 +210,8 @@ export default function UserInformationDialog() {
                                     <TextField disabled={apiCall} value={body} name="body" onChange={updateValue} variant="outlined" id="outlined-size-normal" label="Body" color="secondary" />
                                     <TextField disabled={apiCall} value={odometer} name="odometer" onChange={updateValue} variant="outlined" id="outlined-size-normal" label="Odometer" color="secondary" />
                                     <Divider />
+                                    <TextField disabled={apiCall} value={regDate} name="regDate" onChange={updateValue} variant="outlined" id="outlined-size-normal" label="Registration Date" color="secondary" />
+                                    <TextField disabled={apiCall} value={regNumber} name="regNumber" onChange={updateValue} variant="outlined" id="outlined-size-normal" label="Registration Number" color="secondary" />
                                     <TextField disabled={apiCall} value={titleNumber} name="titleNumber" onChange={updateValue} variant="outlined" id="outlined-size-normal" label="Title Number" color="secondary" />
                                     <TextField disabled={apiCall} value={licenseNumber} name="licenseNumber" onChange={updateValue} variant="outlined" id="outlined-size-normal" label="License Plate Number" color="secondary" />
                                 </>

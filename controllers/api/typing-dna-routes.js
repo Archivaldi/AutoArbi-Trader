@@ -13,8 +13,7 @@ router.post("/check-pattern", (req, res) => {
         user_id,
         typingPattern,
         {
-            type: 0,
-            device: 'desktop'
+            type: 0
         },
         function (error, result) {
             if (error) {
@@ -32,32 +31,32 @@ router.post("/check-pattern", (req, res) => {
 });
 
 
-router.get("/destroyAccount", (req,res) => {
-    const {user_id, role} = req.session;
+router.get("/destroyAccount", (req, res) => {
+    const { user_id, role } = req.session;
     let queryDelete = "";
 
-    if (role === "buyer"){
+    if (role === "buyer") {
         queryDelete = "DELETE FROM Users WHERE user_id = ?"
-    } else if (role === "seller"){
+    } else if (role === "seller") {
         queryDelete = "DELETE Users, Cars FROM Users inner JOIN Cars USING (car_id) where user_id = ?"
     };
 
-        connection.query(queryDelete, [user_id], (err, result) => {
-            if (err) throw err;
-            else {
-                typingDnaClient.delete({userId: user_id}, (err, result) => {
-                    if (err) throw err;
-                    else {
-                        cloudinary.api.delete_resources([`${user_id}_0`, `${user_id}_1`, `${user_id}_2`], (err, result) => {
-                            if (err) throw err;
-                            else {
-                                res.send({message: "Account successfully delete!"});
-                            }
-                        });
-                    }
-                });
-            }
-        });
+    connection.query(queryDelete, [user_id], (err, result) => {
+        if (err) throw err;
+        else {
+            typingDnaClient.delete({ userId: user_id }, (err, result) => {
+                if (err) throw err;
+                else {
+                    cloudinary.api.delete_resources([`${user_id}_0`, `${user_id}_1`, `${user_id}_2`], (err, result) => {
+                        if (err) throw err;
+                        else {
+                            res.send({ message: "Account successfully delete!" });
+                        }
+                    });
+                }
+            });
+        }
+    });
 });
 
 module.exports = router;
