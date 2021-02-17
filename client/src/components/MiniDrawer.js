@@ -42,24 +42,13 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
         const res = await fetch(logout, {
             method: 'POST'
         })
-        window.location.reload()
+        window.location.reload();
     }
 
     const generateDeal = async () => {
         const res = await fetch("/api/anvil/createEtchSigh", {
             method: 'POST'
         });
-    };
-
-    const takeImgInfo = async() => {
-        console.log("Hit the button");
-        const res = await fetch("/api/db/userInfo", {
-            method: 'POST'
-        });
-        const info = await res.json();
-        const {govId, registration, title, billOfSale} = info;
-        setImages(images => [...images, govId, registration, title, billOfSale]);
-        console.log(images);
     };
 
     const {
@@ -135,7 +124,7 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
                         </ListItem>
                     </Link>
                     <Link href="/upload">
-                        <ListItem button={true} onClick={takeImgInfo}>
+                        <ListItem button={true}>
                             <ListItemIcon>
                                 <CloudUploadIcon />
                             </ListItemIcon>
