@@ -6,10 +6,13 @@ import AuthCheck from '../components/AuthCheck';
 import MiniDrawer from '../components/MiniDrawer';
 import UserProgressCard from '../components/UserProgressCard';
 import UserInformationDialog from '../components/UserInformationDialog';
+import { dummyData } from '../utils/dummyData';
 import { dashboardStyles } from '../styles/GlobalDrawerStyles'
+import { checkForAllDocumentComplete } from '../utils/checkForAllDocComplete';
 
 export default function Dashboard() {
   const classes = dashboardStyles();
+  const { buyer, seller } = dummyData;
   const { userInfo } = appRoute;
   const [dbUserInfo, setDbUserInfo] = useState(null);
   const [transactionID, setTransactionID] = useState('No Id');
@@ -17,12 +20,12 @@ export default function Dashboard() {
 
   useEffect(() => {
     (async function getUserInformation() {
-      const res = await fetch(userInfo, {
+      const resTwo = await fetch(userInfo, {
         method: 'POST'
       })
-      const serverUserInfo = await res.json();
+      const serverUserInfo = await resTwo.json();
       setDbUserInfo(serverUserInfo);
-      if (serverUserInfo.seller.transaction_id) {
+      if (!serverUserInfo.message) {
         setTransactionID(`Your Transaction ID: ${serverUserInfo.seller.transaction_id}`);
         setDisplayTransaction(true)
       }
@@ -37,14 +40,17 @@ export default function Dashboard() {
         </div>
       ) : (
           <MiniDrawer
+            allDocsComplete={checkForAllDocumentComplete(buyer, seller)}
             classes={classes}
           >
             <UserInformationDialog />
-            <Snackbar open={displayTransaction}>
-              <Alert severity="info">
-                {transactionID}
-              </Alert>
-            </Snackbar>
+            {!userInfo.seller && (
+              <Snackbar open={displayTransaction}>
+                <Alert severity="info">
+                  {transactionID}
+                </Alert>
+              </Snackbar>
+            )}
             {dbUserInfo && (
               <>
                 {dbUserInfo.seller && (

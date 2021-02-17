@@ -4,6 +4,8 @@ const keys = require('../../config/keys');
 const { typingDna_apiKey, typingDna_secret } = keys.typingDna;
 const typingDnaClient = new TypingDnaClient(typingDna_apiKey, typingDna_secret);
 const connection = require("../../config/db");
+const cloudinary = require('cloudinary').v2;
+cloudinary.config({ cloud_name: keys.cloudinary.cloud_name, api_key: keys.cloudinary.apikey, api_secret: keys.cloudinary.secret });
 
 router.post("/check-pattern", (req, res) => {
     const { typingPattern, user_id, role } = req.body;
@@ -32,26 +34,30 @@ router.post("/check-pattern", (req, res) => {
 
 router.get("/destroyAccount", (req,res) => {
     const {user_id, role} = req.session;
-    let query = "";
+    let queryDelete = "";
 
     if (role === "buyer"){
-        query = "DELETE FROM Users WHERE user_id = ?"
+        queryDelete = "DELETE FROM Users WHERE user_id = ?"
     } else if (role === "seller"){
-        query = "DELETE Users, Cars FROM Users inner JOIN Cars USING (car_id) where user_id = ?"
+        queryDelete = "DELETE Users, Cars FROM Users inner JOIN Cars USING (car_id) where user_id = ?"
     };
 
-    connection.query(query, [user_id], (err, result) => {
-        if (err) throw err;
-        else {
-            typingDnaClient.delete({userId: user_id}, (err, result) => {
-                if (err) throw err;
-                else {
-                    console.log(result);
-                    req.session = null;
-                }
-            });
-        }
-    });
+        connection.query(queryDelete, [user_id], (err, result) => {
+            if (err) throw err;
+            else {
+                typingDnaClient.delete({userId: user_id}, (err, result) => {
+                    if (err) throw err;
+                    else {
+                        cloudinary.api.delete_resources([`${user_id}_0`, `${user_id}_1`, `${user_id}_2`], (err, result) => {
+                            if (err) throw err;
+                            else {
+                                res.send({message: "Account successfully delete!"});
+                            }
+                        });
+                    }
+                });
+            }
+        });
 });
 
 module.exports = router;

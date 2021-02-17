@@ -71,6 +71,10 @@ router.post("/createEtchSigh", (req, res) => {
                 {
                     id: "texas_title",
                     castEid: keys.anvil.title_id
+                },
+                {
+                    id: "registration",
+                    castEid: keys.anvil.reg_id
                 }
             ],
 
@@ -116,6 +120,14 @@ router.post("/createEtchSigh", (req, res) => {
                             seller: `${seller.firstName} ${seller.lastName}`,
                             sellerFullAddress: `${seller.street} ${seller.city} ${seller.state} ${seller.zip_code}`,
                             date: moment().format("MM/DD/YYYY")
+                        }
+                    },
+                    registration: {
+                        data: {
+                            carPlate: seller.plate,
+                            county: seller.county,
+                            regNumber: seller.regNumber,
+                            regDate: seller.regDate
                         }
                     }
                 }
@@ -172,8 +184,12 @@ router.post("/hooks", async (req, res) => {
 
     const { action } = req.body;
     if (action === "etchPacketComplete") {
-        let bill_of_sale_url = "";
-        let title_url = "";
+        let seller_bill_of_sale_url = "";
+        let seller_title_url = "";
+        let seller_registration_url = "";
+        let buyer_bill_of_sale_url = "";
+        let buyer_title_url = "";
+        let buyer_registration_url = "";
         const { data } = req.body;
         const decryptedRSAMessage = await decryptRSA(anvil.private_key, data)
         const info = await JSON.parse(decryptedRSAMessage);
@@ -191,11 +207,17 @@ router.post("/hooks", async (req, res) => {
                             await (extract(path.join(__dirname, "../../output.zip"), { dir: path.join(__dirname, `../../Unzip/${eid}`) }));
                             const files = fs.readdirSync(path.join(__dirname, `../../Unzip/${eid}`));
                             for (let i = 0; i < files.length; i++) {
-                                let { secure_url } = await cloudinary.uploader.upload(path.join(__dirname, `../../Unzip/${eid}/${files[i]}`));
+                                let { secure_url_1 } = await cloudinary.uploader.upload(path.join(__dirname, `../../Unzip/${eid}/${files[i]}`, {public_id: `${result[0].user_id}_${i}`}));
+                                let {secure_url_2} = await cloudinary.uploader.upload(path.join(__dirname, `../../Unzip/${eid}/${files[i]}`, {public_id: `${result[1].user_id}_${i}`}));
                                 if (i === 0) {
-                                    bill_of_sale_url = secure_url;
+                                    seller_bill_of_sale_url = secure_url_1;
+                                    buyer_bill_of_sale_url = secure_url_2;
+                                } else if (i === 1) {
+                                    seller_title_url = secure_url_1;
+                                    buyer_title_url = secure_url_2;
                                 } else {
-                                    title_url = secure_url;
+                                    seller_registration_url = secure_url_1;
+                                    buyer_registration_url = secure_url_1;
                                 }
                             };
 
@@ -214,7 +236,7 @@ router.post("/hooks", async (req, res) => {
                         const payloads = {
                             url: "https://desolate-hollows-77552.herokuapp.com/api/db/updateUrls",
                             method: "POST",
-                            json: { bill_of_sale_url, title_url, seller_id: result[0].user_id, buyer_id: result[1].user_id },
+                            json: { seller_bill_of_sale_url,buyer_bill_of_sale_url, seller_title_url, buyer_title_url, seller_registration_url, buyer_registration_url,seller_id: result[0].user_id, buyer_id: result[1].user_id },
                         };
                         request(payloads, (error, response, body) => {
                             if (error) throw error;

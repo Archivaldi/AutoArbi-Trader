@@ -31,6 +31,8 @@ CREATE TABLE Users (
     county VARCHAR(20),
     govId VARCHAR(100),
     registration VARCHAR(100),
+    regDate VARCHAR(6),
+    regNumber VARCHAR(9),
     title VARCHAR(100),
     billOfSale VARCHAR(100),
     groupId VARCHAR(30),

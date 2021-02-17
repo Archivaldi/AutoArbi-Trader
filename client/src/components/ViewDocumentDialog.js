@@ -22,12 +22,12 @@ export default function ViewDocumentDialog({ url, open, handleDocumentClose, typ
                 <DialogTitle id="alert-dialog-title">{`Viewing ${type} Document`}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        <img
+                        <embed
                             style={{
                                 maxHeight: '350px',
                                 maxWidth: '500px'
                             }}
-                            src={"https://res.cloudinary.com/fourwheels/image/upload/v1613455329/rbrczqunkjgoo5mviztq.pdf"}
+                            src={"https://res.cloudinary.com/fourwheels/image/upload/v1613541348/lngruk4zdijn3w1iuttb.png"}
                             alt={type}
                         />
                     </DialogContentText>

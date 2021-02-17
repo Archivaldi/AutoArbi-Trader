@@ -23,6 +23,7 @@ exports.anvil = {
     title_id: process.env.ANVIL_TITLE_ID,
     public_key: process.env.ANVIL_PUBLIC,
     private_key: process.env.ANVIL_PRIVATE,
+    reg_id: process.env.ANVIL_REG_ID
 };
 
 exports.cloudinary = {
