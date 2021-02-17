@@ -89,10 +89,10 @@ router.post("/check-user", (req, res) => {
                 res.send({ seller: result[0] });
             } else {
                 const buyer = result[1];
-                const { firstName, lastName, street, city, state, county, role, zip_code, govId, transaction_id, billOfSale } = buyer;
+                const { user_id, firstName, lastName, street, city, state, county, role, zip_code, govId, transaction_id, billOfSale } = buyer;
                 res.send({
                     seller: result[0],
-                    buyer: { firstName, lastName, street, city, state, county, role, zip_code, govId, transaction_id, billOfSale }
+                    buyer: { user_id, firstName, lastName, street, city, state, county, role, zip_code, govId, transaction_id, billOfSale }
                 });
             };
         });

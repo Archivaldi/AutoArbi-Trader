@@ -1,33 +1,90 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import AuthCheck from '../components/AuthCheck';
 import MiniDrawer from '../components/MiniDrawer';
 import FileUploadCard from '../components/FileUploadCard';
 import UserInformationDialog from '../components/UserInformationDialog';
-import { dummyData } from '../utils/dummyData';
+import { appRoute } from '../utils/appRoute';
+import { authSteps } from '../utils/authSteps';
 import { uploadStyles } from '../styles/GlobalDrawerStyles'
-import { checkForAllDocumentComplete } from '../utils/checkForAllDocComplete'
 
 export default function Dashboard() {
-    const { buyer, seller } = dummyData;
     const classes = uploadStyles();
-    
+    const [currentUserInfo, setCurrentUserInfo] = useState(null);
+    const [currentUserDocs, setCurrentUserDocs] = useState([]);
+    const { userInfo } = appRoute;
+    const { session } = authSteps.route;
+
+    useEffect(() => {
+        (async function getUserInformation() {
+            const resOne = await fetch(session, {
+                method: 'POST'
+            })
+            const { role } = await resOne.json();
+
+            const resTwo = await fetch(userInfo, {
+                method: 'POST'
+            })
+            const userInform = await resTwo.json();
+            setCurrentUserInfo(userInform[role])
+        })()
+    }, []);
+
+    useEffect(() => {
+        let id = 0;
+        let docsArr = []
+        for (const property in currentUserInfo) {
+            if (
+                property === 'govId' ||
+                property === 'title' ||
+                property === 'billOfSale' ||
+                property === 'registration'
+            ) {
+                let type;
+                let completed = currentUserInfo[property] === !null
+                let url = currentUserInfo[property]
+                if (property === 'govId') type = 'Government ID'
+                if (property === 'title') {
+                    type = 'Vehicle Title'
+                    completed = true
+                }
+                if (property === 'billOfSale') {
+                    type = 'Bill of Sale'
+                    completed = true
+                }
+                if (property === 'registration') {
+                    type = 'Registration'
+                    completed = true
+                }
+                const docObj = {
+                    type,
+                    completed,
+                    url,
+                    id
+                }
+                docsArr.push(docObj)
+                id++
+            }
+        }
+        setCurrentUserDocs(docsArr)
+    }, [currentUserInfo])
 
     return (
         <AuthCheck>
             <MiniDrawer
                 classes={classes}
-                allDocsComplete={checkForAllDocumentComplete(buyer, seller)}
             >
                 <>
                     <UserInformationDialog />
-                    {seller.docs.map(({ id, type, completed, url }) => (
-                        <FileUploadCard
-                            key={id}
-                            type={type}
-                            completed={completed}
-                            url={url}
-                        />
-                    ))}
+                    {currentUserDocs.length > 0 && (
+                        currentUserDocs.map(({ id, type, completed, url }) => (
+                            <FileUploadCard
+                                key={id}
+                                type={type}
+                                completed={completed}
+                                url={url}
+                            />
+                        ))
+                    )}
                 </>
             </MiniDrawer>
         </AuthCheck >
