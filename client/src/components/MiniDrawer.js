@@ -77,7 +77,7 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
             let output = false;
             if (usersDocs.buyer && usersDocs.seller) {
                 for (const property in usersDocs.buyer) {
-                    if (property === 'groupID') {
+                    if (property === 'groupId') {
                         usersDocs.seller[property] !== null && setButtonDisplayed(false)
                     }
                     if (property === 'govId'
@@ -87,7 +87,7 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
                     }
                 }
                 for (const property in usersDocs.seller) {
-                    if (property === 'groupID') {
+                    if (property === 'groupId') {
                         usersDocs.seller[property] !== null && setButtonDisplayed(false)
                     }
                     if (property === 'govId') {
@@ -97,6 +97,7 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
                 }
             }
             completeArr.forEach(item => {
+                console.log({item})
                 item && setButtonDisabled(false)
             })
         })()
