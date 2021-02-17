@@ -135,7 +135,7 @@ router.post("/createEtchSigh", (req, res) => {
 
             signers: [
                 {
-                    id: seller.firstName,
+                    id: seller.user_id,
                     name: `${seller.firstName} ${seller.lastName}`,
                     email: seller.email,
 
@@ -155,7 +155,7 @@ router.post("/createEtchSigh", (req, res) => {
                     ]
                 },
                 {
-                    id: buyer.firstName,
+                    id: buyer.user_id,
                     name: `${buyer.firstName} ${buyer.lastName}`,
                     email: buyer.email,
                     fields: [
