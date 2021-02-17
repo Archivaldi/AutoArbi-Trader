@@ -70,9 +70,9 @@ router.post("/check-user", (req, res) => {
         });
     } else if (role === "buyer") {
         connection.query("SELECT * FROM Users WHERE user_id = ?", [user_id], (err, result) => {
-            const { firstName, lastName, street, city, state, zip, county, transactionId } = result[0];
+            const { firstName, lastName, street, city, state, zip_code, county, transaction_id } = result[0];
             if (err) throw err;
-            else if (!firstName || !lastName || !street || !city || !state || !zip || !county || !transactionId) {
+            else if (!firstName || !lastName || !street || !city || !state || !zip_code || !county || !transaction_id) {
                 res.send({
                     message: "Some info missing"
                 });
@@ -89,9 +89,11 @@ router.post("/check-user", (req, res) => {
             else if (result.length === 1) {
                 res.send({ seller: result[0] });
             } else {
+                const buyer = result[1];
+                const {firsName, lastName, street, city, state, county, role, zip_code, govId, transaction_id} = buyer;
                 res.send({
                     seller: result[0],
-                    buyer: result[1]
+                    buyer: {firsName, lastName, street, city, state, county, role, zip_code, govId, transaction_id}
                 });
             };
         });
@@ -133,9 +135,11 @@ router.post("/add-info", (req, res) => {
                 if (err) throw err;
                 else {
 
+                    const buyer = result[1];
+                    const {firsName, lastName, street, city, state, county, role, zip_code, govId, transaction_id, billOfSale} = buyer;
                     res.send({
                         seller: result[0],
-                        buyer: result[1]
+                        buyer: {firsName, lastName, street, city, state, county, role, zip_code, govId, transaction_id}
                     });
                 };
             });
@@ -230,7 +234,8 @@ router.post("/documentUpload/:document", async (req, res) => {
 
         if (document === "registration") {
             query = "UPLOAD Users SET registration = ? WHERE user_id = ?"
-        } else if (document === "govermentId") {
+        } 
+        else if (document === "govermentId") {
             query = "UPLOAD Users SET govId = ? WHERE user_id = ?"
         }
 

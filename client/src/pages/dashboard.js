@@ -24,6 +24,7 @@ export default function Dashboard() {
         method: 'POST'
       })
       const serverUserInfo = await resTwo.json();
+      console.log(serverUserInfo);
       setDbUserInfo(serverUserInfo);
       if (serverUserInfo.seller.transaction_id) {
         setTransactionID(`Your Transaction ID: ${serverUserInfo.seller.transaction_id}`);
@@ -52,7 +53,10 @@ export default function Dashboard() {
             <UserProgressCard
               key={2}
               userData={dbUserInfo.seller}
-              data={seller}
+            />
+            <UserProgressCard
+              key={1}
+              userData={dbUserInfo.buyer}
             />
           </MiniDrawer>
         )}
