@@ -51,7 +51,7 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
     }
 
     const generateDeal = async () => {
-        apiCall(true)
+        setApiCall(true)
         const res = await fetch("/api/anvil/createEtchSigh", {
             method: 'POST'
         });
@@ -97,7 +97,7 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
                 }
             }
             completeArr.forEach(item => {
-                item && setButtonDisabled(true)
+                item && setButtonDisabled(false)
             })
         })()
     }, [usersDocs])
