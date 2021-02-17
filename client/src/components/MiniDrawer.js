@@ -28,6 +28,7 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
     const { logout } = authSteps.route;
+    const [images, setImages] = useState([]);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -45,11 +46,21 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
     }
 
     const generateDeal = async () => {
-        console.log("Hit the button");
         const res = await fetch("/api/anvil/createEtchSigh", {
             method: 'POST'
         });
-    }
+    };
+
+    const takeImgInfo = async() => {
+        console.log("Hit the button");
+        const res = await fetch("/api/db/userInfo", {
+            method: 'POST'
+        });
+        const info = await res.json();
+        const {govId, registration, title, billOfSale} = info;
+        setImages(images => [...images, govId, registration, title, billOfSale]);
+        console.log(images);
+    };
 
     const {
         root,
@@ -124,7 +135,7 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
                         </ListItem>
                     </Link>
                     <Link href="/upload">
-                        <ListItem button={true}>
+                        <ListItem button={true} onClick={takeImgInfo}>
                             <ListItemIcon>
                                 <CloudUploadIcon />
                             </ListItemIcon>

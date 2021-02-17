@@ -245,6 +245,16 @@ router.post("/documentUpload/:document", async (req, res) => {
     }
 });
 
+router.post("/userInfo", (req,res) => {
+    const {user_id} = req.session;
+    connection.query("SELECT * FROM Users WHERE user_id = ?", [user_id], (err, result) => {
+        if (err) throw err;
+        else {
+            res.send(result[0]);
+        }
+    });
+});
+
 router.post("/session", (req, res) => {
     res.send(req.session);
 });
