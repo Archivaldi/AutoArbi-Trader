@@ -10,6 +10,7 @@ import { checkForAllDocumentComplete } from '../utils/checkForAllDocComplete'
 export default function Dashboard() {
     const { buyer, seller } = dummyData;
     const classes = uploadStyles();
+    
 
     return (
         <AuthCheck>
