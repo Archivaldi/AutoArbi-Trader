@@ -62,7 +62,7 @@ export default function FileUploadCard({ type, completed, url }) {
                         <span>Upload<span className={disAppear}>{completed ? 'ed' : ''}</span></span>
                     </Button>
                     <Button
-                        disabled={!completed}
+                        disabled={!url}
                         className={`${font} ${buttonMargin}`}
                         color="secondary"
                         onClick={handleDocumentOpen}

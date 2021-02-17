@@ -43,9 +43,18 @@ export default function Dashboard() {
                 let completed = currentUserInfo[property] === !null
                 let url = currentUserInfo[property]
                 if (property === 'govId') type = 'Government ID'
-                if (property === 'title') type = 'Vehicle Title'
-                if (property === 'billOfSale') type = 'Bill of Sale'
-                if (property === 'registration') type = 'Registration'
+                if (property === 'title') {
+                    type = 'Vehicle Title'
+                    completed = true
+                }
+                if (property === 'billOfSale') {
+                    type = 'Bill of Sale'
+                    completed = true
+                }
+                if (property === 'registration') {
+                    type = 'Registration'
+                    completed = true
+                }
                 const docObj = {
                     type,
                     completed,
