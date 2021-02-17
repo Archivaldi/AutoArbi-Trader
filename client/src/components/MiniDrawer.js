@@ -80,11 +80,7 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
                     if (property === 'groupID') {
                         usersDocs.seller[property] !== null && setButtonDisplayed(false)
                     }
-                    if (
-                        property === 'govId' ||
-                        property === 'title' ||
-                        property === 'billOfSale' ||
-                        property === 'registration'
+                    if (property === 'govId'
                     ) {
                         let completed = usersDocs.seller[property] !== null;
                         completeArr.push(completed)
@@ -94,13 +90,7 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
                     if (property === 'groupID') {
                         usersDocs.seller[property] !== null && setButtonDisplayed(false)
                     }
-                    if (
-                        property === 'govId' ||
-                        property === 'title' ||
-                        property === 'billOfSale' ||
-                        property === 'registration' ||
-                        property === 'groupID'
-                    ) {
+                    if (property === 'govId') {
                         let completed = usersDocs.seller[property] !== null;
                         completeArr.push(completed)
                     }
