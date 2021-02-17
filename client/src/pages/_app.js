@@ -15,11 +15,12 @@ export default class MyApp extends App {
   }
   render() {
     const { Component, pageProps } = this.props;
-    
+
     return (
       <>
         <Head>
           <title>auto arbi-trader</title>
+          <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/Archivaldi/4wheelz/reflectDBdata/client/src/images/AutoArbiTraderLogo.ico" />
           <meta
             name="viewport"
             content="minimum-scale=1, initial-scale=1, width=device-width"
