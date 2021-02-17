@@ -152,7 +152,7 @@ router.post("/add-info", (req, res) => {
             })
 
         const insert_seller = (car_id) => {
-            connection.query("Update Users SET firstName = ?, lastName = ?, street = ?, city = ?, state = ?, zip_code = ?, transaction_id = ?, car_id = ?, county = ?, regDate = ?, regNumber = ?, WHERE user_id = ?",
+            connection.query("Update Users SET firstName = ?, lastName = ?, street = ?, city = ?, state = ?, zip_code = ?, transaction_id = ?, car_id = ?, county = ?, regDate = ?, regNumber = ? WHERE user_id = ?",
                 [firstName, lastName, street, city, state, zip, transaction_id, car_id, county, regDate, regNumber, user_id],
                 (err, result) => {
                     if (err) throw err;
