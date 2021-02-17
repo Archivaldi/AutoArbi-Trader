@@ -51,16 +51,27 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
         });
     };
 
-    const takeImgInfo = async() => {
+    const takeImgInfo = async () => {
         console.log("Hit the button");
         const res = await fetch("/api/db/userInfo", {
             method: 'POST'
         });
         const info = await res.json();
-        const {govId, registration, title, billOfSale} = info;
+        const { govId, registration, title, billOfSale } = info;
         setImages(images => [...images, govId, registration, title, billOfSale]);
-        console.log(images);
     };
+
+    // useEffect(() => {
+    //     (async function getUserInformation() {
+    //         const resTwo = await fetch(userInfo, {
+    //             method: 'POST'
+    //         })
+    //         const userInform = await resTwo.json();
+    //         console.log(userInform)
+    //     })()
+    // }, []);
+
+
 
     const {
         root,
