@@ -32,8 +32,6 @@ export default function Dashboard() {
     })()
   }, []);
 
-  console.log(dbUserInfo)
-
   return (
     <AuthCheck>
       {dbUserInfo === null ? (
@@ -66,8 +64,7 @@ export default function Dashboard() {
                   />
                 )}
               </>
-            )
-            }
+            )}
           </MiniDrawer>
         )}
     </AuthCheck>

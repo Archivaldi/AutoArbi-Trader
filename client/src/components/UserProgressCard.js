@@ -5,7 +5,7 @@ import ProgressBar from './ProgressBar';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 
 export default function UserProgressCard({ userData }) {
-    const { firstName, lastName, govId, title, billOfSale, registration } = userData;
+    const { firstName, lastName } = userData;
     const [docs, setDocs] = useState([])
     const {
         root,
@@ -25,7 +25,6 @@ export default function UserProgressCard({ userData }) {
         })
         return i / arr.length * 100
     }
-    const completed = percentage(docs)
 
     useEffect(() => {
         let id = 0;
@@ -37,12 +36,21 @@ export default function UserProgressCard({ userData }) {
                 property === 'billOfSale' ||
                 property === 'registration'
             ) {
-                const completed = userData[property];
+                let completed = userData[property];
                 let type;
                 if (property === 'govId') type = 'Government ID'
-                if (property === 'title') type = 'Vehicle Title'
-                if (property === 'billOfSale') type = 'Bill of Sale'
-                if (property === 'registration') type = 'Registration'
+                if (property === 'title') {
+                    type = 'Vehicle Title'
+                    completed = true
+                }
+                if (property === 'billOfSale') {
+                    type = 'Bill of Sale'
+                    completed = true
+                }
+                if (property === 'registration') {
+                    type = 'Registration'
+                    completed = true
+                }
                 const docObj = {
                     completed,
                     type,
@@ -84,9 +92,11 @@ export default function UserProgressCard({ userData }) {
                     )}
                 </div>
             </CardContent>
-            <div className={progress}>
-                <ProgressBar value={completed} />
-            </div>
+            {docs.length > 0 && (
+                <div className={progress}>
+                    <ProgressBar value={percentage(docs)} />
+                </div>
+            )}
         </Card>
     );
 }
