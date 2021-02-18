@@ -12,19 +12,33 @@ router.post("/signup/:role", async (req, res) => {
     const { role } = req.params;
     const { passwordInput, emailInput } = req.body;
 
+    connection.query("SELECT * FROM Users WHERE email = ?", [emailInput], (err, result) => {
+        if (err) throw err;
+        else {
+            if (result.length > 0) {
+                res.send({error: "Duplicate Email!"})
+            } else {
+                unsert_user();
+            }
+        }
+    })
+
     const user_id = uuidv4();
     const p_hash = await bcrypt.hash(passwordInput, 10);
 
-    connection.query("INSERT INTO Users(email, p_hash, user_id, role) VALUES (?,?,?,?)",
+    const unsert_user = () => {
+        connection.query("INSERT INTO Users(email, p_hash, user_id, role) VALUES (?,?,?,?)",
         [emailInput, p_hash, user_id, role],
         (err, result) => {
             if (err) throw err;
             else {
+                req.session.user_id = user_id;
                 req.session.role = role;
                 res.send({ user_id, role });
             }
         }
     );
+    };
 });
 
 
@@ -42,6 +56,7 @@ router.post("/login", (req, res) => {
             bcrypt.compare(passwordInput, p_hash, (err, match) => {
                 if (match) {
                     req.session.role = role;
+                    req.session.user_id = user_id;
                     res.send({ user_id, role });
                 } else {
                     res.send({ error: "Invalid Password. Please try again." })
