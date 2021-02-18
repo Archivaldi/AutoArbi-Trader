@@ -83,6 +83,10 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
         (async function buildArr() {
             let completeArr = [];
             let output = false;
+            if (usersDocs.length === 1 && usersDocs.seller.completed === "1"){
+                setButtonDisplayed(false);
+                return;
+            }
             if (usersDocs.buyer && usersDocs.seller) {
                 for (const property in usersDocs.buyer) {
                     if (property === 'groupId') {
