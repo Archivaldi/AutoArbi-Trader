@@ -49,11 +49,11 @@ router.post("/destroyAccount", (req, res) => {
             typingDnaClient.delete({ userId: user_id }, (err, result) => {
                 if (err) throw err;
                 else {
-                    req.session = null;
                     cloudinary.api.delete_resources([`${user_id}_0`, `${user_id}_1`, `${user_id}_2`], (err, result) => {
                         if (err) throw err;
                         else {
-                            res.send({ message: "Account successfully delete!" });
+                            req.session = null;
+                            res.send({ message: "Account successfully deleted!" });
                         }
                     });
                 }

@@ -63,8 +63,8 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
         const res = await fetch("/api/anvil/createEtchSigh", {
             method: 'POST'
         });
-        const { message } = await res.json();
-        if (message) {
+        const { message, error } = await res.json();
+        if (message || error) {
             window.location.reload();
         }
     };
