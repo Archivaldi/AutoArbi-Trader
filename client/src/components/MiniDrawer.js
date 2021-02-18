@@ -35,7 +35,7 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
     const [buttonDisplayed, setButtonDisplayed] = useState(true);
     const [buttonDisabled, setButtonDisabled] = useState(true);
     const [apiCall, setApiCall] = useState(false);
-    const [destoyAccount, setDestroyAccount] = useState(false);
+    const [destoyAccountButton, setDestroyAccountButton] = useState(false);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -86,7 +86,7 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
             let completeArr = [];
             console.log(usersDocs.seller.title)
             if (usersDocs.length === 1 && usersDocs.seller.title !== null){
-                setDestroyAccount(true);
+                setDestoyAccountButton(true);
                 console.log("IN the if statemnt");
                 return;
             }
@@ -116,6 +116,8 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
             })
         })()
     }, [usersDocs])
+
+    console.log({destoyAccountButton});
 
 
     const {
@@ -210,7 +212,7 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
                             <ListItemText>Send In Forms</ListItemText>
                         </ListItem>
                     )}
-                    {destoyAccount && (
+                    {destoyAccountButton && (
                         <ListItem
                             button={true}
                             onClick={destroyAccount}
