@@ -237,11 +237,14 @@ router.post("/hooks", async (req, res) => {
 
                 main()
                     .then(() => {
+                        console.log(seller_bill_of_sale_url, seller_title_url, seller_registration_url, seller_id)
+                        console.log(buyer_bill_of_sale_url, buyer_title_url, buyer_registration_url, buyer_id)
                         connection.query("UPDATE Users SET billOfSale = ?, title = ?, registration = ? WHERE user_id = ?",
                         [seller_bill_of_sale_url, seller_title_url, seller_registration_url, seller_id],
                         (err, result) => {
                             if (err) throw err;
                             else {
+                                console.log(result);
                                 update_user(buyer_bill_of_sale_url, buyer_title_url, buyer_registration_url, buyer_id);
                             };
                         });
@@ -252,7 +255,9 @@ router.post("/hooks", async (req, res) => {
                             (err, result) => {
                                 if (err) throw err;
                                 else {
+                                    console.log(result);
                                     console.log("Info inserted into database");
+                                    res.send({statusCode: 200});
                                 }
                             }
                             )
