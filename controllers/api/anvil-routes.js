@@ -184,6 +184,8 @@ router.post("/hooks", async (req, res) => {
 
     const { action } = req.body;
     if (action === "etchPacketComplete") {
+        let buyer_id = "";
+        let seller_id = "";
         let seller_bill_of_sale_url = "";
         let seller_title_url = "";
         let seller_registration_url = "";
@@ -199,6 +201,8 @@ router.post("/hooks", async (req, res) => {
         connection.query("SELECT * FROM Users WHERE transaction_id = (SELECT transaction_id FROM Users where email = ?) ORDER BY role DESC", [seller_email], (err, result) => {
             if (err) throw err;
             else {
+                buyer_id = result[1].user_id;
+                seller_id = result[0].user_id;
                 async function main() {
                     try {
                         const { statusCode, response, data, errors } = await anvilClient.downloadDocuments(eid, {});
@@ -233,17 +237,26 @@ router.post("/hooks", async (req, res) => {
 
                 main()
                     .then(() => {
-                        const payloads = {
-                            url: "https://desolate-hollows-77552.herokuapp.com/api/db/updateUrls",
-                            method: "POST",
-                            json: { seller_bill_of_sale_url,buyer_bill_of_sale_url, seller_title_url, buyer_title_url, seller_registration_url, buyer_registration_url,seller_id: result[0].user_id, buyer_id: result[1].user_id },
-                        };
-                        request(payloads, (error, response, body) => {
-                            if (error) throw error;
+                        connection.query("UPDATE Users SET billOfSale = ?, title = ?, registration = ? WHERE user_id = ?",
+                        [seller_bill_of_sale_url, seller_title_url, seller_registration_url, seller_id],
+                        (err, result) => {
+                            if (err) throw err;
                             else {
-                                res.send({ statusCode: 200 });
+                                update_user(buyer_bill_of_sale_url, buyer_title_url, buyer_registration_url, buyer_id);
                             };
                         });
+
+                        const update_user = (billOfSale, title, regUrl, id) => {
+                            connection.query("UPDATE Users SET billOfSale = ?, title = ?, registration = ? WHERE user_id = ?", 
+                            [billOfSale, title, regUrl, id],
+                            (err, result) => {
+                                if (err) throw err;
+                                else {
+                                    console.log("Info inserted into database");
+                                }
+                            }
+                            )
+                        }
                     })
                     .catch((err) => {
                         console.log(err.stack || err.message);

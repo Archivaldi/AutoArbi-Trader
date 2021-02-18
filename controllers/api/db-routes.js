@@ -174,31 +174,6 @@ router.post("/add-info", (req, res) => {
     };
 });
 
-router.post("/updateUrls", async (req, res) => {
-    const { seller_bill_of_sale_url,buyer_bill_of_sale_url, seller_title_url, buyer_title_url, seller_registration_url, buyer_registration_url, seller_id, buyer_id } = req.body;
-    connection.query("UPDATE Users SET billOfSale = ?, title = ?, registration = ? WHERE user_id = ?",
-        [seller_bill_of_sale_url, seller_title_url, seller_registration_url, seller_id],
-        (err, result) => {
-            if (err) throw err;
-            else {
-                update_user(buyer_bill_of_sale_url, buyer_title_url, buyer_registration_url, buyer_id);
-            };
-        });
-
-        const update_user = (billOfSale, title, regUrl, id) => {
-            connection.query("UPDATE Users SET billOfSale = ?, title = ?, registration = ? WHERE user_id = ?", 
-            [billOfSale, title, regUrl, id],
-            (err, result) => {
-                if (err) throw err;
-                else {
-                    console.log("Info inserted");
-                    res.send({ message: "Success" });
-                }
-            }
-            )
-        }
-});
-
 router.post("/documentUpload/:document", async (req, res) => {
     const { document } = req.params;
     const file = req.files.file;
