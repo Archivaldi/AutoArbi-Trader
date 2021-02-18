@@ -9,6 +9,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormGroup from '@material-ui/core/FormGroup';
 import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -91,6 +92,7 @@ export default function FileUploadDialog({ open, handleUploadClose, type }) {
                     <Button onClick={handleUploadClose} color="secondary">
                         Close
                     </Button>
+                    <Typography variant="subtitle1">Please only use PNG or JPG</Typography>
                 </DialogActions>
             </Dialog>
         </div>
