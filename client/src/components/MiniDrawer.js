@@ -76,6 +76,7 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
             })
             const userInform = await resTwo.json();
             setUsersDocs(userInform)
+            console.log(userInform);
         })()
     }, []);
 
