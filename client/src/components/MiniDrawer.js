@@ -77,7 +77,6 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
             })
             const userInform = await resTwo.json();
             setUsersDocs(userInform)
-            console.log(userInform);
         })()
     }, []);
 
@@ -87,7 +86,6 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
             if (usersDocs.seller.title !== null){
                 setDestroyAccountButton(true);
                 setButtonDisplayed(false);
-                console.log("IN the if statemnt");
                 return;
             }
             if (usersDocs.buyer && usersDocs.seller) {
@@ -116,8 +114,6 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
             })
         })()
     }, [usersDocs])
-
-    console.log({destoyAccountButton});
 
 
     const {

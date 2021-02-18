@@ -32,7 +32,6 @@ export default function Dashboard() {
       }
       for (const property in serverUserInfo.seller) {
         if (property === 'groupId') {
-          console.log(`What do I print? ${serverUserInfo.seller[property] !== null}`)
           if (serverUserInfo.seller[property] !== null) {
             setDisplayTransaction(false);
             setDisplaySuccess(true);

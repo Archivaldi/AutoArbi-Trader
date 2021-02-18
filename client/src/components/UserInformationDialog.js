@@ -131,8 +131,6 @@ export default function UserInformationDialog() {
             })
             const message = await res.json();
 
-            console.log(message)
-
             if (message.user_id) {
                 handleSuccessCall()
             } else {

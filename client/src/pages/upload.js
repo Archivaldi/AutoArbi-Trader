@@ -67,7 +67,7 @@ export default function Dashboard() {
         }
         setCurrentUserDocs(docsArr)
     }, [currentUserInfo])
-
+    console.log(currentUserDocs);
     return (
         <AuthCheck>
             <MiniDrawer
