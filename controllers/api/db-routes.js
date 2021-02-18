@@ -91,8 +91,8 @@ router.post("/check-user", (req, res) => {
                 const buyer = result[1];
                 const { user_id, firstName, lastName, street, city, state, county, role, zip_code, govId, transaction_id, billOfSale, groupId } = buyer;
                 res.send({
-                    seller: {user_id: result[0].user_id, firstName: result[0].firstName, lastName: result[0].lastName, street: result[0].street, city: result[0].city, state: result[0].state, county: result[0].county,  role: result[0].role, zip_code: result[0].zip_code, govId: result[0].govId, transaction_id: result[0].transaction_id, billOfSale: result[0].billOfSale, groupId: result[0].groupId},
-                    buyer: { user_id, firstName, lastName, street, city, state, county, role, zip_code, govId, transaction_id, billOfSale, groupId }
+                    seller: result[0],//{user_id: result[0].user_id, firstName: result[0].firstName, lastName: result[0].lastName, street: result[0].street, city: result[0].city, state: result[0].state, county: result[0].county,  role: result[0].role, zip_code: result[0].zip_code, govId: result[0].govId, transaction_id: result[0].transaction_id, billOfSale: result[0].billOfSale, groupId: result[0].groupId},
+                    buyer: result[1] //{ user_id, firstName, lastName, street, city, state, county, role, zip_code, govId, transaction_id, billOfSale, groupId }
                 });
             };
         });
