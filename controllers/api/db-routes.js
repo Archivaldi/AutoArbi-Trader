@@ -20,6 +20,7 @@ router.post("/signup/:role", async (req, res) => {
         (err, result) => {
             if (err) throw err;
             else {
+                req.session.user_id = user_id;
                 req.session.role = role;
                 res.send({ user_id, role });
             }
