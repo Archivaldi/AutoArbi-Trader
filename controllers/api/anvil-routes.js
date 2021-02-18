@@ -19,16 +19,36 @@ router.post("/createEtchSigh", async (req, res) => {
     let seller = {};
     let buyer = {};
 
+
+
     connection.query("SELECT * FROM Users WHERE user_id = ?", [user_id], (err, result) => {
         if (err) throw err;
         else {
             if (result[0].ccompleted === true){
                 res.send({error: "The documents already generated"});
             } else {
-                createEtchSign();
+                findUsers();
             }
         }
     })
+
+    const findUsers = (transaction_id) => {
+        connection.query("SELECT * FROM Users WHERE transaction_id = ?", [transaction_id], (err, result) => {
+            if (err) throw err;
+            else {
+                updateCompleted(result[0].user_id, result[1].user_id);
+            }
+        })
+    };
+
+    const updateCompleted = (buyer_id, seller_id) => {
+        connection.query("UPDATE Users SET completed = true WHERE user_id = ? OR user_id = ?", [buyer_id, seller_id], (err, result) => {
+            if (err) throw err;
+            else {
+                createEtchSign();
+            }
+        })
+    }
 
 
     const createEtchSign = () => {
