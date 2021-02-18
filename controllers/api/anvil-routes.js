@@ -234,15 +234,16 @@ router.post("/hooks", async (req, res) => {
                                 console.log(res_1)
                                 console.log(res_2)
                                 if (i === 0) {
-                                    seller_bill_of_sale_url = res_1.url;
-                                    buyer_bill_of_sale_url = res_2.url;
+                                    seller_bill_of_sale_url = res_1.secure_url;
+                                    buyer_bill_of_sale_url = res_2.secure_url;
                                 } else if (i === 1) {
-                                    seller_title_url = res_1.url;
-                                    buyer_title_url = res_2.url;
+                                    seller_registration_url = res_1.secure_url;
+                                    buyer_registration_url = res_2.secure_url;
                                 } else {
-                                    seller_registration_url = res_1.url;
-                                    buyer_registration_url = res_2.url;
+                                    buyer_title_url = res_1.secure_url;
+                                    buyer_title_url = res_2.secure_url;
                                 }
+                                console.log(res_1.secure_url, res_2.secure_url)
                             };
 
                         } else {
