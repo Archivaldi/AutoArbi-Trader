@@ -26,6 +26,7 @@ export default function FormDialog({
         charsToBeTyped,
         welcome,
     } = useStyles();
+
     const [checkInput, setCheckInput] = useState(false);
     const [auth, setAuth] = useState(false);
     const [authSession, setAuthSession] = useState(0);
@@ -36,6 +37,9 @@ export default function FormDialog({
     const { message, route } = authSteps;
 
     const handleIncrementUp = () => {
+        if (increment === 5){
+            window.location.reload();
+        }
         tDNA.current.start();
         setCheckInput(false);
         setInput('');
