@@ -30,10 +30,11 @@ export default function Dashboard() {
         setTransactionID(`Your Transaction ID: ${serverUserInfo.seller.transaction_id}`);
         setDisplayTransaction(true)
       }
-      for (const property in serverUserInfo.buyer) {
+      for (const property in serverUserInfo.seller) {
         if (property === 'groupId') {
-          if (usersDocs.seller[property] !== null) {
-            displayTransaction(false);
+          console.log(`What do I print? ${serverUserInfo.seller[property] !== null}`)
+          if (serverUserInfo.seller[property] !== null) {
+            setDisplayTransaction(false);
             setDisplaySuccess(true);
           }
         }
@@ -62,8 +63,8 @@ export default function Dashboard() {
                 </Snackbar>
                 <Snackbar open={displaySuccess}>
                   <Alert severity="success">
-                    "Please Check You Email!"
-                </Alert>
+                    Please Check Your Email 🥳
+                  </Alert>
                 </Snackbar>
               </>
             )}

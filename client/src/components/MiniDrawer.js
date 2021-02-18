@@ -47,7 +47,7 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
         const res = await fetch(logout, {
             method: 'POST'
         })
-        window.location.reload();
+        window.location.replace('/dashboard');
     }
 
     const generateDeal = async () => {
@@ -97,7 +97,6 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
                 }
             }
             completeArr.forEach(item => {
-                console.log({item})
                 item && setButtonDisabled(false)
             })
         })()
