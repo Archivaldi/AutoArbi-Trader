@@ -233,14 +233,14 @@ router.post("/hooks", async (req, res) => {
                                 let res_2 = await cloudinary.uploader.upload(path.join(__dirname, `../../Unzip/${eid}/${files[i]}`), {public_id: `${result[1].user_id}_${i}`});
 
                                 if (i === 0) {
-                                    seller_bill_of_sale_url = res_1.secure_url;
-                                    buyer_bill_of_sale_url = res_2.secure_url;
+                                    seller_bill_of_sale_url = res_1.url;
+                                    buyer_bill_of_sale_url = res_2.url;
                                 } else if (i === 1) {
-                                    seller_title_url = res_1.secure_url;
-                                    buyer_title_url = res_2.secure_url;
+                                    seller_title_url = res_1.url;
+                                    buyer_title_url = res_2.url;
                                 } else {
-                                    seller_registration_url = res_1.secure_url;
-                                    buyer_registration_url = res_2.secure_url;
+                                    seller_registration_url = res_1.url;
+                                    buyer_registration_url = res_2.url;
                                 }
                             };
 
