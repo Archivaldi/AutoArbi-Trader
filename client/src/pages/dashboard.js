@@ -17,6 +17,7 @@ export default function Dashboard() {
   const [dbUserInfo, setDbUserInfo] = useState(null);
   const [transactionID, setTransactionID] = useState('No Id');
   const [displayTransaction, setDisplayTransaction] = useState(false);
+  const [displaySuccess, setDisplaySuccess] = useState(false);
 
   useEffect(() => {
     (async function getUserInformation() {
@@ -28,6 +29,14 @@ export default function Dashboard() {
       if (!serverUserInfo.message) {
         setTransactionID(`Your Transaction ID: ${serverUserInfo.seller.transaction_id}`);
         setDisplayTransaction(true)
+      }
+      for (const property in serverUserInfo.buyer) {
+        if (property === 'groupId') {
+          if (usersDocs.seller[property] !== null) {
+            displayTransaction(false);
+            setDisplaySuccess(true);
+          }
+        }
       }
     })()
   }, []);
@@ -45,11 +54,18 @@ export default function Dashboard() {
           >
             <UserInformationDialog />
             {!userInfo.seller && (
-              <Snackbar open={displayTransaction}>
-                <Alert severity="info">
-                  {transactionID}
+              <>
+                <Snackbar open={displayTransaction}>
+                  <Alert severity="info">
+                    {transactionID}
+                  </Alert>
+                </Snackbar>
+                <Snackbar open={displaySuccess}>
+                  <Alert severity="success">
+                    "Please Check You Email!"
                 </Alert>
-              </Snackbar>
+                </Snackbar>
+              </>
             )}
             {dbUserInfo && (
               <>
