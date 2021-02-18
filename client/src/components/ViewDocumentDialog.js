@@ -19,7 +19,7 @@ export default function ViewDocumentDialog({ url, open, handleDocumentClose, typ
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title"><img src="https://raw.githubusercontent.com/Archivaldi/4wheelz/master/client/src/images/ShoppedAnvilLogo.png" alt="anvil_logo" width="200"/>{`Viewing ${type} Document`}</DialogTitle>
+                <DialogTitle id="alert-dialog-title"> <img src="https://raw.githubusercontent.com/Archivaldi/4wheelz/master/client/src/images/ShoppedAnvilLogo.png" alt="anvil_logo" width="200"/> </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         <embed

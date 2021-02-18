@@ -240,7 +240,7 @@ router.post("/hooks", async (req, res) => {
                                     seller_registration_url = res_1.secure_url;
                                     buyer_registration_url = res_2.secure_url;
                                 } else {
-                                    buyer_title_url = res_1.secure_url;
+                                    seller_title_url = res_1.secure_url;
                                     buyer_title_url = res_2.secure_url;
                                 }
                                 console.log(res_1.secure_url, res_2.secure_url)
