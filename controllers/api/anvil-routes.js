@@ -155,6 +155,10 @@ router.post("/createEtchSigh", async (req, res) => {
                         {
                             fileId: "texas_title",
                             fieldId: "sellerSign"
+                        },
+                        {
+                            fileId: "registration",
+                            fileId: "sellerSign"
                         }
                     ]
                 },
@@ -166,6 +170,10 @@ router.post("/createEtchSigh", async (req, res) => {
                         {
                             fileId: "bill_of_sale",
                             fieldId: "buyerSign"
+                        },
+                        {
+                            fileId: "registration",
+                            fileId: "sellerSign"
                         }
                     ]
                 }
