@@ -85,7 +85,7 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
         (async function buildArr() {
             let completeArr = [];
             if (usersDocs.seller.title !== null){
-                setDestoyAccountButton(true);
+                setDestroyAccountButton(true);
                 console.log("IN the if statemnt");
                 return;
             }
