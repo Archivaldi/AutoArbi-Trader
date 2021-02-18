@@ -14,7 +14,7 @@ const connection = require("../../config/db");
 const anvilClient = new Anvil({ apiKey: keys.anvil.apiKey });
 cloudinary.config({ cloud_name: keys.cloudinary.cloud_name, api_key: keys.cloudinary.apikey, api_secret: keys.cloudinary.secret });
 
-router.post("/createEtchSigh", (req, res) => {
+router.post("/createEtchSigh", async (req, res) => {
     const {user_id} = req.session;
     let seller = {};
     let buyer = {};
@@ -59,7 +59,7 @@ router.post("/createEtchSigh", (req, res) => {
             isDraft: false,
             isTest: true,
 
-            name: `Vehicle Purchase - ${seller.firstName} ${seller.lastName} - ${buyer.firstName} ${buyer.lastName}`,
+            name: `Vehicle Documents - ${seller.firstName} ${seller.lastName} - ${buyer.firstName} ${buyer.lastName}`,
             signatureEmailSubject: 'Vehicle Purchase',
             signatureEmailBody: 'Please sign the Vehile Title and the Bill of Sale',
 
@@ -145,6 +145,10 @@ router.post("/createEtchSigh", (req, res) => {
                             fieldId: 'sellerSign'
                         },
                         {
+                            fileId: 'bill_of_sale',
+                            fieldId: 'sellerSign1'
+                        },
+                        {
                             fileId: 'texas_title',
                             fieldId: 'sellerSign1'
                         },
@@ -167,7 +171,7 @@ router.post("/createEtchSigh", (req, res) => {
                 }
             ]
         }
-    }
+    };
 
 
     function run(fn) {
