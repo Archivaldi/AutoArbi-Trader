@@ -85,6 +85,7 @@ export default function FileUploadDialog({ open, handleUploadClose, type }) {
                             </FormGroup>
                         )}
                 </DialogContent>
+                <Typography variant="subtitle1">Please only use PNG or JPG</Typography>
                 <DialogActions>
                     <Button color="secondary" onClick={uploadFile}>
                         Submit
@@ -92,7 +93,6 @@ export default function FileUploadDialog({ open, handleUploadClose, type }) {
                     <Button onClick={handleUploadClose} color="secondary">
                         Close
                     </Button>
-                    <Typography variant="subtitle1">Please only use PNG or JPG</Typography>
                 </DialogActions>
             </Dialog>
         </div>
