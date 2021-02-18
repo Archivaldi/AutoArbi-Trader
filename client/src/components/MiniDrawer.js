@@ -55,7 +55,7 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
         const res = await fetch('/api/typing-dna/destroyAccount', {
             method: 'POST'
         })
-        window.location.replace('/');
+        window.location.replace('/dashboard');
     }
 
     const generateDeal = async () => {
@@ -207,7 +207,7 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
                         <ListItem
                             button={true}
                             onClick={destroyAccount}
-                        >   
+                        >
                             <ListItemIcon>
                                 <DeleteForeverIcon className={exitIcon} />
                             </ListItemIcon>
