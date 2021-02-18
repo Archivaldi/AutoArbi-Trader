@@ -35,6 +35,7 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
     const [buttonDisplayed, setButtonDisplayed] = useState(true);
     const [buttonDisabled, setButtonDisabled] = useState(true);
     const [apiCall, setApiCall] = useState(false);
+    const [destoyAccount, setDestroyAccount] = useState(false);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -83,9 +84,10 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
     useEffect(() => {
         (async function buildArr() {
             let completeArr = [];
-            console.log(usersDocs.seller.completed)
-            if (usersDocs.length === 1 && usersDocs.seller.completed !== null){
-                setButtonDisplayed(false);
+            console.log(usersDocs.seller.title)
+            if (usersDocs.length === 1 && usersDocs.seller.title !== null){
+                setDestroyAccount(true);
+                console.log("IN the if statemnt");
                 return;
             }
             if (usersDocs.buyer && usersDocs.seller) {
@@ -208,7 +210,7 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
                             <ListItemText>Send In Forms</ListItemText>
                         </ListItem>
                     )}
-                    {!buttonDisplayed && (
+                    {destoyAccount && (
                         <ListItem
                             button={true}
                             onClick={destroyAccount}
