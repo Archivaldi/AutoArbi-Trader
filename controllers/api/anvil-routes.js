@@ -81,6 +81,8 @@ router.post("/createEtchSigh", async (req, res) => {
             data: {
                 payloads: {
                     bill_of_sale: {
+                        fontSize: 14,
+                        textColor: '#222222',
                         data: {
                             seller: `${seller.firstName} ${seller.lastName}`,
                             sellerStreet: seller.street,
@@ -108,6 +110,8 @@ router.post("/createEtchSigh", async (req, res) => {
                         }
                     },
                     texas_title: {
+                        fontSize: 14,
+                        textColor: "#222222",
                         data: {
                             titleNumber: seller.title_number,
                             carVin: seller.vin,
@@ -123,6 +127,8 @@ router.post("/createEtchSigh", async (req, res) => {
                         }
                     },
                     registration: {
+                        fontSize: 22,
+                        textColor: '#222222',
                         data: {
                             carPlate: seller.plate,
                             county: seller.county,
