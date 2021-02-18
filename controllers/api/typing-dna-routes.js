@@ -12,8 +12,10 @@ router.post("/check-pattern", (req, res) => {
     typingDnaClient.auto(
         user_id,
         typingPattern,
-        {
-            type: 0
+        {   
+            userId:user_id,
+            type: 0,
+            device: 'desktop'
         },
         function (error, result) {
             if (error) {
