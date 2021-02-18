@@ -179,7 +179,7 @@ router.post("/createEtchSigh", async (req, res) => {
                         },
                         {
                             fileId: "registration",
-                            fileId: "sellerSign"
+                            fileId: "buyerSign"
                         }
                     ]
                 }
