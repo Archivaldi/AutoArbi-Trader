@@ -42,6 +42,7 @@ router.post("/login", (req, res) => {
             bcrypt.compare(passwordInput, p_hash, (err, match) => {
                 if (match) {
                     req.session.role = role;
+                    req.session.user_id = user_id;
                     res.send({ user_id, role });
                 } else {
                     res.send({ error: "Invalid Password. Please try again." })
