@@ -84,8 +84,7 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
     useEffect(() => {
         (async function buildArr() {
             let completeArr = [];
-            console.log(usersDocs.seller.title)
-            if (usersDocs.length === 1 && usersDocs.seller.title !== null){
+            if (usersDocs.seller.title !== null){
                 setDestoyAccountButton(true);
                 console.log("IN the if statemnt");
                 return;
