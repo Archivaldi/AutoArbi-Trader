@@ -19,16 +19,28 @@ router.post("/createEtchSigh", async (req, res) => {
     let seller = {};
     let buyer = {};
 
-
-    connection.query("SELECT * FROM Users LEFT JOIN Cars USING (car_id) WHERE transaction_id = (SELECT transaction_id FROM users WHERE user_id = ?) ORDER BY role DESC", [user_id], (err, result) => {
+    connection.query("SELECT * FROM Users WHERE user_id = ?", [user_id], (err, result) => {
         if (err) throw err;
         else {
-            seller = result[0];
-            buyer = result[1];
-            console.log(seller, buyer)
-            run(main);
-        };
-    });
+            if (result[0].ccompleted === true){
+                res.send({error: "The documents already generated"});
+            } else {
+                createEtchSign();
+            }
+        }
+    })
+
+
+    const createEtchSign = () => {
+        connection.query("SELECT * FROM Users LEFT JOIN Cars USING (car_id) WHERE transaction_id = (SELECT transaction_id FROM users WHERE user_id = ?) ORDER BY role DESC", [user_id], (err, result) => {
+            if (err) throw err;
+            else {
+                seller = result[0];
+                buyer = result[1];
+                run(main);
+            };
+        });
+    }
 
     const insertGroupId = (id) => {
         connection.query("UPDATE Users SET groupId = ? WHERE user_id = ? OR user_id = ?", 

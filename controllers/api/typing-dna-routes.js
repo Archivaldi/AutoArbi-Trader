@@ -33,7 +33,7 @@ router.post("/check-pattern", (req, res) => {
 });
 
 
-router.get("/destroyAccount", (req, res) => {
+router.post("/destroyAccount", (req, res) => {
     const { user_id, role } = req.session;
     let queryDelete = "";
 
