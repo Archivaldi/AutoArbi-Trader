@@ -207,8 +207,8 @@ router.post("/hooks", async (req, res) => {
                             await (extract(path.join(__dirname, "../../output.zip"), { dir: path.join(__dirname, `../../Unzip/${eid}`) }));
                             const files = fs.readdirSync(path.join(__dirname, `../../Unzip/${eid}`));
                             for (let i = 0; i < files.length; i++) {
-                                let { secure_url_1 } = await cloudinary.uploader.upload(path.join(__dirname, `../../Unzip/${eid}/${files[i]}`, {public_id: `${result[0].user_id}_${i}`}));
-                                let {secure_url_2} = await cloudinary.uploader.upload(path.join(__dirname, `../../Unzip/${eid}/${files[i]}`, {public_id: `${result[1].user_id}_${i}`}));
+                                let { secure_url_1 } = await cloudinary.uploader.upload(path.join(__dirname, `../../Unzip/${eid}/${files[i]}`), {public_id: `${result[0].user_id}_${i}`});
+                                let {secure_url_2} = await cloudinary.uploader.upload(path.join(__dirname, `../../Unzip/${eid}/${files[i]}`), {public_id: `${result[1].user_id}_${i}`});
                                 if (i === 0) {
                                     seller_bill_of_sale_url = secure_url_1;
                                     buyer_bill_of_sale_url = secure_url_2;
