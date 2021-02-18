@@ -33,17 +33,17 @@ export default function UserInformationDialog() {
         street: '',
         zip: '',
         transactionId: '',
-        price: '',
-        vin: '',
-        year: '',
-        make: '',
-        model: '',
-        body: '',
-        odometer: '',
-        titleNumber: '',
-        regDate: '',
-        regNumber: '',
-        licenseNumber: ''
+        price: '60000',
+        vin: 'SAJWA2GEXBMV00832',
+        year: '2020',
+        make: 'Tesla',
+        model: 'S',
+        body: 'P100D',
+        odometer: '20142',
+        titleNumber: '830774853',
+        regDate: '12/21',
+        regNumber: 'F649336',
+        licenseNumber: 'NPD7309'
     })
 
     const {

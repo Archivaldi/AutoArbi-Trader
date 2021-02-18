@@ -37,6 +37,7 @@ CREATE TABLE Users (
     billOfSale VARCHAR(265),
     groupId VARCHAR(30),
     transaction_id VARCHAR(10),
+    completed BOOLEAN,
     FOREIGN KEY (car_id) REFERENCES Cars(car_id),
     PRIMARY KEY (user_id)
 );
