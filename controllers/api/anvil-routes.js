@@ -24,10 +24,10 @@ router.post("/createEtchSigh", async (req, res) => {
     connection.query("SELECT * FROM Users WHERE user_id = ?", [user_id], (err, result) => {
         if (err) throw err;
         else {
-            if (result[0].ccompleted === true){
+            if (result[0].completed === true){
                 res.send({error: "The documents already generated"});
             } else {
-                findUsers();
+                findUsers(result[0].transaction_id);
             }
         }
     })
