@@ -211,17 +211,18 @@ router.post("/hooks", async (req, res) => {
                             await (extract(path.join(__dirname, "../../output.zip"), { dir: path.join(__dirname, `../../Unzip/${eid}`) }));
                             const files = fs.readdirSync(path.join(__dirname, `../../Unzip/${eid}`));
                             for (let i = 0; i < files.length; i++) {
-                                let { secure_url_1 } = await cloudinary.uploader.upload(path.join(__dirname, `../../Unzip/${eid}/${files[i]}`), {public_id: `${result[0].user_id}_${i}`});
-                                let {secure_url_2} = await cloudinary.uploader.upload(path.join(__dirname, `../../Unzip/${eid}/${files[i]}`), {public_id: `${result[1].user_id}_${i}`});
+                                let res_1 = await cloudinary.uploader.upload(path.join(__dirname, `../../Unzip/${eid}/${files[i]}`), {public_id: `${result[0].user_id}_${i}`});
+                                let res_2 = await cloudinary.uploader.upload(path.join(__dirname, `../../Unzip/${eid}/${files[i]}`), {public_id: `${result[1].user_id}_${i}`});
+
                                 if (i === 0) {
-                                    seller_bill_of_sale_url = secure_url_1;
-                                    buyer_bill_of_sale_url = secure_url_2;
+                                    seller_bill_of_sale_url = res_1.secure_url;
+                                    buyer_bill_of_sale_url = res_2.secure_url;
                                 } else if (i === 1) {
-                                    seller_title_url = secure_url_1;
-                                    buyer_title_url = secure_url_2;
+                                    seller_title_url = res_1.secure_url;
+                                    buyer_title_url = res_2.secure_url;
                                 } else {
-                                    seller_registration_url = secure_url_1;
-                                    buyer_registration_url = secure_url_1;
+                                    seller_registration_url = res_1.secure_url;
+                                    buyer_registration_url = res_2.secure_url;
                                 }
                             };
 
