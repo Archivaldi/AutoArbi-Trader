@@ -22,6 +22,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import MailIcon from '@material-ui/icons/Mail';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { authSteps } from '../utils/authSteps';
 import { appRoute } from '../utils/appRoute';
 
@@ -48,6 +49,13 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
             method: 'POST'
         })
         window.location.replace('/dashboard');
+    }
+
+    const handleLogout = async () => {
+        const res = await fetch('/api/typing-dna/destroyAccount', {
+            method: 'POST'
+        })
+        window.location.replace('/');
     }
 
     const generateDeal = async () => {
@@ -193,6 +201,17 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
                                 <MailIcon color={buttonDisabled ? "primary" : "secondary"} />
                             </ListItemIcon>
                             <ListItemText>Send In Forms</ListItemText>
+                        </ListItem>
+                    )}
+                    {!buttonDisplayed && (
+                        <ListItem
+                            button={true}
+                            onClick={generateDeal}
+                        >
+                            <ListItemIcon>
+                                <DeleteForeverIcon className={exitIcon} />
+                            </ListItemIcon>
+                            <ListItemText>Delete Forever</ListItemText>
                         </ListItem>
                     )}
                     <Divider />
