@@ -84,7 +84,7 @@ export default function MiniDrawer({ children, classes, allDocsComplete }) {
         (async function buildArr() {
             let completeArr = [];
             console.log(usersDocs.seller.completed)
-            if (usersDocs.length === 1 && usersDocs.seller.completed == "1"){
+            if (usersDocs.length === 1 && usersDocs.seller.completed !== null){
                 setButtonDisplayed(false);
                 return;
             }
