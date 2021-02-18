@@ -11,6 +11,8 @@ cloudinary.config({ cloud_name: keys.cloudinary.cloud_name, api_key: keys.cloudi
 router.post("/signup/:role", async (req, res) => {
     const { role } = req.params;
     const { passwordInput, emailInput } = req.body;
+    const user_id = uuidv4();
+    const p_hash = await bcrypt.hash(passwordInput, 10);
 
     connection.query("SELECT * FROM Users WHERE email = ?", [emailInput], (err, result) => {
         if (err) throw err;
@@ -18,15 +20,12 @@ router.post("/signup/:role", async (req, res) => {
             if (result.length > 0) {
                 res.send({error: "Duplicate Email!"})
             } else {
-                unsert_user();
+                insert_user();
             }
         }
     })
 
-    const user_id = uuidv4();
-    const p_hash = await bcrypt.hash(passwordInput, 10);
-
-    const unsert_user = () => {
+    const insert_user = () => {
         connection.query("INSERT INTO Users(email, p_hash, user_id, role) VALUES (?,?,?,?)",
         [emailInput, p_hash, user_id, role],
         (err, result) => {
