@@ -20,7 +20,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function FileUploadDialog({ open, handleUploadClose, type }) {
-    const [imageUrl, setImageUrl] = useState("")
     const { root } = useStyles()
     const [checked, setChecked] = useState(false);
     const handleChange = () => {
@@ -29,18 +28,17 @@ export default function FileUploadDialog({ open, handleUploadClose, type }) {
 
     const uploadFile = async e => {
         let doc = "";
-        if (type === "Government ID"){
+        if (type === "Government ID") {
             doc = "government_id"
-        } else if (type === "Registration"){
-            doc = "registration"
-        };
-        const files = e.target.files;
+        }
+        const files = document.querySelector('input[name="Government ID"]').files;
         const data = new FormData();
         data.append("file", files[0]);
         const res = await fetch(`/api/db/documentUpload/${doc}`, {
             method: "POST",
             body: data
         });
+        window.location.reload();
     }
 
     return (
@@ -81,18 +79,13 @@ export default function FileUploadDialog({ open, handleUploadClose, type }) {
                                         type="file"
                                         name={type}
                                         hidden
-                                        onChange={uploadFile}
                                     />
                                 </Button>
-                                <FormControlLabel
-                                    control={<Checkbox checked={checked} onChange={handleChange} />}
-                                    label="Apply Signature"
-                                />
                             </FormGroup>
                         )}
                 </DialogContent>
                 <DialogActions>
-                    <Button color="secondary">
+                    <Button color="secondary" onClick={uploadFile}>
                         Submit
                     </Button>
                     <Button onClick={handleUploadClose} color="secondary">

@@ -27,7 +27,7 @@ export default function ViewDocumentDialog({ url, open, handleDocumentClose, typ
                                 maxHeight: '350px',
                                 maxWidth: '500px'
                             }}
-                            src={"https://res.cloudinary.com/fourwheels/image/upload/v1613541348/lngruk4zdijn3w1iuttb.png"}
+                            src={url}
                             alt={type}
                         />
                     </DialogContentText>
