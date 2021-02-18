@@ -39,8 +39,10 @@ export default function Dashboard() {
                 property === 'billOfSale' ||
                 property === 'registration'
             ) {
+                console.log(currentUserInfo[property]);
+                console.log(currentUserInfo[property] !== null);
                 let type;
-                let completed = currentUserInfo[property] === !null
+                let completed = currentUserInfo[property] !== null;
                 let url = currentUserInfo[property]
                 if (property === 'govId') type = 'Government ID'
                 if (property === 'title') {
@@ -67,7 +69,6 @@ export default function Dashboard() {
         }
         setCurrentUserDocs(docsArr)
     }, [currentUserInfo])
-    console.log(currentUserDocs);
     return (
         <AuthCheck>
             <MiniDrawer
