@@ -37,9 +37,6 @@ export default function FormDialog({
     const { message, route } = authSteps;
 
     const handleIncrementUp = () => {
-        if (increment === 5){
-            window.location.reload();
-        }
         tDNA.current.start();
         setCheckInput(false);
         setInput('');
