@@ -18,10 +18,13 @@ const useStyles = makeStyles((theme) => ({
             width: 200,
         },
     },
+    textCenter: {
+        textAlign: 'center'
+    }
 }));
 
 export default function FileUploadDialog({ open, handleUploadClose, type }) {
-    const { root } = useStyles()
+    const { root, textCenter } = useStyles()
     const [checked, setChecked] = useState(false);
     const handleChange = () => {
         setChecked(!checked);
@@ -85,7 +88,7 @@ export default function FileUploadDialog({ open, handleUploadClose, type }) {
                             </FormGroup>
                         )}
                 </DialogContent>
-                <Typography variant="subtitle1">Please only use PNG or JPG</Typography>
+                <Typography className={textCenter} variant="subtitle1">Please only use PNG or JPG</Typography>
                 <DialogActions>
                     <Button color="secondary" onClick={uploadFile}>
                         Submit
