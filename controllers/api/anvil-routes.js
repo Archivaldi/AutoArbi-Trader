@@ -231,7 +231,8 @@ router.post("/hooks", async (req, res) => {
                             for (let i = 0; i < files.length; i++) {
                                 let res_1 = await cloudinary.uploader.upload(path.join(__dirname, `../../Unzip/${eid}/${files[i]}`), {public_id: `${result[0].user_id}_${i}`});
                                 let res_2 = await cloudinary.uploader.upload(path.join(__dirname, `../../Unzip/${eid}/${files[i]}`), {public_id: `${result[1].user_id}_${i}`});
-
+                                console.log(res_1)
+                                console.log(res_2)
                                 if (i === 0) {
                                     seller_bill_of_sale_url = res_1.url;
                                     buyer_bill_of_sale_url = res_2.url;
