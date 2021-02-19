@@ -27,7 +27,7 @@ export default function Dashboard() {
       const serverUserInfo = await resTwo.json();
       setDbUserInfo(serverUserInfo);
       if (!serverUserInfo.message) {
-        setTransactionID(`Your Transaction ID: ${serverUserInfo.seller.transaction_id}`);
+        setTransactionID(`💡 Tip use this to link Buyer & Seller, Transaction ID: ${serverUserInfo.seller.transaction_id}`);
         setDisplayTransaction(true)
       }
       for (const property in serverUserInfo.seller) {

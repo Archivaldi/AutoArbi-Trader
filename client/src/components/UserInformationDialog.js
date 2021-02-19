@@ -7,7 +7,8 @@ import {
     DialogTitle,
     TextField,
     Divider,
-    Snackbar
+    Snackbar,
+    Typography
 } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import { useStyles } from '../styles/UserInformationDialogStyles';
@@ -16,7 +17,7 @@ import { appRoute } from '../utils/appRoute';
 import useForm from '../utils/useForm';
 
 export default function UserInformationDialog() {
-    const { content, root, logoutButton } = useStyles();
+    const { content, root, logoutButton, textCenter } = useStyles();
     const { logout, session } = authSteps.route;
     const { userInfo, addUserInfo } = appRoute;
     const [infoDialogOpen, setInfoDialogOpen] = useState(false);
@@ -196,7 +197,10 @@ export default function UserInformationDialog() {
                         <Divider />
                         <>
                             {userRole === "buyer" && (
-                                <TextField disabled={apiCall} value={transactionId} name="transactionId" onChange={updateValue} variant="outlined" id="outlined-size-normal" label="Transaction ID" color="secondary" />
+                                <>
+                                    <Typography className={textCenter} variant="body1">💡Tip: You can get this from the seller</Typography>
+                                    <TextField disabled={apiCall} value={transactionId} name="transactionId" onChange={updateValue} variant="outlined" id="outlined-size-normal" label="Transaction ID" color="secondary" />
+                                </>
                             )}
                             {userRole === "seller" && (
                                 <>

@@ -16,5 +16,8 @@ export const useStyles = makeStyles((theme) => ({
     },
     content: {
         maxHeight: 500
+    },
+    textCenter: {
+        textAlign: 'center'
     }
 }));
