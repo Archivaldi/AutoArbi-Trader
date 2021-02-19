@@ -56,7 +56,7 @@ export default function Dashboard() {
             {!userInfo.seller && (
               <>
                 <Snackbar open={displayTransaction}>
-                  <Alert severity="info">
+                  <Alert severity="info" className={classes.textCenter}>
                     {transactionID}
                   </Alert>
                 </Snackbar>

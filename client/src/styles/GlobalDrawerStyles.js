@@ -103,6 +103,9 @@ const materialUIStyles = (theme, page) => {
                     height: '100vh',
                     justifyContent: 'center',
                     alignItems: 'center',
+                },
+                textCenter: {
+                    textAlign: 'center'
                 }
             }
         }
